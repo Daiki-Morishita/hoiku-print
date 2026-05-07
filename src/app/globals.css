@@ -130,6 +130,13 @@
   }
 }
 
+@layer components {
+  .input {
+    @apply w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none
+           focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition-colors;
+  }
+}
+
 /* 印刷最適化 */
 @media print {
   /* 画面用要素をすべて非表示 */

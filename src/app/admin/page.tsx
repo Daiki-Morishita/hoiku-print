@@ -11,6 +11,7 @@ import {
   IMAGE_STATUS_COLOR,
   type ImageStatus,
 } from '@/lib/types'
+import { ImageUploader } from '@/components/admin/ImageUploader'
 
 export const metadata = {
   title: '素材管理 | ぬりえプリント Admin',
@@ -57,6 +58,22 @@ export default function AdminPage() {
           <StatCard label="レビュー待ち" value={stats.pending} color="bg-yellow-50 text-yellow-700 border-yellow-200" />
           <StatCard label="承認済み" value={stats.approved} color="bg-green-50 text-green-700 border-green-200" />
           <StatCard label="要修正" value={stats.needs_revision} color="bg-red-50 text-red-700 border-red-200" />
+        </div>
+
+        {/* ── 画像アップロード & AI 解析 ── */}
+        <div className="mb-8 bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div className="px-5 py-3.5 border-b border-gray-100 flex items-center gap-2">
+            <span className="text-lg">🤖</span>
+            <div>
+              <h2 className="font-semibold text-sm text-gray-900">新しいイラストを追加</h2>
+              <p className="text-xs text-gray-500 mt-0.5">
+                画像をアップロードすると Claude Vision が自動でメタデータを提案します
+              </p>
+            </div>
+          </div>
+          <div className="p-5">
+            <ImageUploader />
+          </div>
         </div>
 
         {/* 命名規則リファレンス */}
