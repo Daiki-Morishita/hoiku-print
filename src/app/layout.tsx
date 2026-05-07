@@ -12,6 +12,7 @@ const notoSansJP = Noto_Sans_JP({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://nurie-print.vercel.app'),
   title: {
     default: 'ぬりえプリント | 保育士のための無料教材プリント',
     template: '%s | ぬりえプリント',

@@ -19,6 +19,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return {
     title: material.title,
     description: material.description,
+    openGraph: {
+      title: material.title,
+      description: material.description,
+      type: 'article',
+    },
   }
 }
 
@@ -49,8 +54,24 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
 
   const hasSvg = material.imageUrl && material.imageUrl.endsWith('.svg')
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: material.title,
+    description: material.description,
+    educationalLevel: ageLabel,
+    educationalUse: 'practice',
+    inLanguage: 'ja',
+    isAccessibleForFree: true,
+    license: 'https://creativecommons.org/licenses/by-nc/4.0/',
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ===== 印刷専用エリア（画面では非表示） ===== */}
       <div className="hidden print:block print-area">
         <div style={{ padding: '10mm 15mm' }}>

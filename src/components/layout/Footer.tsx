@@ -36,12 +36,13 @@ export function Footer() {
               <li><Link href="/category/age/3" className="hover:text-foreground transition-colors">3歳向け</Link></li>
               <li><Link href="/category/age/4" className="hover:text-foreground transition-colors">4歳向け</Link></li>
               <li><Link href="/category/age/5" className="hover:text-foreground transition-colors">5歳向け</Link></li>
+              <li><Link href="/category/age/6" className="hover:text-foreground transition-colors">6歳向け</Link></li>
             </ul>
           </div>
         </div>
 
         <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-2">
-          <p className="text-xs text-muted-foreground">© 2025 ぬりえプリント. All rights reserved.</p>
+          <p className="text-xs text-muted-foreground">© 2026 ぬりえプリント. All rights reserved.</p>
           <p className="text-xs text-muted-foreground">教材は保育・教育目的での使用に限り無料です</p>
         </div>
       </div>
