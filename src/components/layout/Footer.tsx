@@ -1,0 +1,50 @@
+import Link from 'next/link'
+import { Printer } from 'lucide-react'
+
+export function Footer() {
+  return (
+    <footer className="border-t border-border bg-white mt-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-7 h-7 bg-primary rounded-lg flex items-center justify-center">
+                <Printer className="w-3.5 h-3.5 text-white" />
+              </div>
+              <span className="font-bold text-foreground">ほいくぷりんと</span>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              保育士・幼稚園教諭のための<br />無料教材プリントサービス。<br />
+              現場で本当に使いやすいUIを目指しています。
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-sm mb-3">カテゴリ</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><Link href="/category/type/coloring" className="hover:text-foreground transition-colors">ぬりえ</Link></li>
+              <li><Link href="/category/type/hiragana" className="hover:text-foreground transition-colors">ひらがな練習</Link></li>
+              <li><Link href="/category/type/maze" className="hover:text-foreground transition-colors">迷路</Link></li>
+              <li><Link href="/category/type/drawing" className="hover:text-foreground transition-colors">運筆プリント</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-sm mb-3">年齢で探す</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><Link href="/category/age/2" className="hover:text-foreground transition-colors">2歳向け</Link></li>
+              <li><Link href="/category/age/3" className="hover:text-foreground transition-colors">3歳向け</Link></li>
+              <li><Link href="/category/age/4" className="hover:text-foreground transition-colors">4歳向け</Link></li>
+              <li><Link href="/category/age/5" className="hover:text-foreground transition-colors">5歳向け</Link></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-2">
+          <p className="text-xs text-muted-foreground">© 2025 ほいくぷりんと. All rights reserved.</p>
+          <p className="text-xs text-muted-foreground">教材は保育・教育目的での使用に限り無料です</p>
+        </div>
+      </div>
+    </footer>
+  )
+}

@@ -1,65 +1,202 @@
-import Image from "next/image";
+import Link from 'next/link'
+import { Search, Star, ArrowRight, Printer, Heart, Users } from 'lucide-react'
+import { MaterialCard } from '@/components/materials/MaterialCard'
+import { getPopularMaterials } from '@/lib/data'
+import { CATEGORY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
 
-export default function Home() {
+export default function HomePage() {
+  const popular = getPopularMaterials(6)
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div>
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-primary/8 to-background pb-16 pt-12 sm:pt-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+          <div className="inline-flex items-center gap-2 text-xs text-primary bg-primary/10 px-3 py-1.5 rounded-full mb-6 font-medium">
+            <Heart className="w-3 h-3" />
+            保育士・幼稚園教諭のために
+          </div>
+
+          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-foreground mb-5 leading-tight">
+            「今すぐ印刷して<br className="sm:hidden" />使える」<br />
+            <span className="text-primary">保育教材がそろう場所</span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto mb-8 leading-relaxed">
+            ぬりえ・ひらがな・迷路など、現場で本当に使える教材を無料配布。
+            年齢・季節・行事で絞り込んで、すぐ印刷できます。
           </p>
+
+          <div className="max-w-lg mx-auto mb-8">
+            <Link
+              href="/materials"
+              className="flex items-center gap-3 bg-white border border-border rounded-xl px-5 py-3.5 text-muted-foreground hover:border-primary/50 hover:shadow-sm transition-all text-sm sm:text-base"
+            >
+              <Search className="w-5 h-5 text-primary shrink-0" />
+              <span>教材を検索（年齢・季節・行事など）</span>
+            </Link>
+          </div>
+
+          <div className="flex items-center justify-center gap-6 sm:gap-10 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1.5">
+              <Printer className="w-4 h-4 text-primary" />
+              <span><strong className="text-foreground">20+</strong> 教材</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Users className="w-4 h-4 text-primary" />
+              <span>2〜6歳対応</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Star className="w-4 h-4 text-primary" />
+              <span>完全無料</span>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      {/* 年齢で探す */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        <SectionHeader title="年齢で探す" subtitle="年齢に合った教材だけを表示します" href="/materials" />
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-6">
+          {[2, 3, 4, 5, 6].map(age => (
+            <Link
+              key={age}
+              href={`/category/age/${age}`}
+              className="group bg-white border border-border rounded-2xl p-4 text-center hover:border-primary/40 hover:bg-primary/3 transition-all"
+            >
+              <div className="text-3xl mb-2">
+                {age === 2 ? '👶' : age === 3 ? '🧒' : age === 4 ? '👦' : age === 5 ? '🧑' : '👧'}
+              </div>
+              <div className="font-bold text-foreground">{age}歳</div>
+              <div className="text-xs text-muted-foreground mt-0.5">向け</div>
+            </Link>
+          ))}
         </div>
-      </main>
+      </section>
+
+      {/* カテゴリ */}
+      <section className="bg-muted/30 py-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <SectionHeader title="種類で探す" subtitle="教材の種類から探せます" />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
+            {Object.entries(CATEGORY_LABELS).map(([key, label]) => {
+              const icons: Record<string, string> = {
+                coloring: '🖍️', hiragana: 'あ', numbers: '1️⃣',
+                drawing: '✏️', maze: '🗺️', dotconnect: '⚫',
+                craft: '🎨', scissors: '✂️',
+              }
+              return (
+                <Link
+                  key={key}
+                  href={`/category/type/${key}`}
+                  className="bg-white border border-border rounded-xl p-3 flex items-center gap-3 hover:border-primary/40 hover:shadow-sm transition-all"
+                >
+                  <span className="text-2xl w-8 text-center shrink-0">{icons[key]}</span>
+                  <span className="text-sm font-medium">{label}</span>
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 人気教材 */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        <SectionHeader title="人気の教材" subtitle="保育現場でよく使われている教材" href="/materials" />
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
+          {popular.map(material => (
+            <MaterialCard key={material.id} material={material} />
+          ))}
+        </div>
+      </section>
+
+      {/* 季節・行事 */}
+      <section className="bg-muted/30 py-12">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid sm:grid-cols-2 gap-8">
+            <div>
+              <SectionHeader title="季節で探す" />
+              <div className="grid grid-cols-2 gap-3 mt-4">
+                {Object.entries(SEASON_LABELS).map(([key, label]) => {
+                  const icons: Record<string, string> = {
+                    spring: '🌸', summer: '🌊', autumn: '🍂', winter: '❄️',
+                  }
+                  return (
+                    <Link
+                      key={key}
+                      href={`/category/season/${key}`}
+                      className="bg-white border border-border rounded-xl p-4 flex items-center gap-3 hover:border-primary/40 hover:shadow-sm transition-all"
+                    >
+                      <span className="text-2xl">{icons[key]}</span>
+                      <span className="text-sm font-medium">{label}</span>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+
+            <div>
+              <SectionHeader title="行事で探す" />
+              <div className="grid grid-cols-2 gap-3 mt-4">
+                {Object.entries(EVENT_LABELS).slice(0, 6).map(([key, label]) => {
+                  const icons: Record<string, string> = {
+                    tanabata: '🎋', setsubun: '🫘', summerfestival: '🏮',
+                    halloween: '🎃', christmas: '🎄', hinamatsuri: '🎎',
+                    sports: '🏃', graduation: '🎓', mothers: '💐', fathers: '👔',
+                  }
+                  return (
+                    <Link
+                      key={key}
+                      href={`/category/event/${key}`}
+                      className="bg-white border border-border rounded-xl p-3 flex items-center gap-2.5 hover:border-primary/40 hover:shadow-sm transition-all"
+                    >
+                      <span className="text-xl shrink-0">{icons[key]}</span>
+                      <span className="text-sm font-medium">{label}</span>
+                    </Link>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-16 text-center">
+        <div className="bg-primary/8 rounded-3xl p-8 sm:p-12">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">
+            保育現場をもっとラクに
+          </h2>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            雨の日も、自由時間も、行事前も。<br />
+            すぐ使える教材がここにあります。
+          </p>
+          <Link
+            href="/materials"
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 rounded-xl font-medium hover:bg-primary/90 transition-colors"
+          >
+            すべての教材を見る
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
     </div>
-  );
+  )
+}
+
+function SectionHeader({ title, subtitle, href }: { title: string; subtitle?: string; href?: string }) {
+  return (
+    <div className="flex items-center justify-between">
+      <div>
+        <h2 className="text-xl font-bold tracking-tight">{title}</h2>
+        {subtitle && <p className="text-sm text-muted-foreground mt-0.5">{subtitle}</p>}
+      </div>
+      {href && (
+        <Link href={href} className="text-sm text-primary hover:text-primary/80 flex items-center gap-1 transition-colors">
+          すべて見る
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+      )}
+    </div>
+  )
 }

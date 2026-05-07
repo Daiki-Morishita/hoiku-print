@@ -1,0 +1,314 @@
+import type { Material, Category, Season, Theme, AgeGroup } from './types'
+
+export const materials: Material[] = [
+  {
+    id: 'cat-simple',
+    title: 'ねこのぬりえ',
+    description: 'おおきなねこのかわいいぬりえ。線が太くて塗りやすく、2〜3歳にぴったりです。',
+    ageMin: 2, ageMax: 3, difficulty: 1, duration: 10,
+    category: 'coloring', theme: 'animals',
+    tags: ['ねこ', '動物', 'かわいい'],
+    tools: ['クレヨン', '色鉛筆'],
+    activityIdeas: ['好きな色で塗ろう', '模様をかいてみよう'],
+    imageUrl: '/materials/cat-simple.svg',
+    pdfUrl: '/materials/cat-simple.pdf',
+    createdAt: '2025-04-01', popular: true,
+  },
+  {
+    id: 'elephant-simple',
+    title: 'ぞうのぬりえ',
+    description: 'のんびりぞうの大きなぬりえ。広い面積で塗りやすく、達成感があります。',
+    ageMin: 2, ageMax: 4, difficulty: 1, duration: 10,
+    category: 'coloring', theme: 'animals',
+    tags: ['ぞう', '動物', 'ジャングル'],
+    tools: ['クレヨン'],
+    activityIdeas: ['何色のぞうにする？', 'ぞうの鼻で水をかけるお絵描き'],
+    imageUrl: '/materials/elephant-simple.svg',
+    pdfUrl: '/materials/elephant-simple.pdf',
+    createdAt: '2025-04-02', popular: true,
+  },
+  {
+    id: 'dinosaur-trex',
+    title: 'ティラノサウルスのぬりえ',
+    description: '人気の恐竜ぬりえ。細かい鱗まで描いた本格的なデザイン。',
+    ageMin: 4, ageMax: 6, difficulty: 2, duration: 15,
+    category: 'coloring', theme: 'dinosaurs',
+    tags: ['恐竜', 'ティラノサウルス', '男の子'],
+    tools: ['色鉛筆', 'クレヨン'],
+    activityIdeas: ['好きな色の恐竜を作ろう', '恐竜の名前を覚えよう'],
+    imageUrl: '/materials/dinosaur-trex.svg',
+    pdfUrl: '/materials/dinosaur-trex.pdf',
+    createdAt: '2025-04-03', popular: true,
+  },
+  {
+    id: 'firetruck',
+    title: 'しょうぼうしゃのぬりえ',
+    description: 'はたらくくるまシリーズ。赤い消防車のダイナミックなぬりえ。',
+    ageMin: 3, ageMax: 5, difficulty: 2, duration: 15,
+    category: 'coloring', theme: 'vehicles',
+    tags: ['消防車', 'くるま', 'はたらくくるま'],
+    tools: ['クレヨン', '色鉛筆'],
+    activityIdeas: ['消防士になりきって発表', '赤い物探しゲーム'],
+    imageUrl: '/materials/firetruck.svg',
+    pdfUrl: '/materials/firetruck.pdf',
+    createdAt: '2025-04-04', popular: false,
+  },
+  {
+    id: 'tanabata-star',
+    title: '七夕 たなばたのぬりえ',
+    description: '笹と星と織姫のかわいい七夕ぬりえ。行事前の準備にぴったり。',
+    ageMin: 3, ageMax: 6, difficulty: 2, duration: 15,
+    category: 'coloring',
+    tags: ['七夕', '行事', '星', '笹'],
+    season: 'summer', event: 'tanabata',
+    tools: ['クレヨン', '色鉛筆', '折り紙'],
+    activityIdeas: ['お願い事を書こう', '短冊づくりと合わせて'],
+    imageUrl: '/materials/tanabata-star.svg',
+    pdfUrl: '/materials/tanabata-star.pdf',
+    createdAt: '2025-04-05', popular: true,
+  },
+  {
+    id: 'christmas-tree',
+    title: 'クリスマスツリーのぬりえ',
+    description: '大きなクリスマスツリー。飾りを自分でデザインできる余白つき。',
+    ageMin: 3, ageMax: 6, difficulty: 1, duration: 15,
+    category: 'coloring',
+    tags: ['クリスマス', '行事', 'ツリー'],
+    season: 'winter', event: 'christmas',
+    tools: ['クレヨン', '色鉛筆', 'シール'],
+    activityIdeas: ['好きな飾りを描き加えよう', '切り取って壁面に'],
+    imageUrl: '/materials/christmas-tree.svg',
+    pdfUrl: '/materials/christmas-tree.pdf',
+    createdAt: '2025-04-06', popular: true,
+  },
+  {
+    id: 'halloween-pumpkin',
+    title: 'ハロウィン かぼちゃのぬりえ',
+    description: 'おばけとかぼちゃのハロウィンぬりえ。顔を自由に描いて楽しめます。',
+    ageMin: 3, ageMax: 6, difficulty: 1, duration: 10,
+    category: 'coloring',
+    tags: ['ハロウィン', 'かぼちゃ', 'おばけ', '行事'],
+    season: 'autumn', event: 'halloween',
+    tools: ['クレヨン', '黒ペン'],
+    activityIdeas: ['顔を自分でデザイン', 'コスチュームと合わせて'],
+    imageUrl: '/materials/halloween-pumpkin.svg',
+    pdfUrl: '/materials/halloween-pumpkin.pdf',
+    createdAt: '2025-04-07', popular: false,
+  },
+  {
+    id: 'hiragana-a-line',
+    title: 'ひらがな あ行 練習プリント',
+    description: 'あ・い・う・え・お の書き順付き練習シート。点線なぞり書きで覚えられます。',
+    ageMin: 4, ageMax: 6, difficulty: 2, duration: 15,
+    category: 'hiragana',
+    tags: ['ひらがな', '書き方', '練習', '小学校準備'],
+    tools: ['鉛筆'],
+    activityIdeas: ['声に出しながら書こう', 'カードゲームに'],
+    imageUrl: '/materials/hiragana-a-line.svg',
+    pdfUrl: '/materials/hiragana-a-line.pdf',
+    createdAt: '2025-04-08', popular: true,
+  },
+  {
+    id: 'numbers-1-10',
+    title: '数字 1〜10 練習プリント',
+    description: '1から10の数字の書き順と数え方。絵と数字を合わせた楽しいデザイン。',
+    ageMin: 3, ageMax: 5, difficulty: 1, duration: 10,
+    category: 'numbers',
+    tags: ['数字', '数え方', '算数準備'],
+    tools: ['鉛筆', 'クレヨン'],
+    activityIdeas: ['数を声に出して数えよう', '絵の中の数を探そう'],
+    imageUrl: '/materials/numbers-1-10.svg',
+    pdfUrl: '/materials/numbers-1-10.pdf',
+    createdAt: '2025-04-09', popular: false,
+  },
+  {
+    id: 'maze-easy',
+    title: 'かんたん迷路 どうぶつ編',
+    description: '動物を助けに行くかんたん迷路。2〜3歳でも楽しめるシンプルなコース。',
+    ageMin: 2, ageMax: 4, difficulty: 1, duration: 5,
+    category: 'maze', theme: 'animals',
+    tags: ['迷路', '動物', '集中力'],
+    tools: ['鉛筆', 'クレヨン'],
+    activityIdeas: ['どの道を通る？声に出して', 'タイムアタック'],
+    imageUrl: '/materials/maze-easy.svg',
+    pdfUrl: '/materials/maze-easy.pdf',
+    createdAt: '2025-04-10', popular: false,
+  },
+  {
+    id: 'maze-medium',
+    title: '迷路 恐竜の世界',
+    description: '恐竜の世界を探検する中級迷路。4〜5歳向けの少し長いコース。',
+    ageMin: 4, ageMax: 6, difficulty: 2, duration: 10,
+    category: 'maze', theme: 'dinosaurs',
+    tags: ['迷路', '恐竜', '集中力'],
+    tools: ['鉛筆'],
+    activityIdeas: ['恐竜を探せ！', '友達と競争'],
+    imageUrl: '/materials/maze-medium.svg',
+    pdfUrl: '/materials/maze-medium.pdf',
+    createdAt: '2025-04-11', popular: false,
+  },
+  {
+    id: 'dotconnect-1-20',
+    title: '点つなぎ 1〜20 うさぎ',
+    description: '1から20の数字順に点をつなぐとうさぎが現れる楽しい点つなぎ。',
+    ageMin: 4, ageMax: 6, difficulty: 2, duration: 10,
+    category: 'dotconnect',
+    tags: ['点つなぎ', '数字', '集中力', 'うさぎ'],
+    tools: ['鉛筆'],
+    activityIdeas: ['数字を声に出しながら', 'できた絵を色塗りしよう'],
+    imageUrl: '/materials/dotconnect-usamgi.svg',
+    pdfUrl: '/materials/dotconnect-usagi.pdf',
+    createdAt: '2025-04-12', popular: false,
+  },
+  {
+    id: 'drawing-straight',
+    title: '運筆プリント まっすぐな線',
+    description: 'ゆっくりゆっくり線を引く練習。えんぴつの持ち方も身につきます。',
+    ageMin: 3, ageMax: 5, difficulty: 1, duration: 10,
+    category: 'drawing',
+    tags: ['運筆', '線', 'えんぴつ', '就学準備'],
+    tools: ['鉛筆', 'クレヨン'],
+    activityIdeas: ['ゆっくり丁寧にが大事', 'はみ出さないゲーム'],
+    imageUrl: '/materials/drawing-straight.svg',
+    pdfUrl: '/materials/drawing-straight.pdf',
+    createdAt: '2025-04-13', popular: false,
+  },
+  {
+    id: 'drawing-curve',
+    title: '運筆プリント くねくね線',
+    description: 'カーブした道をなぞる運筆プリント。手首の動きを練習します。',
+    ageMin: 3, ageMax: 5, difficulty: 2, duration: 10,
+    category: 'drawing',
+    tags: ['運筆', 'カーブ', 'えんぴつ'],
+    tools: ['鉛筆'],
+    activityIdeas: ['車が走ってるね', 'どうぶつが歩いてるね'],
+    imageUrl: '/materials/drawing-curve.svg',
+    pdfUrl: '/materials/drawing-curve.pdf',
+    createdAt: '2025-04-14', popular: false,
+  },
+  {
+    id: 'summer-sea',
+    title: '夏の海 さかなたちのぬりえ',
+    description: 'カラフルな海の生き物が泳ぐ夏のぬりえ。魚・タコ・ヤドカリが登場。',
+    ageMin: 3, ageMax: 6, difficulty: 2, duration: 15,
+    category: 'coloring', theme: 'sea',
+    tags: ['海', '魚', '夏', 'カラフル'],
+    season: 'summer',
+    tools: ['クレヨン', '水彩色鉛筆'],
+    activityIdeas: ['何色の魚にする？', '海の生き物を覚えよう'],
+    imageUrl: '/materials/summer-sea.svg',
+    pdfUrl: '/materials/summer-sea.pdf',
+    createdAt: '2025-04-15', popular: false,
+  },
+  {
+    id: 'spring-flower',
+    title: '春のお花 チューリップのぬりえ',
+    description: 'チューリップと蝶々の春らしいぬりえ。入園・卒園シーズンにもぴったり。',
+    ageMin: 2, ageMax: 5, difficulty: 1, duration: 10,
+    category: 'coloring', theme: 'flowers',
+    tags: ['チューリップ', '春', '花', 'ちょうちょ'],
+    season: 'spring',
+    tools: ['クレヨン', '色鉛筆'],
+    activityIdeas: ['何色のチューリップ？', '壁面飾りに使おう'],
+    imageUrl: '/materials/spring-flower.svg',
+    pdfUrl: '/materials/spring-flower.pdf',
+    createdAt: '2025-04-16', popular: false,
+  },
+  {
+    id: 'autumn-leaves',
+    title: '秋の葉っぱ もみじのぬりえ',
+    description: 'もみじ・いちょう・どんぐりの秋らしいぬりえ。色の変化を楽しめます。',
+    ageMin: 3, ageMax: 6, difficulty: 1, duration: 10,
+    category: 'coloring', theme: 'flowers',
+    tags: ['もみじ', '秋', '葉っぱ', '落ち葉'],
+    season: 'autumn',
+    tools: ['クレヨン', '色鉛筆'],
+    activityIdeas: ['赤・黄色・茶色で塗ってみよう', '落ち葉拾いと合わせて'],
+    imageUrl: '/materials/autumn-leaves.svg',
+    pdfUrl: '/materials/autumn-leaves.pdf',
+    createdAt: '2025-04-17', popular: false,
+  },
+  {
+    id: 'scissors-straight',
+    title: 'ハサミ練習 まっすぐ切ろう',
+    description: '直線を切る練習シート。線に沿って切ることで手先の器用さを鍛えます。',
+    ageMin: 3, ageMax: 5, difficulty: 1, duration: 10,
+    category: 'scissors',
+    tags: ['ハサミ', '切る練習', '手先', '指先'],
+    tools: ['子ども用ハサミ'],
+    activityIdeas: ['安全な使い方を確認してから', '切った紙で貼り絵に'],
+    imageUrl: '/materials/scissors-straight.svg',
+    pdfUrl: '/materials/scissors-straight.pdf',
+    createdAt: '2025-04-18', popular: false,
+  },
+  {
+    id: 'food-bento',
+    title: 'おべんとうのぬりえ',
+    description: 'おにぎり・からあげ・卵焼きが入ったお弁当のぬりえ。食育にもなります。',
+    ageMin: 2, ageMax: 5, difficulty: 1, duration: 10,
+    category: 'coloring', theme: 'food',
+    tags: ['お弁当', '食べ物', '食育'],
+    tools: ['クレヨン', '色鉛筆'],
+    activityIdeas: ['どんな色が食べ物に合うかな', 'お気に入りのおかずはどれ？'],
+    imageUrl: '/materials/food-bento.svg',
+    pdfUrl: '/materials/food-bento.pdf',
+    createdAt: '2025-04-19', popular: false,
+  },
+  {
+    id: 'train-simple',
+    title: 'でんしゃのぬりえ',
+    description: 'かわいい電車のぬりえ。窓の中に人を描き加えて楽しめます。',
+    ageMin: 2, ageMax: 5, difficulty: 1, duration: 10,
+    category: 'coloring', theme: 'trains',
+    tags: ['電車', '乗り物', '男の子', 'でんしゃ'],
+    tools: ['クレヨン'],
+    activityIdeas: ['好きな色の電車を作ろう', '窓に乗客を描こう'],
+    imageUrl: '/materials/train-simple.svg',
+    pdfUrl: '/materials/train-simple.pdf',
+    createdAt: '2025-04-20', popular: false,
+  },
+]
+
+// フィルタリング関数
+export function filterMaterials(params: {
+  age?: number
+  category?: string
+  season?: string
+  event?: string
+  theme?: string
+  difficulty?: number
+  search?: string
+}): Material[] {
+  return materials.filter(m => {
+    if (params.age && (m.ageMin > params.age || m.ageMax < params.age)) return false
+    if (params.category && m.category !== params.category) return false
+    if (params.season && m.season !== params.season) return false
+    if (params.event && m.event !== params.event) return false
+    if (params.theme && m.theme !== params.theme) return false
+    if (params.difficulty && m.difficulty !== params.difficulty) return false
+    if (params.search) {
+      const q = params.search.toLowerCase()
+      const haystack = [m.title, m.description, ...m.tags].join(' ').toLowerCase()
+      if (!haystack.includes(q)) return false
+    }
+    return true
+  })
+}
+
+export function getPopularMaterials(limit = 6): Material[] {
+  return materials.filter(m => m.popular).slice(0, limit)
+}
+
+export function getMaterialById(id: string): Material | undefined {
+  return materials.find(m => m.id === id)
+}
+
+export function getRelatedMaterials(material: Material, limit = 4): Material[] {
+  return materials
+    .filter(m => m.id !== material.id && (
+      m.category === material.category ||
+      m.theme === material.theme ||
+      m.event === material.event
+    ))
+    .slice(0, limit)
+}
