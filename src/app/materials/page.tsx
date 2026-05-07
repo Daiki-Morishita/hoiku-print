@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { MaterialCard } from '@/components/materials/MaterialCard'
 import { SearchFilters } from '@/components/search/SearchFilters'
+import { SearchBar } from '@/components/search/SearchBar'
 import { filterMaterials } from '@/lib/data'
 import type { Category, Season } from '@/lib/types'
 
@@ -31,15 +32,24 @@ export default async function MaterialsPage({
     search: params.search,
   })
 
-  const activeCount = [params.age, params.category, params.season, params.event].filter(Boolean).length
+  const activeCount = [params.age, params.category, params.season, params.event, params.search].filter(Boolean).length
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
       <div className="mb-6">
         <h1 className="text-2xl font-bold">教材を探す</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          {filtered.length}件の教材が見つかりました
+          {activeCount > 0
+            ? `${filtered.length}件が見つかりました`
+            : `全${filtered.length}件の教材`}
         </p>
+      </div>
+
+      {/* キーワード検索バー */}
+      <div className="mb-6">
+        <Suspense fallback={<div className="h-10 bg-muted rounded-xl animate-pulse" />}>
+          <SearchBar />
+        </Suspense>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8">

@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
-export const alt = 'ほいくぷりんと - 保育士のための無料教材プリント'
+export const alt = 'ぬりえプリント - 保育士のための無料教材プリント'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
@@ -22,7 +22,7 @@ export default async function OGImage() {
       >
         <div style={{ fontSize: 80, marginBottom: 20 }}>🖨️</div>
         <div style={{ fontSize: 56, fontWeight: 700, color: '#1F2937', marginBottom: 12 }}>
-          ほいくぷりんと
+          ぬりえプリント
         </div>
         <div style={{ fontSize: 28, color: '#5B9BD5', fontWeight: 600, marginBottom: 20 }}>
           保育士のための無料教材プリント

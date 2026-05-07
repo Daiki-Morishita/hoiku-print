@@ -17,7 +17,7 @@ export function Header() {
               <Printer className="w-4 h-4 text-white" />
             </div>
             <span className="text-lg font-bold text-foreground tracking-tight">
-              ほいくぷりんと
+              ぬりえプリント
             </span>
           </Link>
 

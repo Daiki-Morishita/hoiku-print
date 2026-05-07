@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Clock, Users, Star } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import type { Material } from '@/lib/types'
@@ -14,19 +15,44 @@ const difficultyColor: Record<number, string> = {
   3: 'bg-red-100 text-red-800',
 }
 
+const categoryEmoji: Record<string, string> = {
+  coloring: '🖍️', hiragana: 'あ', numbers: '1', drawing: '✏️',
+  maze: '🗺', dotconnect: '⚫', craft: '🎨', scissors: '✂️',
+}
+
+const themeEmoji: Record<string, string> = {
+  animals: '🐾', dinosaurs: '🦕', vehicles: '🚒', trains: '🚃',
+  food: '🍎', sea: '🐟', flowers: '🌸', insects: '🐛', characters: '⭐',
+}
+
 export function MaterialCard({ material }: MaterialCardProps) {
   const ageLabel = material.ageMin === material.ageMax
     ? `${material.ageMin}歳`
     : `${material.ageMin}〜${material.ageMax}歳`
+
+  const hasSvg = material.imageUrl && material.imageUrl.endsWith('.svg')
 
   return (
     <Link
       href={`/materials/${material.id}`}
       className="group bg-white rounded-2xl border border-border overflow-hidden hover:shadow-md hover:border-primary/30 transition-all duration-200 flex flex-col"
     >
-      {/* 教材プレビュー画像エリア */}
+      {/* プレビューエリア */}
       <div className="relative bg-gradient-to-br from-primary/5 to-primary/10 aspect-[4/3] flex items-center justify-center overflow-hidden">
-        <MaterialPreview category={material.category} theme={material.theme} />
+        {hasSvg ? (
+          <Image
+            src={material.imageUrl}
+            alt={material.title}
+            width={200}
+            height={150}
+            className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-200"
+            unoptimized
+          />
+        ) : (
+          <div className="text-6xl select-none group-hover:scale-110 transition-transform duration-200">
+            {material.theme ? (themeEmoji[material.theme] ?? categoryEmoji[material.category] ?? '🖨') : (categoryEmoji[material.category] ?? '🖨')}
+          </div>
+        )}
         {material.popular && (
           <div className="absolute top-2 left-2">
             <span className="inline-flex items-center gap-1 text-xs bg-accent text-white px-2 py-0.5 rounded-full font-medium">
@@ -43,7 +69,7 @@ export function MaterialCard({ material }: MaterialCardProps) {
       </div>
 
       {/* カード情報 */}
-      <div className="p-4 flex flex-col gap-3 flex-1">
+      <div className="p-4 flex flex-col gap-2.5 flex-1">
         <div>
           <h3 className="font-semibold text-sm leading-snug group-hover:text-primary transition-colors line-clamp-2">
             {material.title}
@@ -53,15 +79,13 @@ export function MaterialCard({ material }: MaterialCardProps) {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5 flex-wrap">
           <Badge variant="secondary" className="text-xs">
             {CATEGORY_LABELS[material.category]}
           </Badge>
-          {material.event && (
-            <Badge variant="outline" className="text-xs">
-              {material.tags[0]}
-            </Badge>
-          )}
+          {material.tags.slice(0, 1).map(tag => (
+            <Badge key={tag} variant="outline" className="text-xs">{tag}</Badge>
+          ))}
         </div>
 
         <div className="flex items-center justify-between text-xs text-muted-foreground mt-auto pt-2 border-t border-border">
@@ -76,33 +100,5 @@ export function MaterialCard({ material }: MaterialCardProps) {
         </div>
       </div>
     </Link>
-  )
-}
-
-function MaterialPreview({ category, theme }: { category: string; theme?: string }) {
-  const emojiMap: Record<string, string> = {
-    'coloring-animals': '🐱',
-    'coloring-dinosaurs': '🦕',
-    'coloring-vehicles': '🚒',
-    'coloring-trains': '🚃',
-    'coloring-food': '🍱',
-    'coloring-sea': '🐟',
-    'coloring-flowers': '🌸',
-    'hiragana': 'あ',
-    'numbers': '1',
-    'maze': '🗺',
-    'dotconnect': '⚫',
-    'drawing': '✏️',
-    'scissors': '✂️',
-    'craft': '🎨',
-  }
-
-  const key = theme ? `${category}-${theme}` : category
-  const emoji = emojiMap[key] || emojiMap[category] || '🖨'
-
-  return (
-    <div className="text-6xl select-none group-hover:scale-110 transition-transform duration-200">
-      {emoji}
-    </div>
   )
 }

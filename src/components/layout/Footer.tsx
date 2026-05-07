@@ -11,7 +11,7 @@ export function Footer() {
               <div className="w-7 h-7 bg-primary rounded-lg flex items-center justify-center">
                 <Printer className="w-3.5 h-3.5 text-white" />
               </div>
-              <span className="font-bold text-foreground">ほいくぷりんと</span>
+              <span className="font-bold text-foreground">ぬりえプリント</span>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
               保育士・幼稚園教諭のための<br />無料教材プリントサービス。<br />
@@ -41,7 +41,7 @@ export function Footer() {
         </div>
 
         <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-2">
-          <p className="text-xs text-muted-foreground">© 2025 ほいくぷりんと. All rights reserved.</p>
+          <p className="text-xs text-muted-foreground">© 2025 ぬりえプリント. All rights reserved.</p>
           <p className="text-xs text-muted-foreground">教材は保育・教育目的での使用に限り無料です</p>
         </div>
       </div>
