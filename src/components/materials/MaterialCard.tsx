@@ -30,7 +30,8 @@ export function MaterialCard({ material }: MaterialCardProps) {
     ? `${material.ageMin}歳`
     : `${material.ageMin}〜${material.ageMax}歳`
 
-  const hasSvg = material.imageUrl && material.imageUrl.endsWith('.svg')
+  // SVG・JPG・PNG・WebP 問わず imageUrl があれば画像表示
+  const hasImage = !!material.imageUrl
 
   return (
     <Link
@@ -39,13 +40,13 @@ export function MaterialCard({ material }: MaterialCardProps) {
     >
       {/* プレビューエリア */}
       <div className="relative bg-gradient-to-br from-primary/5 to-primary/10 aspect-[4/3] flex items-center justify-center overflow-hidden">
-        {hasSvg ? (
+        {hasImage ? (
           <Image
             src={material.imageUrl}
             alt={material.title}
-            width={200}
-            height={150}
-            className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-200"
+            width={320}
+            height={240}
+            className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-200"
             unoptimized
           />
         ) : (

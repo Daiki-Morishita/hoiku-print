@@ -52,7 +52,13 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
     ? `${material.ageMin}歳`
     : `${material.ageMin}〜${material.ageMax}歳`
 
-  const hasSvg = material.imageUrl && material.imageUrl.endsWith('.svg')
+  const hasImage = !!material.imageUrl
+  // 印刷用: API経由で長辺3500pxにアップスケールした画像を使う
+  const printImageUrl = material.imageUrl
+    ? material.imageUrl.endsWith('.svg')
+      ? material.imageUrl                    // SVGはそのまま（解像度非依存）
+      : `/api/print-image/${material.id}`    // JPG/PNG → 高解像度API
+    : null
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -87,14 +93,14 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             {material.title}
           </h1>
 
-          {/* ぬりえ本体 */}
-          {hasSvg && (
+          {/* 教材画像（印刷用高解像度APIから取得） */}
+          {printImageUrl && (
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '6mm' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={material.imageUrl}
+                src={printImageUrl}
                 alt={material.title}
-                style={{ width: '160mm', height: 'auto', maxHeight: '200mm', objectFit: 'contain' }}
+                style={{ width: '170mm', height: 'auto', maxHeight: '220mm', objectFit: 'contain' }}
               />
             </div>
           )}
@@ -120,9 +126,9 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
         <div className="grid lg:grid-cols-[1fr_300px] gap-8">
           {/* メインコンテンツ */}
           <div>
-            {/* 教材プレビュー */}
+            {/* 教材プレビュー（画面表示用・next/imageで最適化） */}
             <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl overflow-hidden mb-6 relative flex items-center justify-center min-h-64">
-              {hasSvg ? (
+              {hasImage ? (
                 <Image
                   src={material.imageUrl}
                   alt={material.title}
