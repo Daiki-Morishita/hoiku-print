@@ -104,7 +104,7 @@ export const materials: Material[] = [
     tools: ['クレヨン', '色鉛筆', 'シール'],
     activityIdeas: ['好きな飾りを描き加えよう', '切り取って壁面に'],
     imageUrl: '/materials/christmas-tree.svg',
-    pdfUrl: '/materials/christmas-tree.pdf',
+    pdfUrl: '/materials/christmas-tree.svg',
     createdAt: '2025-04-06', popular: true,
   },
   {
@@ -118,7 +118,7 @@ export const materials: Material[] = [
     tools: ['クレヨン', '黒ペン'],
     activityIdeas: ['顔を自分でデザイン', 'コスチュームと合わせて'],
     imageUrl: '/materials/halloween-pumpkin.svg',
-    pdfUrl: '/materials/halloween-pumpkin.pdf',
+    pdfUrl: '/materials/halloween-pumpkin.svg',
     createdAt: '2025-04-07', popular: false,
   },
   {
@@ -146,6 +146,19 @@ export const materials: Material[] = [
     imageUrl: '/materials/numbers-1-10.svg',
     pdfUrl: '/materials/numbers-1-10.pdf',
     createdAt: '2025-04-09', popular: false,
+  },
+  {
+    id: 'numbers-1to5',
+    title: 'すうじ 1〜5 なぞり書き',
+    description: '1から5の数字をなぞって書く練習シート。書き順番号つき、繰り返し練習できます。',
+    ageMin: 3, ageMax: 5, difficulty: 1, duration: 10,
+    category: 'numbers',
+    tags: ['数字', 'なぞり書き', '書き方', '就学準備'],
+    tools: ['鉛筆', 'クレヨン'],
+    activityIdeas: ['声に出しながら書こう', '1〜5まで数えながら'],
+    imageUrl: '/materials/numbers-1to5.svg',
+    pdfUrl: '/materials/numbers-1to5.svg',
+    createdAt: '2025-05-07', popular: true,
   },
   {
     id: 'maze-easy',
@@ -236,8 +249,8 @@ export const materials: Material[] = [
     season: 'spring',
     tools: ['クレヨン', '色鉛筆'],
     activityIdeas: ['何色のチューリップ？', '壁面飾りに使おう'],
-    imageUrl: '/materials/spring-flower.svg',
-    pdfUrl: '/materials/spring-flower.pdf',
+    imageUrl: '/materials/tulip-spring.svg',
+    pdfUrl: '/materials/tulip-spring.svg',
     createdAt: '2025-04-16', popular: false,
   },
   {

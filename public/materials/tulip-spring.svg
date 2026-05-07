@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 480" width="400" height="480">
+  <!-- 2〜5歳向け チューリップ ぬりえ -->
+
+  <!-- 茎（左） -->
+  <line x1="115" y1="340" x2="115" y2="460" stroke="#222" stroke-width="10" stroke-linecap="round"/>
+  <!-- 葉っぱ（左・外） -->
+  <path d="M115 390 Q75 360 60 330 Q90 320 115 360Z" fill="white" stroke="#222" stroke-width="9"/>
+  <!-- 葉っぱ（左・内） -->
+  <path d="M115 400 Q145 370 155 340 Q130 335 115 370Z" fill="white" stroke="#222" stroke-width="9"/>
+
+  <!-- 茎（中央） -->
+  <line x1="200" y1="310" x2="200" y2="460" stroke="#222" stroke-width="10" stroke-linecap="round"/>
+  <!-- 葉っぱ（中・左） -->
+  <path d="M200 380 Q160 350 145 318 Q175 308 200 350Z" fill="white" stroke="#222" stroke-width="9"/>
+  <!-- 葉っぱ（中・右） -->
+  <path d="M200 390 Q240 360 255 328 Q225 318 200 360Z" fill="white" stroke="#222" stroke-width="9"/>
+
+  <!-- 茎（右） -->
+  <line x1="285" y1="340" x2="285" y2="460" stroke="#222" stroke-width="10" stroke-linecap="round"/>
+  <!-- 葉っぱ（右・内） -->
+  <path d="M285 390 Q255 360 245 330 Q270 320 285 360Z" fill="white" stroke="#222" stroke-width="9"/>
+  <!-- 葉っぱ（右・外） -->
+  <path d="M285 400 Q320 365 338 335 Q310 325 285 370Z" fill="white" stroke="#222" stroke-width="9"/>
+
+  <!-- 花（左）赤系イメージ -->
+  <path d="M80 340 Q70 300 90 260 Q115 230 115 260 Q115 230 140 260 Q160 300 150 340Z"
+        fill="white" stroke="#222" stroke-width="10" stroke-linejoin="round"/>
+
+  <!-- 花（中央）黄系 -->
+  <path d="M165 310 Q155 265 175 220 Q200 185 200 220 Q200 185 225 220 Q245 265 235 310Z"
+        fill="white" stroke="#222" stroke-width="10" stroke-linejoin="round"/>
+
+  <!-- 花（右）ピンク系 -->
+  <path d="M250 340 Q240 300 260 260 Q285 230 285 260 Q285 230 310 260 Q330 300 320 340Z"
+        fill="white" stroke="#222" stroke-width="10" stroke-linejoin="round"/>
+
+  <!-- タイトル -->
+  <text x="200" y="35" font-family="sans-serif" font-size="20" font-weight="bold" fill="#222" text-anchor="middle">チューリップ ぬりえ</text>
+  <text x="200" y="58" font-family="sans-serif" font-size="13" fill="#6B7280" text-anchor="middle">すきないろで ぬってみよう！</text>
+</svg>
