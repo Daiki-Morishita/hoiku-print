@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <!-- 3〜6歳向け 七夕ぬりえ -->
+
+  <!-- 笹の幹 -->
+  <line x1="200" y1="480" x2="200" y2="60" stroke="#222" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- 笹の枝（左） -->
+  <path d="M200 120 Q155 100 130 115" fill="none" stroke="#222" stroke-width="8" stroke-linecap="round"/>
+  <path d="M200 180 Q148 155 118 168" fill="none" stroke="#222" stroke-width="8" stroke-linecap="round"/>
+  <path d="M200 245 Q152 220 125 235" fill="none" stroke="#222" stroke-width="8" stroke-linecap="round"/>
+  <path d="M200 310 Q155 285 128 300" fill="none" stroke="#222" stroke-width="8" stroke-linecap="round"/>
+  <path d="M200 375 Q155 350 130 365" fill="none" stroke="#222" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- 笹の枝（右） -->
+  <path d="M200 150 Q248 128 272 142" fill="none" stroke="#222" stroke-width="8" stroke-linecap="round"/>
+  <path d="M200 215 Q252 192 278 206" fill="none" stroke="#222" stroke-width="8" stroke-linecap="round"/>
+  <path d="M200 278 Q250 255 275 270" fill="none" stroke="#222" stroke-width="8" stroke-linecap="round"/>
+  <path d="M200 342 Q248 318 272 333" fill="none" stroke="#222" stroke-width="8" stroke-linecap="round"/>
+
+  <!-- 笹の葉（シンプル） -->
+  <ellipse cx="118" cy="115" rx="20" ry="8" fill="white" stroke="#222" stroke-width="7" transform="rotate(-20 118 115)"/>
+  <ellipse cx="108" cy="168" rx="20" ry="8" fill="white" stroke="#222" stroke-width="7" transform="rotate(-15 108 168)"/>
+  <ellipse cx="115" cy="235" rx="20" ry="8" fill="white" stroke="#222" stroke-width="7" transform="rotate(-20 115 235)"/>
+  <ellipse cx="118" cy="300" rx="20" ry="8" fill="white" stroke="#222" stroke-width="7" transform="rotate(-20 118 300)"/>
+  <ellipse cx="118" cy="365" rx="20" ry="8" fill="white" stroke="#222" stroke-width="7" transform="rotate(-20 118 365)"/>
+  <ellipse cx="282" cy="142" rx="20" ry="8" fill="white" stroke="#222" stroke-width="7" transform="rotate(20 282 142)"/>
+  <ellipse cx="288" cy="206" rx="20" ry="8" fill="white" stroke="#222" stroke-width="7" transform="rotate(15 288 206)"/>
+  <ellipse cx="285" cy="270" rx="20" ry="8" fill="white" stroke="#222" stroke-width="7" transform="rotate(20 285 270)"/>
+  <ellipse cx="282" cy="333" rx="20" ry="8" fill="white" stroke="#222" stroke-width="7" transform="rotate(20 282 333)"/>
+
+  <!-- 短冊（左） -->
+  <rect x="65" y="200" width="48" height="75" rx="4" fill="white" stroke="#222" stroke-width="8"/>
+  <line x1="89" y1="200" x2="89" y2="175" stroke="#222" stroke-width="6"/>
+  <line x1="89" y1="175" x2="148" y2="182" stroke="#222" stroke-width="5" stroke-dasharray="4,3"/>
+
+  <!-- 短冊（右） -->
+  <rect x="287" y="230" width="48" height="75" rx="4" fill="white" stroke="#222" stroke-width="8"/>
+  <line x1="311" y1="230" x2="311" y2="205" stroke="#222" stroke-width="6"/>
+  <line x1="311" y1="205" x2="252" y2="215" stroke="#222" stroke-width="5" stroke-dasharray="4,3"/>
+
+  <!-- ほし（大） -->
+  <polygon points="200,25 208,48 232,48 213,62 220,86 200,72 180,86 187,62 168,48 192,48"
+           fill="white" stroke="#222" stroke-width="9"/>
+
+  <!-- ほし（小・左） -->
+  <polygon points="80,80 85,95 100,95 88,104 93,119 80,110 67,119 72,104 60,95 75,95"
+           fill="white" stroke="#222" stroke-width="7"/>
+
+  <!-- ほし（小・右） -->
+  <polygon points="320,65 325,80 340,80 328,89 333,104 320,95 307,104 312,89 300,80 315,80"
+           fill="white" stroke="#222" stroke-width="7"/>
+</svg>

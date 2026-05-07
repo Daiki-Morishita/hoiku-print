@@ -5,10 +5,11 @@
 UX核心: **「考えなくていい」** = 迷わず・すぐ使える・すぐ印刷
 
 ## 技術スタック
-- Next.js 15 App Router + TypeScript
+- Next.js 16 App Router + TypeScript
 - Tailwind CSS v4 + shadcn/ui
-- 静的データ(JSON) → 将来DB移行想定
+- 静的データ(TypeScript) → 将来DB移行想定
 - GitHub + Vercel デプロイ
+- フォント: `next/font/google` (Noto_Sans_JP) — CSS @import 禁止(Turbopack panic)
 
 ## カラーパレット
 ```
@@ -84,8 +85,29 @@ type Material = {
 - インク節約: 背景なし
 - 名前欄付きレイアウト
 
+## 実装済みSVG教材 (public/materials/)
+| ファイル | 内容 | 対象年齢 |
+|---|---|---|
+| cat-simple.svg | ねこ ぬりえ | 2歳〜 |
+| bear-simple.svg | くま ぬりえ | 2歳〜 |
+| apple-simple.svg | りんご ぬりえ | 2歳〜 |
+| dinosaur-trex.svg | ティラノサウルス | 3-5歳 |
+| tanabata-star.svg | 七夕 ぬりえ | 3-6歳 |
+| maze-easy.svg | かんたん迷路 | 2-4歳 |
+| hiragana-a-line.svg | あ行 なぞり書き | 4-6歳 |
+
+## トップページ構成 (page.tsx)
+Hero → 状況で探す(6カード) → 年齢で探す → 種類で探す →
+2歳向け特集 → 人気教材 → 季節・行事 → CTA
+
+## 注意事項
+- SVG印刷: `<img>`タグ使用(next/image は印刷不可)
+- 印刷レイアウト: `print:hidden` / `hidden print:block` で画面/印刷切替
+- 検索: URL query params経由 (?age=3&category=coloring 等)
+
 ## 拡張ロードマップ
-1. v1: 静的サイト (現在)
-2. v2: 会員制・お気に入り保存
-3. v3: AI教材提案・保育士レビュー
-4. v4: 月齢別提案・保育AIアシスタント
+1. v1: 静的サイト (現在) — 23教材、SVGぬりえ7種
+2. v2: 教材追加(クリスマス・ハロウィン・数字・アルファベット)
+3. v3: 会員制・お気に入り保存
+4. v4: AI教材提案・保育士レビュー
+5. v5: 月齢別提案・保育AIアシスタント

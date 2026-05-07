@@ -54,6 +54,33 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* 状況で探す（保育士の課題に直結） */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-4">
+        <SectionHeader title="今の状況で探す" subtitle="保育現場のあの場面に、すぐ使える教材を" />
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6">
+          {[
+            { label: '雨の日', emoji: '🌧️', query: '?category=coloring&age=3', desc: '室内で静かに' },
+            { label: '朝の受け入れ', emoji: '🌅', query: '?difficulty=1&age=3', desc: 'すぐ取り組める' },
+            { label: '自由時間', emoji: '⏰', query: '?category=coloring', desc: '手軽に楽しめる' },
+            { label: '行事前', emoji: '🎉', query: '?season=summer', desc: '季節・行事テーマ' },
+            { label: '帰り待ち', emoji: '🎒', query: '?duration=5', desc: '5〜10分でできる' },
+            { label: '延長保育', emoji: '🌙', query: '?category=maze', desc: '集中力を育てる' },
+          ].map(({ label, emoji, query, desc }) => (
+            <Link
+              key={label}
+              href={`/materials${query}`}
+              className="group bg-white border border-border rounded-2xl p-4 flex items-center gap-3 hover:border-primary/40 hover:shadow-sm transition-all"
+            >
+              <span className="text-3xl shrink-0">{emoji}</span>
+              <div>
+                <div className="font-semibold text-sm">{label}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{desc}</div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* 年齢で探す */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <SectionHeader title="年齢で探す" subtitle="年齢に合った教材だけを表示します" href="/materials" />
@@ -100,8 +127,41 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 人気教材 */}
+      {/* 2歳向け特集 */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        <div className="bg-gradient-to-r from-pink-50 to-blue-50 rounded-3xl p-6 sm:p-8">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-3xl">👶</span>
+            <div>
+              <h2 className="text-xl font-bold">2歳向けぬりえ</h2>
+              <p className="text-sm text-muted-foreground">はじめてのぬりえに。極太ラインで塗りやすい設計</p>
+            </div>
+            <Link href="/category/age/2" className="ml-auto text-sm text-primary hover:text-primary/80 flex items-center gap-1 shrink-0">
+              もっと見る <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-3 gap-3 mt-5">
+            {['cat-simple', 'bear-simple', 'apple-simple'].map(id => {
+              const m = popular.find(p => p.id === id) ?? { id, title: '', description: '', imageUrl: `/materials/${id}.svg` }
+              return (
+                <Link key={id} href={`/materials/${id}`}
+                  className="bg-white rounded-xl border border-white/60 overflow-hidden hover:shadow-md transition-all group">
+                  <div className="aspect-square bg-white flex items-center justify-center p-2">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={`/materials/${id}.svg`} alt="" className="w-full h-full object-contain group-hover:scale-105 transition-transform" />
+                  </div>
+                  <div className="px-2 pb-2 text-xs font-medium text-center truncate">
+                    {id === 'cat-simple' ? 'ねこ' : id === 'bear-simple' ? 'くま' : 'りんご'}
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 人気教材 */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-4 pb-12">
         <SectionHeader title="人気の教材" subtitle="保育現場でよく使われている教材" href="/materials" />
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
           {popular.map(material => (

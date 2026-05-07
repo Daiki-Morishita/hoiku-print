@@ -63,7 +63,7 @@ export const materials: Material[] = [
     tools: ['色鉛筆', 'クレヨン'],
     activityIdeas: ['好きな色の恐竜を作ろう', '恐竜の名前を覚えよう'],
     imageUrl: '/materials/dinosaur-trex.svg',
-    pdfUrl: '/materials/dinosaur-trex.pdf',
+    pdfUrl: '/materials/dinosaur-trex.svg',
     createdAt: '2025-04-03', popular: true,
   },
   {
@@ -90,7 +90,7 @@ export const materials: Material[] = [
     tools: ['クレヨン', '色鉛筆', '折り紙'],
     activityIdeas: ['お願い事を書こう', '短冊づくりと合わせて'],
     imageUrl: '/materials/tanabata-star.svg',
-    pdfUrl: '/materials/tanabata-star.pdf',
+    pdfUrl: '/materials/tanabata-star.svg',
     createdAt: '2025-04-05', popular: true,
   },
   {
@@ -131,7 +131,7 @@ export const materials: Material[] = [
     tools: ['鉛筆'],
     activityIdeas: ['声に出しながら書こう', 'カードゲームに'],
     imageUrl: '/materials/hiragana-a-line.svg',
-    pdfUrl: '/materials/hiragana-a-line.pdf',
+    pdfUrl: '/materials/hiragana-a-line.svg',
     createdAt: '2025-04-08', popular: true,
   },
   {
@@ -157,7 +157,7 @@ export const materials: Material[] = [
     tools: ['鉛筆', 'クレヨン'],
     activityIdeas: ['どの道を通る？声に出して', 'タイムアタック'],
     imageUrl: '/materials/maze-easy.svg',
-    pdfUrl: '/materials/maze-easy.pdf',
+    pdfUrl: '/materials/maze-easy.svg',
     createdAt: '2025-04-10', popular: false,
   },
   {
