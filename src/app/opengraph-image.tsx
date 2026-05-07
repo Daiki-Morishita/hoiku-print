@@ -1,0 +1,37 @@
+import { ImageResponse } from 'next/og'
+
+export const runtime = 'edge'
+export const alt = 'ほいくぷりんと - 保育士のための無料教材プリント'
+export const size = { width: 1200, height: 630 }
+export const contentType = 'image/png'
+
+export default async function OGImage() {
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          background: 'linear-gradient(135deg, #EEF4FB 0%, #FAFAF9 100%)',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontFamily: 'sans-serif',
+        }}
+      >
+        <div style={{ fontSize: 80, marginBottom: 20 }}>🖨️</div>
+        <div style={{ fontSize: 56, fontWeight: 700, color: '#1F2937', marginBottom: 12 }}>
+          ほいくぷりんと
+        </div>
+        <div style={{ fontSize: 28, color: '#5B9BD5', fontWeight: 600, marginBottom: 20 }}>
+          保育士のための無料教材プリント
+        </div>
+        <div style={{ fontSize: 22, color: '#6B7280' }}>
+          ぬりえ・ひらがな・迷路・運筆 | 年齢・季節・行事で検索
+        </div>
+      </div>
+    ),
+    size
+  )
+}
