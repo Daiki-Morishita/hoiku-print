@@ -105,9 +105,49 @@ Hero → 状況で探す(6カード) → 年齢で探す → 種類で探す →
 - 印刷レイアウト: `print:hidden` / `hidden print:block` で画面/印刷切替
 - 検索: URL query params経由 (?age=3&category=coloring 等)
 
+## イラスト素材管理ルール
+
+### ファイル命名規則
+```
+public/materials/
+  {id}.svg                  # 印刷用SVG線画（必須・常に存在する）
+  {id}-illust.jpg           # AIイラスト（差し替え単位・1280×960px推奨）
+  {id}-illust-v{N}.jpg      # リビジョン管理（差し替え前の旧版を保持する場合）
+  {id}-thumb.jpg            # サムネイル（400×300px、将来的にOGP用）
+```
+
+### imageStatus フロー
+```
+[未設定]         data.ts に imageStatus なし or 'placeholder'
+    ↓  AIにイラストを発注・生成
+[pending_review]  {id}-illust.jpg を配置 → imageStatus: 'pending_review'
+    ↓  /admin で目視確認
+[approved]       問題なければ → imageStatus: 'approved'
+[needs_revision] 修正が必要 → illustNotes に指示を記載 → AIに再生成依頼
+    ↓  差し替え後
+[approved]       再承認
+```
+
+### イラスト差し替え手順
+1. `public/materials/{id}-illust.jpg` を上書き保存
+2. `data.ts` の該当エントリを更新:
+   ```ts
+   illustUrl: '/materials/{id}-illust.jpg',
+   illustVersion: 2,          // +1 する
+   imageStatus: 'pending_review',
+   illustNotes: '差し替え理由・修正指示',
+   ```
+3. `/admin` ページで確認 → `approved` に更新
+
+### 素材仕様（AI生成時の指示テンプレート）
+- サイズ: 1280×960px（4:3）
+- スタイル: 明るいフラットイラスト、保育士向け、日本語ユーザー向け
+- 背景: 白または淡いパステル
+- 用途: 保育園・幼稚園のWebサイト教材サムネイル
+
 ## 拡張ロードマップ
-1. v1: 静的サイト (現在) — 23教材、SVGぬりえ7種
-2. v2: 教材追加(クリスマス・ハロウィン・数字・アルファベット)
+1. v1: 静的サイト (現在) — 27教材、SVGぬりえ11種
+2. v2: AI生成イラストを順次差し替え（imageStatus管理で進捗追跡）
 3. v3: 会員制・お気に入り保存
 4. v4: AI教材提案・保育士レビュー
 5. v5: 月齢別提案・保育AIアシスタント
