@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { materials } from '@/lib/data'
 
-const BASE_URL = 'https://hoiku-print.vercel.app'
+const BASE_URL = 'https://nurie-print.vercel.app'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const materialPages = materials.map(m => ({

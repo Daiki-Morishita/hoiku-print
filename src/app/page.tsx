@@ -1,11 +1,12 @@
 import Link from 'next/link'
 import { Search, Star, ArrowRight, Printer, Heart, Users } from 'lucide-react'
 import { MaterialCard } from '@/components/materials/MaterialCard'
-import { getPopularMaterials } from '@/lib/data'
+import { getPopularMaterials, materials } from '@/lib/data'
 import { CATEGORY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
 
 export default function HomePage() {
   const popular = getPopularMaterials(6)
+  const totalCount = materials.length
 
   return (
     <div>
@@ -40,7 +41,7 @@ export default function HomePage() {
           <div className="flex items-center justify-center gap-6 sm:gap-10 text-sm text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <Printer className="w-4 h-4 text-primary" />
-              <span><strong className="text-foreground">20+</strong> 教材</span>
+              <span><strong className="text-foreground">{totalCount}</strong> 教材</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Users className="w-4 h-4 text-primary" />
