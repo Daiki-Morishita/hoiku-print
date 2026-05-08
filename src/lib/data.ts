@@ -1,4 +1,5 @@
 import type { Material, Category, Season, Theme, AgeGroup } from './types'
+import { normalizeQuery, normalizeText } from './utils'
 
 export const materials: Material[] = [
   {
@@ -71,8 +72,8 @@ export function filterMaterials(params: {
     if (params.theme && m.theme !== params.theme) return false
     if (params.difficulty && m.difficulty !== params.difficulty) return false
     if (params.search) {
-      const q = params.search.toLowerCase()
-      const haystack = [m.title, m.description, ...m.tags].join(' ').toLowerCase()
+      const q = normalizeQuery(params.search)
+      const haystack = normalizeText([m.title, m.description, ...m.tags].join(' '))
       if (!haystack.includes(q)) return false
     }
     return true
