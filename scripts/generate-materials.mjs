@@ -195,6 +195,9 @@ for (let i = 0; i < targets.length; i++) {
   const t = targets[i]
   console.log(`\n[${i + 1}/${targets.length}] ${t.theme}`)
 
+  // 辞書を自動更新（テーマ1件につき1回）
+  await updateKanjiMap(t.theme)
+
   for (const v of VARIANTS) {
     total++
     console.log(`  → ${v.key} を生成中...`)
@@ -473,3 +476,91 @@ function anthropicRequest(endpoint, body) {
 }
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)) }
+
+// ── カタカナ→ひらがな（スクリプト内用） ──────────────────────────────────
+function kanaToHiraJs(str) {
+  return str.replace(/[ァ-ヶ]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60))
+}
+
+// ── KANJI_MAP 自動更新 ────────────────────────────────────────────────────
+
+/**
+ * テーマの漢字表記を Claude に問い合わせ、utils.ts の KANJI_MAP へ自動追記する。
+ * 外来語（チーターなど）は漢字なし → スキップ。
+ * 既登録のエントリは上書きしない。
+ */
+async function updateKanjiMap(theme) {
+  const utilsPath = path.join(ROOT, 'src', 'lib', 'utils.ts')
+  const content = fs.readFileSync(utilsPath, 'utf8')
+
+  const body = JSON.stringify({
+    model: 'claude-opus-4-7',
+    max_tokens: 256,
+    messages: [{
+      role: 'user',
+      content: `日本語の単語「${theme}」について、一般的に使われる漢字表記があれば教えてください。
+
+ルール:
+- 「チーター」「パンダ」「ロケット」のような外来語・カタカナ語は kanji を空配列にしてください
+- 「くじら」→「鯨」のように常用漢字または広く知られた漢字がある場合のみ含めてください
+- hira は必ず純粋なひらがなで返してください（カタカナ・漢字不可）
+
+JSONのみ返してください（説明不要）:
+{"hira":"ひらがな","kanji":["漢字1"]}
+漢字なし例: {"hira":"ちーたー","kanji":[]}`,
+    }],
+  })
+
+  let parsed
+  try {
+    const data = await anthropicRequest('/v1/messages', body)
+    const text = data.content.find(b => b.type === 'text')?.text ?? ''
+    // JSON 部分だけ抽出（```json ... ``` のようなラップに対応）
+    const jsonMatch = text.match(/\{[\s\S]*\}/)
+    if (!jsonMatch) throw new Error('JSON not found')
+    parsed = JSON.parse(jsonMatch[0])
+  } catch (e) {
+    console.log(`    ⚠️ 辞書更新スキップ（${e.message}）`)
+    return
+  }
+
+  const { hira, kanji } = parsed
+  if (!Array.isArray(kanji) || kanji.length === 0) {
+    console.log(`    📖 辞書: 漢字なし（${theme} → ${hira}）`)
+    return
+  }
+
+  // 未登録のエントリのみ追加
+  const newEntries = kanji.filter(k => !content.includes(`'${k}'`))
+  if (newEntries.length === 0) {
+    console.log(`    📖 辞書: 既に登録済み（${kanji.join('・')}）`)
+    return
+  }
+
+  // KANJI_MAP の閉じ括弧の直前に挿入
+  const insertion = newEntries.map(k => `  '${k}': '${hira}',`).join('\n') + '\n'
+  const updated = insertIntoKanjiMap(content, insertion)
+  fs.writeFileSync(utilsPath, updated, 'utf8')
+  console.log(`    📖 辞書に追加: ${newEntries.map(k => `${k} → ${hira}`).join(', ')}`)
+}
+
+/**
+ * utils.ts の KANJI_MAP オブジェクトの閉じ括弧直前に文字列を挿入する。
+ */
+function insertIntoKanjiMap(content, insertion) {
+  const startIdx = content.indexOf('const KANJI_MAP')
+  if (startIdx === -1) return content
+
+  let depth = 0
+  for (let i = startIdx; i < content.length; i++) {
+    if (content[i] === '{') {
+      depth++
+    } else if (content[i] === '}') {
+      depth--
+      if (depth === 0) {
+        return content.slice(0, i) + insertion + content.slice(i)
+      }
+    }
+  }
+  return content
+}
