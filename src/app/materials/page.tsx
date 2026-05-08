@@ -2,7 +2,8 @@ import { Suspense } from 'react'
 import { MaterialCard } from '@/components/materials/MaterialCard'
 import { SearchFilters } from '@/components/search/SearchFilters'
 import { SearchBar } from '@/components/search/SearchBar'
-import { filterMaterials } from '@/lib/data'
+import { SortSelector } from '@/components/search/SortSelector'
+import { filterMaterials, type SortKey } from '@/lib/data'
 import type { Category, Season } from '@/lib/types'
 
 interface SearchParams {
@@ -11,6 +12,7 @@ interface SearchParams {
   season?: string
   event?: string
   search?: string
+  sort?: string
 }
 
 export const metadata = {
@@ -24,12 +26,14 @@ export default async function MaterialsPage({
   searchParams: Promise<SearchParams>
 }) {
   const params = await searchParams
+  const sort = (params.sort as SortKey) ?? 'newest'
   const filtered = filterMaterials({
     age: params.age ? Number(params.age) : undefined,
     category: params.category as Category | undefined,
     season: params.season as Season | undefined,
     event: params.event,
     search: params.search,
+    sort,
   })
 
   const activeCount = [params.age, params.category, params.season, params.event, params.search].filter(Boolean).length
@@ -38,11 +42,6 @@ export default async function MaterialsPage({
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
       <div className="mb-6">
         <h1 className="text-2xl font-bold">教材を探す</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          {activeCount > 0
-            ? `${filtered.length}件が見つかりました`
-            : `全${filtered.length}件の教材`}
-        </p>
       </div>
 
       {/* キーワード検索バー */}
@@ -72,6 +71,16 @@ export default async function MaterialsPage({
 
         {/* 教材グリッド */}
         <div className="flex-1">
+          {/* ソートセレクター */}
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-sm text-muted-foreground">
+              {activeCount > 0 ? `${filtered.length}件` : `全${filtered.length}件`}
+            </p>
+            <Suspense fallback={<div className="h-9 w-56 bg-muted rounded-xl animate-pulse" />}>
+              <SortSelector />
+            </Suspense>
+          </div>
+
           {filtered.length === 0 ? (
             <div className="text-center py-16 text-muted-foreground">
               <div className="text-4xl mb-3">🔍</div>

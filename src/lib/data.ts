@@ -212,6 +212,8 @@ export const materials: Material[] = [
   },
 ]
 
+export type SortKey = 'newest' | 'popular' | 'favorites'
+
 // フィルタリング関数
 export function filterMaterials(params: {
   age?: number
@@ -221,8 +223,10 @@ export function filterMaterials(params: {
   theme?: string
   difficulty?: number
   search?: string
+  sort?: SortKey
+  favoriteIds?: string[]
 }): Material[] {
-  return materials.filter(m => {
+  const filtered = materials.filter(m => {
     if (params.age && (m.ageMin > params.age || m.ageMax < params.age)) return false
     if (params.category && m.category !== params.category) return false
     if (params.season && m.season !== params.season) return false
@@ -236,6 +240,31 @@ export function filterMaterials(params: {
     }
     return true
   })
+
+  const sort = params.sort ?? 'newest'
+
+  if (sort === 'popular') {
+    return [...filtered].sort((a, b) => {
+      if (a.popular !== b.popular) return a.popular ? -1 : 1
+      const da = b.downloadCount ?? 0
+      const db = a.downloadCount ?? 0
+      if (da !== db) return da - db
+      return b.createdAt.localeCompare(a.createdAt)
+    })
+  }
+
+  if (sort === 'favorites' && params.favoriteIds) {
+    const favSet = new Set(params.favoriteIds)
+    return [...filtered].sort((a, b) => {
+      const af = favSet.has(a.id) ? 1 : 0
+      const bf = favSet.has(b.id) ? 1 : 0
+      if (af !== bf) return bf - af
+      return b.createdAt.localeCompare(a.createdAt)
+    })
+  }
+
+  // newest（デフォルト）
+  return [...filtered].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 }
 
 export function getPopularMaterials(limit = 6): Material[] {
