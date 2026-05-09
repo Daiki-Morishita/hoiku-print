@@ -2,10 +2,12 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { Menu, X, Search, Printer } from 'lucide-react'
+import { Menu, X, Search, Printer, User, LogOut } from 'lucide-react'
+import { useSession, signOut } from 'next-auth/react'
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { data: session } = useSession()
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-border">
@@ -42,6 +44,30 @@ export function Header() {
               <Search className="w-4 h-4" />
               教材を検索
             </Link>
+            {session ? (
+              <div className="hidden md:flex items-center gap-1">
+                <Link
+                  href="/account"
+                  className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg hover:bg-muted transition-colors"
+                >
+                  <User className="w-4 h-4" />
+                  マイページ
+                </Link>
+                <button
+                  onClick={() => signOut({ callbackUrl: '/' })}
+                  className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg hover:bg-muted transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="hidden md:flex items-center gap-2 text-sm border border-border px-4 py-2 rounded-lg hover:bg-muted transition-colors"
+              >
+                ログイン
+              </Link>
+            )}
             <button
               className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
