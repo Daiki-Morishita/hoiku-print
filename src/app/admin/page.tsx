@@ -4,15 +4,10 @@
  * ⚠️ 本番環境では Basic Auth や環境変数チェックで保護すること
  *    例: ADMIN_SECRET を URL パラメータ or middleware で確認
  */
-import Image from 'next/image'
 import { materials } from '@/lib/data'
-import {
-  IMAGE_STATUS_LABELS,
-  IMAGE_STATUS_COLOR,
-  type ImageStatus,
-} from '@/lib/types'
+import type { ImageStatus } from '@/lib/types'
 import { ImageUploader } from '@/components/admin/ImageUploader'
-import { DeleteButton } from '@/components/admin/DeleteButton'
+import { AdminMaterialsTable } from '@/components/admin/AdminMaterialsTable'
 
 export const metadata = {
   title: '素材管理 | ぬりえプリント Admin',
@@ -118,109 +113,9 @@ export default function AdminPage() {
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
           <div className="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between">
             <h2 className="font-semibold text-sm text-gray-900">教材一覧（{materials.length}件）</h2>
-            <p className="text-xs text-gray-400">data.ts を編集してステータスを更新してください</p>
+            <p className="text-xs text-gray-400">ヘッダーをクリックでソート / data.ts を編集してステータスを更新</p>
           </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
-                  <th className="px-4 py-3 text-left font-medium">プレビュー</th>
-                  <th className="px-4 py-3 text-left font-medium">ID / タイトル</th>
-                  <th className="px-4 py-3 text-left font-medium">ステータス</th>
-                  <th className="px-4 py-3 text-left font-medium">イラストファイル</th>
-                  <th className="px-4 py-3 text-left font-medium">Ver.</th>
-                  <th className="px-4 py-3 text-left font-medium">メモ</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {materials.map(m => {
-                  const status = m.imageStatus ?? 'placeholder'
-                  const badgeClass = IMAGE_STATUS_COLOR[status]
-                  const hasIllust = !!m.illustUrl
-                  const expectedFile = `/materials/${m.id}-illust.jpg`
-
-                  return (
-                    <tr key={m.id} className="hover:bg-gray-50 transition-colors">
-                      {/* プレビュー */}
-                      <td className="px-4 py-3">
-                        <div className="w-16 h-12 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center border border-gray-200">
-                          {hasIllust ? (
-                            <Image
-                              src={m.illustUrl!}
-                              alt={m.title}
-                              width={64}
-                              height={48}
-                              className="w-full h-full object-cover"
-                            />
-                          ) : m.imageUrl.endsWith('.svg') ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                              src={m.imageUrl}
-                              alt={m.title}
-                              className="w-full h-full object-contain p-1"
-                            />
-                          ) : (
-                            <span className="text-2xl">🖼️</span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* ID / タイトル */}
-                      <td className="px-4 py-3">
-                        <a
-                          href={`/materials/${m.id}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="font-mono text-xs text-blue-600 hover:underline"
-                        >
-                          {m.id}
-                        </a>
-                        <p className="text-xs text-gray-700 mt-0.5 max-w-[200px]">{m.title}</p>
-                      </td>
-
-                      {/* ステータス */}
-                      <td className="px-4 py-3">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${badgeClass}`}>
-                          {IMAGE_STATUS_LABELS[status]}
-                        </span>
-                      </td>
-
-                      {/* イラストファイル */}
-                      <td className="px-4 py-3">
-                        {hasIllust ? (
-                          <code className="text-xs text-green-700 bg-green-50 px-1.5 py-0.5 rounded">
-                            {m.illustUrl}
-                          </code>
-                        ) : (
-                          <code className="text-xs text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded">
-                            {expectedFile}
-                          </code>
-                        )}
-                      </td>
-
-                      {/* バージョン */}
-                      <td className="px-4 py-3 text-xs text-gray-500">
-                        {m.illustVersion ? `v${m.illustVersion}` : '—'}
-                      </td>
-
-                      {/* メモ */}
-                      <td className="px-4 py-3 text-xs text-gray-500 max-w-[180px]">
-                        {m.illustNotes ?? (
-                          <span className="text-gray-300">—</span>
-                        )}
-                      </td>
-
-                      {/* 削除 */}
-                      <td className="px-4 py-3">
-                        {m.illustUrl && <DeleteButton illustUrl={m.illustUrl} />}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
+          <AdminMaterialsTable materials={materials} />
         </div>
 
         {/* フッターガイド */}

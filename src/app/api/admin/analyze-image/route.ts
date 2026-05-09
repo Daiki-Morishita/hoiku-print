@@ -55,7 +55,7 @@ data.ts ファイルに追加するための構造化メタデータを JSON で
 必ず以下のスキーマに厳密に従うこと（余分なキーは追加しない）:
 {
   "id": "kebab-case の英語ID（例: cat-coloring）",
-  "title": "日本語のタイトル（例: ねこのぬりえ）",
+  "title": "日本語のタイトル。絵に描かれているポーズ・場所・一緒に描かれているもの（食べ物・小道具・背景要素など）を盛り込んだ、この絵だけを表す個性的な短いフレーズ。（例: 「はちみつをなめるくまさん」「ブランコにのるこぶたたち」「おひさまとちょうちょとうさぎ」）",
   "description": "日本語の説明文（80字以内）",
   "category": "coloring | hiragana | numbers | drawing | maze | dotconnect | craft | scissors",
   "theme": "animals | dinosaurs | vehicles | trains | food | sea | insects | flowers | characters  // 該当しない場合は省略",
@@ -71,6 +71,7 @@ data.ts ファイルに追加するための構造化メタデータを JSON で
 }
 
 重要ルール:
+- title は「〇〇のぬりえ」という形式を絶対に使わない。絵に描かれているポーズ・場所・小道具・登場する要素を具体的に含んだ、その絵だけを表すユニークな短いフレーズにする
 - category は画像の用途から判断（ぬりえ線画→coloring, 迷路→maze, ひらがなの練習→hiragana 等）
 - ageMin/ageMax は線の複雑さ・難易度から推定
 - tools は最低限必要な道具を列挙（ぬりえなら「クレヨン」「色鉛筆」等）
