@@ -12,6 +12,7 @@ import {
   type ImageStatus,
 } from '@/lib/types'
 import { ImageUploader } from '@/components/admin/ImageUploader'
+import { DeleteButton } from '@/components/admin/DeleteButton'
 
 export const metadata = {
   title: '素材管理 | ぬりえプリント Admin',
@@ -208,6 +209,11 @@ export default function AdminPage() {
                         {m.illustNotes ?? (
                           <span className="text-gray-300">—</span>
                         )}
+                      </td>
+
+                      {/* 削除 */}
+                      <td className="px-4 py-3">
+                        {m.illustUrl && <DeleteButton illustUrl={m.illustUrl} />}
                       </td>
                     </tr>
                   )

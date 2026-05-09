@@ -1,8 +1,9 @@
 import Link from 'next/link'
-import { Search, Star, ArrowRight, Printer, Heart, Users } from 'lucide-react'
+import { Star, ArrowRight, Printer, Heart, Users } from 'lucide-react'
 import { MaterialCard } from '@/components/materials/MaterialCard'
-import { getPopularMaterials, materials } from '@/lib/data'
+import { getPopularMaterials, materials, getMaterialById } from '@/lib/data'
 import { CATEGORY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
+import { HomeSearch } from '@/components/HomeSearch'
 
 export default function HomePage() {
   const popular = getPopularMaterials(6)
@@ -28,15 +29,7 @@ export default function HomePage() {
             年齢・季節・行事で絞り込んで、すぐ印刷できます。
           </p>
 
-          <div className="max-w-lg mx-auto mb-8">
-            <Link
-              href="/materials"
-              className="flex items-center gap-3 bg-white border border-border rounded-xl px-5 py-3.5 text-muted-foreground hover:border-primary/50 hover:shadow-sm transition-all text-sm sm:text-base"
-            >
-              <Search className="w-5 h-5 text-primary shrink-0" />
-              <span>教材を検索（年齢・季節・行事など）</span>
-            </Link>
-          </div>
+          <HomeSearch />
 
           <div className="flex items-center justify-center gap-6 sm:gap-10 text-sm text-muted-foreground">
             <div className="flex items-center gap-1.5">
@@ -142,17 +135,22 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="grid grid-cols-3 gap-3 mt-5">
-            {['cat-simple', 'bear-simple', 'apple-simple'].map(id => {
-              const m = popular.find(p => p.id === id) ?? { id, title: '', description: '', imageUrl: `/materials/${id}.svg` }
+            {(['dog-simple', 'rabbit-simple-1', 'bear-simple-1'] as const).map(id => {
+              const m = getMaterialById(id)
+              const shortTitle: Record<string, string> = {
+                'dog-simple': 'こいぬ',
+                'rabbit-simple-1': 'うさぎ',
+                'bear-simple-1': 'くまさん',
+              }
               return (
                 <Link key={id} href={`/materials/${id}`}
                   className="bg-white rounded-xl border border-white/60 overflow-hidden hover:shadow-md transition-all group">
                   <div className="aspect-square bg-white flex items-center justify-center p-2">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={`/materials/${id}.svg`} alt="" className="w-full h-full object-contain group-hover:scale-105 transition-transform" />
+                    <img src={m?.imageUrl ?? `/materials/${id}.svg`} alt="" className="w-full h-full object-contain group-hover:scale-105 transition-transform" />
                   </div>
                   <div className="px-2 pb-2 text-xs font-medium text-center truncate">
-                    {id === 'cat-simple' ? 'ねこ' : id === 'bear-simple' ? 'くま' : 'りんご'}
+                    {shortTitle[id]}
                   </div>
                 </Link>
               )

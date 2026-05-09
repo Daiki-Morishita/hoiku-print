@@ -14,6 +14,19 @@ import Anthropic from '@anthropic-ai/sdk'
 import fs from 'fs'
 import path from 'path'
 
+// Next.js 16 + Turbopack での env 読み込み不具合の回避策
+function getApiKey(): string | undefined {
+  if (process.env.ANTHROPIC_API_KEY) return process.env.ANTHROPIC_API_KEY
+  try {
+    const envPath = path.join(process.cwd(), '.env.local')
+    const content = fs.readFileSync(envPath, 'utf8')
+    const match   = content.match(/^ANTHROPIC_API_KEY=(.+)$/m)
+    return match?.[1]?.trim()
+  } catch {
+    return undefined
+  }
+}
+
 // ── 型定義 ──────────────────────────────────────────────────────────────────
 
 export type SuggestedMeta = {
@@ -84,6 +97,19 @@ export async function POST(request: Request) {
     const bytes   = await file.arrayBuffer()
     const buffer  = Buffer.from(bytes)
 
+    // intendedId が指定されていて既に同名ファイルが存在する場合は即エラー
+    const earlyIntendedId = formData.get('intendedId')
+    if (typeof earlyIntendedId === 'string' && earlyIntendedId.trim()) {
+      const finalExt0  = ext === 'jpeg' ? 'jpg' : ext
+      const checkPath  = path.join(process.cwd(), 'public', 'materials', `${earlyIntendedId.trim()}-illust.${finalExt0}`)
+      if (fs.existsSync(checkPath)) {
+        return NextResponse.json(
+          { error: `ID「${earlyIntendedId.trim()}」は既に登録済みです。削除してから再アップロードしてください。` },
+          { status: 409 }
+        )
+      }
+    }
+
     // タイムスタンプベースの一時ファイル名（後でIDが確定したら rename できる）
     const timestamp = Date.now()
     const savedName = `upload-${timestamp}.${ext === 'jpeg' ? 'jpg' : ext}`
@@ -94,7 +120,13 @@ export async function POST(request: Request) {
     fs.writeFileSync(absPath, buffer)
 
     // ── Claude Vision で解析 ──────────────────────────────────────────────
-    const client = new Anthropic()
+    const apiKey = getApiKey()
+    if (!apiKey) {
+      // temp ファイルを削除してからエラーを返す
+      fs.unlinkSync(absPath)
+      return NextResponse.json({ error: 'ANTHROPIC_API_KEY が設定されていません' }, { status: 500 })
+    }
+    const client = new Anthropic({ apiKey })
 
     const base64Data = buffer.toString('base64')
     const mediaType  = ext === 'png' ? 'image/png'
@@ -141,11 +173,34 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Failed to parse Claude response', raw: rawText }, { status: 500 })
     }
 
-    // ── data.ts スニペット生成 ────────────────────────────────────────────
-    const illustUrl = savedPath   // 後でリネームする場合は別途対応
-    const snippet   = generateSnippet(meta, illustUrl)
+    // ── 解析後に正式なファイル名へリネーム ────────────────────────────────
+    const intendedId    = formData.get('intendedId')
+    const finalExt      = ext === 'jpeg' ? 'jpg' : ext
+    // intendedId が指定されていればそれを優先、なければ Claude Vision の提案を使う
+    const baseId        = (typeof intendedId === 'string' && intendedId.trim())
+      ? intendedId.trim()
+      : meta.id
+    meta.id             = baseId
+    const finalFilename = `${baseId}-illust.${finalExt}`
+    const finalAbsPath  = path.join(process.cwd(), 'public', 'materials', finalFilename)
+    const finalPath     = `/materials/${finalFilename}`
 
-    return NextResponse.json({ meta, snippet, savedPath })
+    // 同名ファイルが既にある場合は上書きしない（-v2, -v3 とする）
+    let resolvedAbsPath = finalAbsPath
+    let resolvedPath    = finalPath
+    if (fs.existsSync(finalAbsPath) && finalAbsPath !== absPath) {
+      let v = 2
+      while (fs.existsSync(path.join(process.cwd(), 'public', 'materials', `${meta.id}-illust-v${v}.${finalExt}`))) v++
+      const vFilename   = `${meta.id}-illust-v${v}.${finalExt}`
+      resolvedAbsPath   = path.join(process.cwd(), 'public', 'materials', vFilename)
+      resolvedPath      = `/materials/${vFilename}`
+    }
+    fs.renameSync(absPath, resolvedAbsPath)
+
+    // ── data.ts スニペット生成 ────────────────────────────────────────────
+    const snippet = generateSnippet(meta, resolvedPath)
+
+    return NextResponse.json({ meta, snippet, savedPath: resolvedPath })
   } catch (err) {
     console.error('[analyze-image]', err)
     return NextResponse.json(

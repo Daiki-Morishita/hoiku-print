@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import Link from 'next/link'
 import { MaterialCard } from '@/components/materials/MaterialCard'
 import { SearchFilters } from '@/components/search/SearchFilters'
 import { SearchBar } from '@/components/search/SearchBar'
@@ -58,9 +59,9 @@ export default async function MaterialsPage({
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-semibold text-sm">絞り込み</h2>
               {activeCount > 0 && (
-                <a href="/materials" className="text-xs text-primary hover:underline">
+                <Link href="/materials" className="text-xs text-primary hover:underline">
                   クリア
-                </a>
+                </Link>
               )}
             </div>
             <Suspense fallback={<div className="animate-pulse h-48 bg-muted rounded-lg" />}>
@@ -86,9 +87,9 @@ export default async function MaterialsPage({
               <div className="text-4xl mb-3">🔍</div>
               <p className="font-medium">該当する教材が見つかりませんでした</p>
               <p className="text-sm mt-1">条件を変えて探してみてください</p>
-              <a href="/materials" className="inline-block mt-4 text-sm text-primary hover:underline">
+              <Link href="/materials" className="inline-block mt-4 text-sm text-primary hover:underline">
                 すべての教材を見る
-              </a>
+              </Link>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
