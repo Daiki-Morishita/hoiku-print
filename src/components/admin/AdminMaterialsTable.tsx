@@ -5,6 +5,7 @@ import Image from 'next/image'
 import type { Material, ImageStatus } from '@/lib/types'
 import { IMAGE_STATUS_LABELS, IMAGE_STATUS_COLOR } from '@/lib/types'
 import { DeleteButton } from './DeleteButton'
+import { EditMaterialModal } from './EditMaterialModal'
 
 type SortKey = 'id' | 'status' | 'version' | 'created'
 type SortDir = 'asc' | 'desc'
@@ -24,6 +25,7 @@ function SortIcon({ active, dir }: { active: boolean; dir: SortDir }) {
 export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
   const [sortKey, setSortKey] = useState<SortKey>('status')
   const [sortDir, setSortDir] = useState<SortDir>('asc')
+  const [editTarget, setEditTarget] = useState<Material | null>(null)
 
   function handleSort(key: SortKey) {
     if (sortKey === key) {
@@ -54,6 +56,14 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
   const thSort = `${thBase} cursor-pointer hover:text-gray-700 select-none`
 
   return (
+    <>
+    {editTarget && (
+      <EditMaterialModal
+        material={editTarget}
+        onClose={() => setEditTarget(null)}
+        onSaved={() => window.location.reload()}
+      />
+    )}
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
         <thead>
@@ -145,7 +155,13 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
                   {m.illustNotes ?? <span className="text-gray-300">—</span>}
                 </td>
 
-                <td className="px-4 py-1.5">
+                <td className="px-4 py-1.5 flex items-center gap-2">
+                  <button
+                    onClick={() => setEditTarget(m)}
+                    className="text-xs text-blue-500 hover:text-blue-700 border border-blue-200 hover:border-blue-400 px-2 py-0.5 rounded"
+                  >
+                    編集
+                  </button>
                   {m.illustUrl && <DeleteButton illustUrl={m.illustUrl} />}
                 </td>
               </tr>
@@ -154,5 +170,6 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
         </tbody>
       </table>
     </div>
+    </>
   )
 }
