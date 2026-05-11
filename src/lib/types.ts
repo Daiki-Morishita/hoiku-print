@@ -1,6 +1,6 @@
 export type AgeGroup = 2 | 3 | 4 | 5 | 6
 
-export type Difficulty = 1 | 2 | 3
+export type Difficulty = 1 | 2 | 3 | 4
 
 export type Duration = 5 | 10 | 15 | 20 | 30
 
@@ -136,4 +136,5 @@ export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
   1: 'やさしい',
   2: 'ふつう',
   3: 'むずかしい',
+  4: 'とてもむずかしい',
 }
