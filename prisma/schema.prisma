@@ -97,3 +97,13 @@ model PrintLog {
   user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   createdAt  DateTime @default(now())
 }
+
+model SearchRequest {
+  id        String   @id @default(cuid())
+  query     String
+  count     Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([query])
+}

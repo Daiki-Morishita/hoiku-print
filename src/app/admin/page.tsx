@@ -8,6 +8,8 @@ import { materials } from '@/lib/data'
 import type { ImageStatus } from '@/lib/types'
 import { ImageUploader } from '@/components/admin/ImageUploader'
 import { AdminMaterialsTable } from '@/components/admin/AdminMaterialsTable'
+import { SearchRequestsTable } from '@/components/admin/SearchRequestsTable'
+import { prisma } from '@/lib/db'
 
 export const metadata = {
   title: '素材管理 | ぬりえプリント Admin',
@@ -19,7 +21,10 @@ function countByStatus(status: ImageStatus | 'placeholder') {
   return materials.filter(m => (m.imageStatus ?? 'placeholder') === status).length
 }
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  const searchRequests = await prisma.searchRequest.findMany({
+    orderBy: { count: 'desc' },
+  })
   const stats = {
     total: materials.length,
     placeholder: countByStatus('placeholder'),
@@ -116,6 +121,21 @@ export default function AdminPage() {
             <p className="text-xs text-gray-400">ヘッダーをクリックでソート / data.ts を編集してステータスを更新</p>
           </div>
           <AdminMaterialsTable materials={materials} />
+        </div>
+
+        {/* 検索リクエスト */}
+        <div className="mt-8 bg-white border border-gray-200 rounded-xl overflow-hidden">
+          <div className="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">📋</span>
+              <div>
+                <h2 className="font-semibold text-sm text-gray-900">未ヒット検索ワード（生成テーマ候補）</h2>
+                <p className="text-xs text-gray-500 mt-0.5">素材が見つからなかった検索ワード。回数が多いほど優先テーマ候補</p>
+              </div>
+            </div>
+            <span className="text-xs text-gray-400">{searchRequests.length}件</span>
+          </div>
+          <SearchRequestsTable requests={searchRequests} />
         </div>
 
         {/* フッターガイド */}

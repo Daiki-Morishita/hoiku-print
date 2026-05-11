@@ -6,6 +6,7 @@ import { SearchBar } from '@/components/search/SearchBar'
 import { SortSelector } from '@/components/search/SortSelector'
 import { filterMaterials, type SortKey } from '@/lib/data'
 import type { Category, Season } from '@/lib/types'
+import { NoResultsBanner } from '@/components/search/NoResultsBanner'
 
 interface SearchParams {
   age?: string
@@ -83,14 +84,18 @@ export default async function MaterialsPage({
           </div>
 
           {filtered.length === 0 ? (
-            <div className="text-center py-16 text-muted-foreground">
-              <div className="text-4xl mb-3">🔍</div>
-              <p className="font-medium">該当する教材が見つかりませんでした</p>
-              <p className="text-sm mt-1">条件を変えて探してみてください</p>
-              <Link href="/materials" className="inline-block mt-4 text-sm text-primary hover:underline">
-                すべての教材を見る
-              </Link>
-            </div>
+            params.search ? (
+              <NoResultsBanner query={params.search} />
+            ) : (
+              <div className="text-center py-16 text-muted-foreground">
+                <div className="text-4xl mb-3">🔍</div>
+                <p className="font-medium">該当する教材が見つかりませんでした</p>
+                <p className="text-sm mt-1">条件を変えて探してみてください</p>
+                <Link href="/materials" className="inline-block mt-4 text-sm text-primary hover:underline">
+                  すべての教材を見る
+                </Link>
+              </div>
+            )
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               {filtered.map(material => (
