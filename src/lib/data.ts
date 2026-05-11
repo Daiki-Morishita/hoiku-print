@@ -3218,7 +3218,64 @@ export function getMaterialById(id: string): Material | undefined {
   return materials.find(m => m.id === id)
 }
 
-export function getRelatedMaterials(material: Material, limit = 4): Material[] {
+export function getRelatedMaterials(material: Material, limit = 4): Material[
+  {
+    id: 'ostrich-simple-1',
+    title: 'かわいいダチョウ',
+    description: 'シンプルなダチョウのぬりえ。大きな体と長い首が特徴的です。',
+    ageMin: 2, ageMax: 3, difficulty: 1, duration: 10,
+    category: 'coloring', theme: 'animal',
+    tags: ['ダチョウ', '動物', 'アフリカ', 'とり', '鳥'],
+    tools: ['クレヨン', '色えんぴつ'],
+    activityIdeas: ['ダチョウの体の色を観察してみよう', '世界一大きな鳥だよ'],
+    imageUrl: '/materials/ostrich-simple-1-illust.png',
+    illustUrl: '/materials/ostrich-simple-1-illust.png',
+    illustVersion: 1, imageStatus: 'pending_review',
+    pdfUrl: '', createdAt: '2026-05-11', popular: false,
+  },
+  {
+    id: 'ostrich-easy-1',
+    title: 'ダチョウ',
+    description: '草原に立つダチョウのぬりえ。長い脚と首をぬりましょう。',
+    ageMin: 3, ageMax: 4, difficulty: 2, duration: 15,
+    category: 'coloring', theme: 'animal',
+    tags: ['ダチョウ', '動物', 'アフリカ', 'とり', '鳥', '草原'],
+    tools: ['クレヨン', '色えんぴつ'],
+    activityIdeas: ['茶色と黒の羽を塗ってみよう', '卵は大きいよ'],
+    imageUrl: '/materials/ostrich-easy-1-illust.png',
+    illustUrl: '/materials/ostrich-easy-1-illust.png',
+    illustVersion: 1, imageStatus: 'pending_review',
+    pdfUrl: '', createdAt: '2026-05-11', popular: false,
+  },
+  {
+    id: 'ostrich-normal-1',
+    title: 'ダチョウの親子',
+    description: '親子のダチョウが草原にいる場面のぬりえです。',
+    ageMin: 4, ageMax: 5, difficulty: 3, duration: 20,
+    category: 'coloring', theme: 'animal',
+    tags: ['ダチョウ', '動物', 'アフリカ', '親子', '草原'],
+    tools: ['色えんぴつ', 'マーカー'],
+    activityIdeas: ['親と子どもの大きさを比べよう', '草の色も工夫してみよう'],
+    imageUrl: '/materials/ostrich-normal-1-illust.png',
+    illustUrl: '/materials/ostrich-normal-1-illust.png',
+    illustVersion: 1, imageStatus: 'pending_review',
+    pdfUrl: '', createdAt: '2026-05-11', popular: false,
+  },
+  {
+    id: 'ostrich-rich-1',
+    title: 'ダチョウの群れ',
+    description: 'サバンナを歩くダチョウの群れ。木や太陽も一緒にぬりましょう。',
+    ageMin: 5, ageMax: 6, difficulty: 4, duration: 30,
+    category: 'coloring', theme: 'animal',
+    tags: ['ダチョウ', '動物', 'アフリカ', 'サバンナ', '群れ'],
+    tools: ['色えんぴつ', 'マーカー', '水彩'],
+    activityIdeas: ['群れでどんな生活をしているか調べよう', 'サバンナの風景を作ろう'],
+    imageUrl: '/materials/ostrich-rich-1-illust.png',
+    illustUrl: '/materials/ostrich-rich-1-illust.png',
+    illustVersion: 1, imageStatus: 'pending_review',
+    pdfUrl: '', createdAt: '2026-05-11', popular: false,
+  },
+] {
   return materials
     .filter(m => m.id !== material.id && (
       m.category === material.category ||
