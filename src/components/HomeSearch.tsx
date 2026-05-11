@@ -10,7 +10,7 @@ export function HomeSearch() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const q = query.trim()
-    router.push(q ? `/materials?q=${encodeURIComponent(q)}` : '/materials')
+    router.push(q ? `/materials?search=${encodeURIComponent(q)}` : '/materials')
   }
 
   return (
