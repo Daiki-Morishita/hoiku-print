@@ -33,9 +33,9 @@ export function Footer() {
             <h3 className="font-semibold text-sm mb-3">コラム</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link href="/columns/benefits-of-coloring-for-kids" className="hover:text-foreground transition-colors">ぬりえの発達効果</Link></li>
-              <li><Link href="/columns/coloring-by-age-guide" className="hover:text-foreground transition-colors">年齢別ぬりえの選び方</Link></li>
-              <li><Link href="/columns/hiragana-practice-guide" className="hover:text-foreground transition-colors">ひらがな練習の進め方</Link></li>
-              <li><Link href="/columns/maze-benefits-for-kids" className="hover:text-foreground transition-colors">迷路遊びの効果</Link></li>
+              <li><Link href="/columns/when-to-start-hiragana-learning" className="hover:text-foreground transition-colors">ひらがなの始め時</Link></li>
+              <li><Link href="/columns/best-coloring-pages-for-4-year-olds" className="hover:text-foreground transition-colors">4歳向けぬりえの選び方</Link></li>
+              <li><Link href="/columns/outdoor-play-benefits" className="hover:text-foreground transition-colors">外遊びの発達効果</Link></li>
               <li><Link href="/columns" className="hover:text-foreground transition-colors">コラム一覧 →</Link></li>
             </ul>
           </div>
