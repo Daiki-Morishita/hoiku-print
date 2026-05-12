@@ -109,7 +109,7 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             />
           </div>
         )}
-        {/* 右下ブランディング（ぬりえプリントのみ） */}
+        {/* 右下ブランディング */}
         <div style={{
           position: 'absolute',
           right: '8mm',
@@ -118,11 +118,15 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
           padding: '0.5mm 1.5mm',
           borderRadius: '1mm',
           fontSize: '9pt',
-          fontWeight: 'bold',
           color: '#333',
           letterSpacing: '0.05em',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.4em',
         }}>
-          ぬりえプリント
+          <span>{material.title}</span>
+          <span style={{ color: '#aaa' }}>｜</span>
+          <span>ぬりえプリント</span>
         </div>
       </div>
 

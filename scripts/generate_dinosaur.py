@@ -31,6 +31,13 @@ REPO_DIR = Path(__file__).parent.parent
 TMP_DIR = REPO_DIR / "tmp_materials"
 DATA_TS = REPO_DIR / "src" / "lib" / "data.ts"
 LOG_FILE = Path(__file__).parent / "generate_dinosaur.log"
+FAILED_LOG = Path(__file__).parent / "failed_ids.txt"
+
+CHROME_CMD = [
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "--remote-debugging-port=9222",
+    f'--user-data-dir={Path.home()}/.chatgpt-chrome-profile',
+]
 
 TMP_DIR.mkdir(exist_ok=True)
 
@@ -71,6 +78,32 @@ def make_entries(theme_id, jp_name, variant, titles, descs):
 
 # 恐竜定義: 各恐竜の特徴と共通注意点
 DINOSAURS = {
+    "velociraptor": {
+        "jp": "ヴェロキラプトル",
+        "note": "ヴェロキラプトルの細身で素早い体つき、長い尻尾、後ろ足の鋭いカギ爪、小さな羽毛をシンプルでかわいく描く。鋭い顔は子ども向けに親しみやすくする。",
+        "variants": {
+            1: {
+                "scenes": {
+                    "simple": "かわいいヴェロキラプトルの塗り絵。ヴェロキラプトル1匹のみ・横向きで立つ姿・背景なし・余白たっぷり。",
+                    "easy":   "かわいいヴェロキラプトルの塗り絵。ヴェロキラプトルが森の中を走っているかわいい構図。シダ植物つき。",
+                    "normal": "かわいいヴェロキラプトルの塗り絵。2匹のヴェロキラプトルが群れで森を駆ける構図。木とシダが点在。",
+                    "rich":   "かわいいヴェロキラプトルの塗り絵。ヴェロキラプトルの群れが太古の森でにぎやかに過ごす構図。木・シダ・岩・卵が点在。",
+                },
+                "titles": {
+                    "simple": "かわいいヴェロキラプトル",
+                    "easy":   "もりのヴェロキラプトル",
+                    "normal": "むれのヴェロキラプトル",
+                    "rich":   "ヴェロキラプトルのかぞく",
+                },
+                "descs": {
+                    "simple": "シンプルなヴェロキラプトルの線画。素早い体つきと長い尻尾がかわいい。",
+                    "easy":   "森を走るヴェロキラプトルの線画。シダ植物つき。",
+                    "normal": "2匹で駆けるヴェロキラプトルの線画。木とシダつき。",
+                    "rich":   "太古の森で過ごすヴェロキラプトルの群れのにぎやかな線画。卵つき。",
+                },
+            },
+        },
+    },
     "spinosaurus": {
         "jp": "スピノサウルス",
         "note": "スピノサウルスの背中の大きな帆と細長いワニのような頭、長い尻尾をシンプルでかわいく描く。背中の帆は輪郭線のみで模様は入れない。",
@@ -201,16 +234,37 @@ def git_commit_push(theme_id, variant):
 # =========================================================
 # ChatGPT 操作
 # =========================================================
+ERROR_PHRASES = [
+    "画像生成に失敗",
+    "画像を作成できません",
+    "もう一度リクエストしてください",
+    "image generation failed",
+    "couldn't generate",
+    "unable to generate",
+]
+
+
 def wait_for_image(page, timeout=240):
+    """画像生成完了 or エラーを検出。
+    Returns: ('ok', src) | ('error', None) | ('timeout', None)
+    """
     deadline = time.time() + timeout
     while time.time() < deadline:
         imgs = page.query_selector_all("img")
         for img in imgs:
             src = img.get_attribute("src") or ""
             if "backend-api/estuary/content" in src or "oaiusercontent" in src:
-                return src
+                return ('ok', src)
+        # エラーメッセージ検知
+        try:
+            body_text = page.evaluate("() => document.body.innerText")
+            for phrase in ERROR_PHRASES:
+                if phrase in body_text:
+                    return ('error', None)
+        except Exception:
+            pass
         time.sleep(3)
-    return None
+    return ('timeout', None)
 
 
 def whiten_background(in_path, out_path=None, threshold=235):
@@ -270,34 +324,106 @@ def delete_current_chat(page):
         return False
 
 
-def generate_one(page, file_id, prompt, out_path):
+def generate_one(page, file_id, prompt, out_path, max_retries=3):
     if out_path.exists():
         log(f"  スキップ（既存）: {file_id}")
         return True
 
-    log(f"  生成開始: {file_id}")
-    page.goto("https://chatgpt.com/", wait_until="domcontentloaded")
-    time.sleep(2)
-    box = page.wait_for_selector("#prompt-textarea", timeout=30000)
-    box.click()
-    box.fill(prompt)
-    time.sleep(0.5)
-    page.keyboard.press("Enter")
-    log(f"  プロンプト送信。生成待ち...")
+    for attempt in range(1, max_retries + 1):
+        log(f"  生成開始 (試行 {attempt}/{max_retries}): {file_id}")
+        page.goto("https://chatgpt.com/", wait_until="domcontentloaded")
+        time.sleep(2)
+        try:
+            box = page.wait_for_selector("#prompt-textarea", timeout=30000)
+        except Exception as e:
+            log(f"  入力欄取得失敗: {e}")
+            time.sleep(5)
+            continue
+        box.click()
+        box.fill(prompt)
+        time.sleep(0.5)
+        page.keyboard.press("Enter")
+        log(f"  プロンプト送信。生成待ち...")
 
-    img_src = wait_for_image(page, timeout=240)
-    if not img_src:
-        log(f"  タイムアウト: {file_id}")
-        return False
+        status, img_src = wait_for_image(page, timeout=240)
+        if status == 'ok':
+            ok = download_image(page, img_src, out_path)
+            if ok:
+                log(f"  ローカル保存: {out_path}")
+                delete_current_chat(page)
+                return True
+            log(f"  DL失敗、リトライ")
+        elif status == 'error':
+            log(f"  ChatGPTエラー検知、リトライ")
+            delete_current_chat(page)
+        else:
+            log(f"  タイムアウト、リトライ")
+        time.sleep(5)
 
-    ok = download_image(page, img_src, out_path)
-    if ok:
-        log(f"  ローカル保存: {out_path}")
-        delete_current_chat(page)
-    return ok
+    log(f"  最大リトライ到達、失敗: {file_id}")
+    return False
 
 
-def run_variant(page, theme_id, variant, client):
+def notify_mac(title, msg):
+    """macOS通知センターに通知を送る"""
+    try:
+        subprocess.run([
+            "osascript", "-e",
+            f'display notification "{msg}" with title "{title}"'
+        ], check=False)
+    except Exception:
+        pass
+
+
+def restart_chrome(pw):
+    """ChromeをKill→再起動→CDP再接続。新しい browser を返す。"""
+    log("  [復旧] Chromeを再起動中...")
+    subprocess.run(["pkill", "-f", "remote-debugging-port=9222"], check=False)
+    time.sleep(3)
+    subprocess.Popen(CHROME_CMD, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    time.sleep(8)  # 起動待ち
+    for attempt in range(3):
+        try:
+            browser = pw.chromium.connect_over_cdp("http://localhost:9222")
+            log("  [復旧] Chrome再接続成功")
+            return browser
+        except Exception as e:
+            log(f"  [復旧] 再接続失敗 ({attempt+1}/3): {e}")
+            time.sleep(5)
+    log("  [復旧] Chrome再接続できず。処理続行不可。")
+    return None
+
+
+def generate_with_recovery(pw, state, file_id, prompt, out_path):
+    """generate_one の呼び出しをリトライ消耗後の3段回復でラップ"""
+    # 通常3リトライ
+    if generate_one(state['page'], file_id, prompt, out_path):
+        return True
+
+    # ① 60秒クールダウン後に再試行
+    log(f"  [復旧①] 60秒クールダウン後に再試行: {file_id}")
+    time.sleep(60)
+    if generate_one(state['page'], file_id, prompt, out_path, max_retries=1):
+        return True
+
+    # ② ブラウザ再起動後に再試行
+    log(f"  [復旧②] ブラウザ再起動後に再試行: {file_id}")
+    new_browser = restart_chrome(pw)
+    if new_browser is not None:
+        state['browser'] = new_browser
+        state['page'] = new_browser.contexts[0].new_page()
+        if generate_one(state['page'], file_id, prompt, out_path, max_retries=1):
+            return True
+
+    # ③ スキップ + ログ + 通知
+    log(f"  [復旧③] スキップして次へ: {file_id}")
+    with open(FAILED_LOG, "a") as f:
+        f.write(f"{time.strftime('%Y-%m-%dT%H:%M:%S')} {file_id}\n")
+    notify_mac("ぬりえ生成失敗", f"{file_id} を3段回復後もスキップしました")
+    return False
+
+
+def run_variant(pw, state, theme_id, variant, client):  # noqa: E501
     dino = DINOSAURS[theme_id]
     jp = dino["jp"]
     note = dino["note"]
@@ -311,9 +437,9 @@ def run_variant(page, theme_id, variant, client):
     for file_id, description in specs:
         prompt = f"{description}\n{note}\n{COMMON_CONDITIONS}"
         local_path = TMP_DIR / f"{file_id}-illust.png"
-        ok = generate_one(page, file_id, prompt, local_path)
+        ok = generate_with_recovery(pw, state, file_id, prompt, local_path)
         if not ok:
-            log(f"  失敗: {file_id}")
+            log(f"  失敗（スキップ）: {file_id}")
             continue
         try:
             url = upload_to_supabase(client, local_path, f"{file_id}-illust.png")
@@ -356,16 +482,17 @@ def main():
 
         context = browser.contexts[0]
         page = context.new_page()
+        state = {'browser': browser, 'page': page}
 
         if args.all:
             for tid, dino in DINOSAURS.items():
                 for v in dino["variants"]:
-                    run_variant(page, tid, v, client)
+                    run_variant(p, state, tid, v, client)
                     time.sleep(10)
         else:
-            run_variant(page, args.theme, args.variant, client)
+            run_variant(p, state, args.theme, args.variant, client)
 
-        browser.close()
+        state['browser'].close()
         log("\n全処理完了")
 
 

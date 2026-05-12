@@ -90,8 +90,8 @@ async function updateStatus(id: string, status: ImageStatus) {
 }
 
 export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
-  const [sortKey, setSortKey] = useState<SortKey>('id')
-  const [sortDir, setSortDir] = useState<SortDir>('asc')
+  const [sortKey, setSortKey] = useState<SortKey>('created')
+  const [sortDir, setSortDir] = useState<SortDir>('desc')
   const [editTarget, setEditTarget] = useState<Material | null>(null)
   const [viewMode, setViewMode] = useState<ViewMode>('list')
   const [tileSize, setTileSize] = useState<TileSize>('md')
