@@ -50,6 +50,24 @@ src/
     └── materials/            # 教材画像・PDF
 ```
 
+## 素材の階層構造（共通言語）
+
+```
+Category（カテゴリ）        … プリントの種類。coloring / hiragana / maze 等
+  └─ Theme（テーマ）        … カテゴリ内の大ジャンル。animals / vehicles 等
+       └─ Item（アイテム）  … テーマ内の具体的な対象。bear / train / bus 等
+            └─ Unit（ユニット）… 難易度バリアント（4段階固定）
+```
+
+| Unit   | 内容                        | 対象年齢 |
+|--------|-----------------------------|----------|
+| simple | キャラ1体・背景なし         | 2〜3歳   |
+| easy   | キャラ1体＋関連要素1つ      | 3歳      |
+| normal | キャラ1体＋関連要素2〜3つ   | 3〜4歳   |
+| rich   | 複数キャラ＋背景             | 4〜6歳   |
+
+素材ID形式: `{item}-{unit}-{連番}`  例: `bear-simple-1`, `bus-rich-1`
+
 ## データモデル
 ```typescript
 type Material = {

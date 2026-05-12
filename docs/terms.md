@@ -53,6 +53,7 @@
 | `flowers` | 花・植物 |
 | `characters` | キャラクター風 |
 | `park` | 公園・遊具 |
+| `seasonal-events` | 季節の行事 |
 
 ---
 

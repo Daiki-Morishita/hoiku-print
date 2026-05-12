@@ -1,3 +1,15 @@
+/**
+ * 素材の階層構造（共通言語） — docs/terms.md が正式定義
+ *
+ * Category（カテゴリ）
+ *   └─ Theme（テーマ）       … 大ジャンル（動物・のりもの 等）
+ *        └─ Item（アイテム） … 個別題材（くま・ブランコ 等）
+ *             └─ Variant（バリアント）… 同アイテムの別場面構成（-1/-2/-3）
+ *                  └─ Unit（ユニット）… 難易度（simple/easy/normal/rich）
+ *
+ * 素材ID形式: {item}-{unit}-{variant}  例: swing-simple-1 / swing-simple-2
+ */
+
 export type AgeGroup = 2 | 3 | 4 | 5 | 6
 
 export type Difficulty = 1 | 2 | 3 | 4
@@ -26,7 +38,8 @@ export type Theme =
   | 'insects'       // 虫
   | 'flowers'       // 花・植物
   | 'characters'    // キャラクター風
-  | 'park'          // 公園・遊具
+  | 'park'             // 公園・遊具
+  | 'seasonal-events'  // 季節の行事
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   coloring: 'ぬりえ',
@@ -39,6 +52,40 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   scissors: 'ハサミ練習',
 }
 
+// ========== Item / Unit ==========
+
+/**
+ * Item（アイテム）: テーマ内の具体的な対象。
+ * 素材IDの第1セグメント。例: bear, cat, train, bus
+ * 固定リストではなく string — 新テーマ追加のたびに自由に増やせる。
+ */
+export type Item = string
+
+/**
+ * Unit（ユニット）: アイテムの難易度バリアント。
+ * 素材IDの第2セグメント。4段階固定。
+ *
+ * simple … キャラ1体・背景なし（2〜3歳）
+ * easy   … キャラ1体＋関連要素1つ（3歳）
+ * normal … キャラ1体＋関連要素2〜3（3〜4歳）
+ * rich   … 複数キャラ＋背景（4〜6歳）
+ */
+export type Unit = 'simple' | 'easy' | 'normal' | 'rich'
+
+export const UNIT_LABELS: Record<Unit, string> = {
+  simple: 'シンプル',
+  easy:   'かんたん',
+  normal: 'ふつう',
+  rich:   'にぎやか',
+}
+
+export const UNIT_AGE: Record<Unit, { min: AgeGroup; max: AgeGroup }> = {
+  simple: { min: 2, max: 3 },
+  easy:   { min: 3, max: 4 },
+  normal: { min: 3, max: 5 },
+  rich:   { min: 4, max: 6 },
+}
+
 export const THEME_LABELS: Record<Theme, string> = {
   animals: '動物',
   dinosaurs: '恐竜',
@@ -49,6 +96,8 @@ export const THEME_LABELS: Record<Theme, string> = {
   insects: '虫',
   flowers: '花・植物',
   characters: 'キャラクター風',
+  park: '公園・遊具',
+  'seasonal-events': '季節の行事',
 }
 
 export const SEASON_LABELS: Record<Season, string> = {
@@ -59,16 +108,31 @@ export const SEASON_LABELS: Record<Season, string> = {
 }
 
 export const EVENT_LABELS: Record<string, string> = {
-  tanabata: '七夕',
-  setsubun: '節分',
+  // 春
+  hinamatsuri:   'ひな祭り',
+  enrollment:    '入園・進級式',
+  childrensday:  'こどもの日',
+  mothersday:    '母の日',
+  excursion:     '遠足',
+  // 夏
+  fathersday:    '父の日',
+  tanabata:      '七夕',
+  pool:          'プール',
   summerfestival: '夏祭り',
-  halloween: 'ハロウィン',
-  christmas: 'クリスマス',
-  hinamatsuri: 'ひな祭り',
-  sports: '運動会',
-  graduation: '卒園式・入園式',
-  mothers: '母の日',
-  fathers: '父の日',
+  // 秋
+  tsukimi:       'お月見',
+  sports:        '運動会',
+  imohori:       'いもほり',
+  halloween:     'ハロウィン',
+  shichigosan:   '七五三',
+  // 冬
+  christmas:     'クリスマス',
+  mochitsuki:    'もちつき',
+  newyear:       'お正月',
+  setsubun:      '節分',
+  // 通年
+  graduation:    '卒園式',
+  birthday:      '誕生日',
 }
 
 // ========== イラスト素材管理 ==========

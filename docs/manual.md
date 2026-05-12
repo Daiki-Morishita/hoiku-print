@@ -58,6 +58,33 @@ time.sleep(60) を長くする（120秒→180秒と段階的に増やす）。
 
 ---
 
+## 季節の行事テーマ（seasonal-events）
+
+### 実行
+```bash
+python3 scripts/batch_seasonal_events.py --item hinamatsuri --variant 1
+python3 scripts/batch_seasonal_events.py --all --variant 1   # 1巡目
+python3 scripts/batch_seasonal_events.py --all --variant 2   # 2巡目（別場面）
+python3 scripts/batch_seasonal_events.py --all --variant 3   # 3巡目（別場面）
+```
+
+### アイテムリスト（計21種）
+- **春**: hinamatsuri, enrollment, childrensday, mothersday, excursion
+- **夏**: fathersday, tanabata, pool, summerfestival
+- **秋**: tsukimi, sports, imohori, halloween, shichigosan
+- **冬**: christmas, mochitsuki, newyear, setsubun
+- **通年**: graduation, birthday
+
+### バリアントの違い（-1/-2/-3）
+同じアイテム・同じユニットで構図・登場要素を変えた別バージョン。
+3バリアントで1アイテムを多角的にカバーする。
+
+### レート制限対策
+アイテム間60秒ウェイト（generate_park.py と同じ設定）。
+引っかかった場合は time.sleep の値を 120/180 と段階的に増やす。
+
+---
+
 ## 共通仕様
 
 ### スクリプトが自動でやること
