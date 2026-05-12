@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
-import { CATEGORY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
+import { CATEGORY_LABELS, SEASON_LABELS, EVENT_LABELS, DIFFICULTY_LABELS } from '@/lib/types'
 
 const ages = [2, 3, 4, 5, 6]
 
@@ -25,6 +25,7 @@ export function SearchFilters() {
     category: searchParams.get('category'),
     season: searchParams.get('season'),
     event: searchParams.get('event'),
+    difficulty: searchParams.get('difficulty'),
   }
 
   return (
@@ -66,6 +67,20 @@ export function SearchFilters() {
               label={label}
               active={current.season === key}
               onClick={() => updateParam('season', key)}
+            />
+          ))}
+        </div>
+      </FilterSection>
+
+      {/* 難易度 */}
+      <FilterSection label="難易度">
+        <div className="flex flex-wrap gap-2">
+          {Object.entries(DIFFICULTY_LABELS).map(([key, label]) => (
+            <FilterChip
+              key={key}
+              label={label}
+              active={current.difficulty === key}
+              onClick={() => updateParam('difficulty', key)}
             />
           ))}
         </div>
