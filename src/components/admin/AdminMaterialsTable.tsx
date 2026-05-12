@@ -415,7 +415,12 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
                       />
                     </td>
                     <td className="px-3 py-1.5">
-                      <div className="w-14 h-10 bg-gray-100 rounded overflow-hidden flex items-center justify-center border border-gray-200">
+                      <a
+                        href={`/materials/${m.id}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block w-14 h-10 bg-gray-100 rounded overflow-hidden flex items-center justify-center border border-gray-200 hover:border-blue-400 hover:ring-1 hover:ring-blue-300 transition"
+                      >
                         {hasIllust ? (
                           <Image
                             src={m.illustUrl!}
@@ -430,7 +435,7 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
                         ) : (
                           <span className="text-xl">🖼️</span>
                         )}
-                      </div>
+                      </a>
                     </td>
 
                     <td className="px-4 py-1.5">
@@ -524,20 +529,27 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
                       onChange={() => toggleSelect(m.id)}
                       className="absolute top-2 left-2 z-10 w-4 h-4"
                     />
-                    {hasIllust ? (
-                      <Image
-                        src={m.illustUrl!}
-                        alt={m.title}
-                        width={w}
-                        height={h}
-                        className="w-full h-full object-contain"
-                      />
-                    ) : m.imageUrl.endsWith('.svg') ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={m.imageUrl} alt={m.title} className="w-full h-full object-contain p-2" />
-                    ) : (
-                      <span className="text-4xl">🖼️</span>
-                    )}
+                    <a
+                      href={`/materials/${m.id}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block w-full h-full flex items-center justify-center hover:opacity-80 transition"
+                    >
+                      {hasIllust ? (
+                        <Image
+                          src={m.illustUrl!}
+                          alt={m.title}
+                          width={w}
+                          height={h}
+                          className="w-full h-full object-contain"
+                        />
+                      ) : m.imageUrl.endsWith('.svg') ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={m.imageUrl} alt={m.title} className="w-full h-full object-contain p-2" />
+                      ) : (
+                        <span className="text-4xl">🖼️</span>
+                      )}
+                    </a>
                   </div>
                   <div className="p-2 space-y-1.5">
                     <a
