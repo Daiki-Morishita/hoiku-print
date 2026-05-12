@@ -240,8 +240,11 @@ export default async function ColumnPage({ params }: { params: Promise<{ slug: s
               {related.map(r => (
                 <Link key={r.slug} href={`/columns/${r.slug}`}
                   className="flex gap-4 bg-white border border-border rounded-xl p-4 hover:border-primary/40 transition-all">
-                  <div className="w-20 h-16 bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg shrink-0 flex items-center justify-center">
-                    <BookOpen className="w-6 h-6 text-primary/30" />
+                  <div className="w-20 h-16 bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg shrink-0 overflow-hidden relative flex items-center justify-center">
+                    {r.heroSrc
+                      ? <Image src={r.heroSrc} alt={r.heroAlt} fill className="object-cover" />
+                      : <BookOpen className="w-6 h-6 text-primary/30" />
+                    }
                   </div>
                   <div>
                     <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${categoryColor[r.category] ?? 'bg-gray-100 text-gray-600'}`}>
