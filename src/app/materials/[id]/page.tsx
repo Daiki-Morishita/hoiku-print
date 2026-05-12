@@ -31,6 +31,7 @@ const difficultyColor: Record<number, string> = {
   1: 'bg-green-100 text-green-800 border-green-200',
   2: 'bg-yellow-100 text-yellow-800 border-yellow-200',
   3: 'bg-red-100 text-red-800 border-red-200',
+  4: 'bg-purple-100 text-purple-800 border-purple-200',
 }
 
 const categoryEmoji: Record<string, string> = {
