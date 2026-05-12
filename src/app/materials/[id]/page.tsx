@@ -17,12 +17,13 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const material = getMaterialById(id)
   if (!material) return {}
   return {
-    title: material.title,
+    title: `${material.title}｜無料プリント`,
     description: material.description,
     openGraph: {
       title: material.title,
       description: material.description,
       type: 'article',
+      ...(material.imageUrl ? { images: [{ url: material.imageUrl, alt: material.title }] } : {}),
     },
   }
 }
@@ -75,14 +76,30 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
     inLanguage: 'ja',
     isAccessibleForFree: true,
     license: 'https://creativecommons.org/licenses/by-nc/4.0/',
+    publisher: {
+      '@type': 'Organization',
+      name: 'ぬりえプリント',
+      url: 'https://nurie-print.com',
+      logo: { '@type': 'ImageObject', url: 'https://nurie-print.com/icon.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://nurie-print.com/materials/${material.id}` },
+    ...(material.imageUrl ? { image: `https://nurie-print.com${material.imageUrl}` } : {}),
+  }
+
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://nurie-print.com' },
+      { '@type': 'ListItem', position: 2, name: '教材一覧', item: 'https://nurie-print.com/materials' },
+      { '@type': 'ListItem', position: 3, name: material.title, item: `https://nurie-print.com/materials/${material.id}` },
+    ],
   }
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       {/* ===== 印刷専用エリア（画面では非表示・横A4・画像のみ・モノクロ） ===== */}
       <style>{`
         @page { size: A4 landscape; margin: 0; }
