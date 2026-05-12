@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 public/materials/
+tmp_materials/
+scripts/*.log
+scripts/auth_state.json

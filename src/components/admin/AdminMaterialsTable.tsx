@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import type { Material, ImageStatus, Category, Theme } from '@/lib/types'
 import { IMAGE_STATUS_LABELS, IMAGE_STATUS_COLOR, CATEGORY_LABELS, THEME_LABELS } from '@/lib/types'
+import { normalizeQuery, normalizeText } from '@/lib/utils'
 import { DeleteButton } from './DeleteButton'
 import { EditMaterialModal } from './EditMaterialModal'
 
@@ -152,16 +153,17 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
   const availableCategories = Array.from(new Set(materials.map(m => m.category))).sort()
   const availableThemes = Array.from(new Set(materials.map(m => m.theme).filter(Boolean) as Theme[])).sort()
 
-  const q = search.trim().toLowerCase()
+  const q = normalizeQuery(search)
   const filtered = materials.filter(m => {
     if (filterCategory !== 'all' && m.category !== filterCategory) return false
     if (filterTheme !== 'all' && m.theme !== filterTheme) return false
     if (filterStatus !== 'all' && (m.imageStatus ?? 'placeholder') !== filterStatus) return false
     if (q) {
-      const hay = [
+      const raw = [
         m.id, m.title, m.description, m.category, m.theme ?? '',
         ...m.tags, m.illustNotes ?? '',
-      ].join(' ').toLowerCase()
+      ].join(' ')
+      const hay = normalizeText(raw) + ' ' + normalizeQuery(raw)
       if (!hay.includes(q)) return false
     }
     return true
