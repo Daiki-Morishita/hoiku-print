@@ -5,7 +5,7 @@ import { columns } from '@/lib/columns'
 const BASE_URL = 'https://nurie-print.com'
 
 const AGES = [2, 3, 4, 5, 6]
-const THEMES = ['animals', 'dinosaurs', 'vehicles', 'sea']
+const ALL_THEMES = ['animals', 'dinosaurs', 'vehicles', 'sea', 'park']
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const materialPages = materials.map(m => ({
@@ -16,7 +16,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...(m.imageUrl ? { images: [m.imageUrl] } : {}),
   }))
 
-  // Only include category/season pages that have actual materials
+  // Only include theme/season pages that have actual materials
+  const themePages = ALL_THEMES
+    .filter(t => filterMaterials({ theme: t as Parameters<typeof filterMaterials>[0]['theme'] }).length > 0)
+    .map(t => ({ url: `${BASE_URL}/category/theme/${t}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 }))
+
   const seasonPages = ['spring', 'summer', 'autumn', 'winter']
     .filter(s => filterMaterials({ season: s as Parameters<typeof filterMaterials>[0]['season'] }).length > 0)
     .map(s => ({ url: `${BASE_URL}/category/season/${s}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6 }))
@@ -24,7 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const categoryPages = [
     ...AGES.map(age => ({ url: `${BASE_URL}/category/age/${age}`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 })),
     { url: `${BASE_URL}/category/type/coloring`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.8 },
-    ...THEMES.map(t => ({ url: `${BASE_URL}/category/theme/${t}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 })),
+    ...themePages,
     ...seasonPages,
   ]
 
