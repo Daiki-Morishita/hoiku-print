@@ -60,7 +60,7 @@ export default async function MaterialsPage({
         <h1 className="text-2xl font-bold">教材を探す</h1>
         {activeCount === 0 && (
           <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
-            ぬりえ・点つなぎ・運筆など{filtered.length}点以上の教材を無料配布中。年齢・テーマ・季節で絞り込めます。
+            動物・恐竜・乗り物など{filtered.length}点以上のぬりえ教材を無料配布中。年齢・テーマ・難易度・季節で絞り込めます。
           </p>
         )}
       </div>
