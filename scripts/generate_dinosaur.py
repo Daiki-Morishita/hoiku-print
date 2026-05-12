@@ -36,7 +36,8 @@ TMP_DIR.mkdir(exist_ok=True)
 
 COMMON_CONDITIONS = """
 共通条件
-白背景・線画スタイル（塗りつぶしなし）
+背景は必ず純白 #FFFFFF（オフホワイト・クリーム色・グレー味のかかった白は禁止）
+線画スタイル（塗りつぶしなし）
 輪郭線は太くはっきりと描き、細い線や掠れた線は使わない
 A4横長・高画質
 文字・テキスト・ラベル・枠線・フレームは一切入れない
@@ -212,6 +213,23 @@ def wait_for_image(page, timeout=240):
     return None
 
 
+def whiten_background(in_path, out_path=None, threshold=235):
+    """背景近白(>=threshold)を純白#FFFFFFに統一"""
+    try:
+        from PIL import Image
+        import numpy as np
+        out_path = out_path or in_path
+        img = Image.open(in_path).convert("RGB")
+        arr = np.array(img)
+        mask = (arr[:,:,0] >= threshold) & (arr[:,:,1] >= threshold) & (arr[:,:,2] >= threshold)
+        arr[mask] = [255, 255, 255]
+        Image.fromarray(arr).save(out_path, "PNG", optimize=True)
+        return True
+    except Exception as e:
+        log(f"  背景純白化失敗: {e}")
+        return False
+
+
 def download_image(page, img_src, out_path):
     data = page.evaluate("""async (url) => {
         const r = await fetch(url, {credentials: 'include'});
@@ -221,6 +239,8 @@ def download_image(page, img_src, out_path):
     if data:
         with open(out_path, "wb") as f:
             f.write(bytes(data))
+        # 背景純白化（必須）
+        whiten_background(out_path)
         return True
     return False
 
