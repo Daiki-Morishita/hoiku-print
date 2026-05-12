@@ -153,6 +153,25 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* テーマで探す */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
+        <SectionHeader title="テーマで探す" subtitle="好きなテーマからぬりえを選べます" />
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
+          {[
+            { href: '/category/theme/animals', emoji: '🐾', label: '動物' },
+            { href: '/category/theme/dinosaurs', emoji: '🦕', label: '恐竜' },
+            { href: '/category/theme/vehicles', emoji: '🚒', label: 'のりもの' },
+            { href: '/category/theme/sea', emoji: '🐟', label: '海の生き物' },
+          ].map(({ href, emoji, label }) => (
+            <Link key={href} href={href}
+              className="bg-white border border-border rounded-xl p-3 flex items-center gap-3 hover:border-primary/40 hover:shadow-sm transition-all">
+              <span className="text-2xl w-8 text-center shrink-0">{emoji}</span>
+              <span className="text-sm font-medium">{label}</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* 2歳向け特集 */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
         <div className="bg-gradient-to-r from-pink-50 to-blue-50 rounded-3xl p-6 sm:p-8">
