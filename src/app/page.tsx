@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Star, ArrowRight, Printer, Heart, Users, BookOpen, Clock } from 'lucide-react'
 import { MaterialCard } from '@/components/materials/MaterialCard'
 import { getPopularMaterials, materials, getMaterialById, filterMaterials } from '@/lib/data'
-import { CATEGORY_LABELS, SEASON_LABELS } from '@/lib/types'
+import { SEASON_LABELS } from '@/lib/types'
 import { HomeSearch } from '@/components/HomeSearch'
 import { columns } from '@/lib/columns'
 
@@ -141,32 +141,6 @@ export default function HomePage() {
               <div className="text-xs text-muted-foreground mt-0.5">向け</div>
             </Link>
           ))}
-        </div>
-      </section>
-
-      {/* カテゴリ */}
-      <section className="bg-muted/30 py-12">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <SectionHeader title="種類で探す" subtitle="教材の種類から探せます" />
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-            {Object.entries(CATEGORY_LABELS).map(([key, label]) => {
-              const icons: Record<string, string> = {
-                coloring: '🖍️', hiragana: 'あ', numbers: '1️⃣',
-                drawing: '✏️', maze: '🗺️', dotconnect: '⚫',
-                craft: '🎨', scissors: '✂️',
-              }
-              return (
-                <Link
-                  key={key}
-                  href={`/category/type/${key}`}
-                  className="bg-white border border-border rounded-xl p-3 flex items-center gap-3 hover:border-primary/40 hover:shadow-sm transition-all"
-                >
-                  <span className="text-2xl w-8 text-center shrink-0">{icons[key]}</span>
-                  <span className="text-sm font-medium">{label}</span>
-                </Link>
-              )
-            })}
-          </div>
         </div>
       </section>
 
