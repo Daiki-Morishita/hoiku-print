@@ -161,7 +161,7 @@ export const columns: Column[] = [
       {
         type: 'materials',
         label: 'この記事に関連する教材',
-        ids: [],
+        ids: ['bear-easy-1', 'rabbit-easy-1', 'panda-easy-1', 'elephant-easy-1'],
       },
     ],
   },
@@ -260,7 +260,7 @@ export const columns: Column[] = [
       {
         type: 'materials',
         label: '年齢別の教材を探す',
-        ids: [],
+        ids: ['cat-simple', 'rabbit-easy-1', 'panda-normal-1', 'lion-rich-1'],
       },
     ],
   },
@@ -354,7 +354,7 @@ export const columns: Column[] = [
       {
         type: 'materials',
         label: '運筆練習の教材を見る',
-        ids: [],
+        ids: ['rabbit-simple-1', 'bear-simple-1', 'cat-simple', 'panda-simple-1'],
       },
     ],
   },
@@ -434,8 +434,8 @@ export const columns: Column[] = [
       },
       {
         type: 'materials',
-        label: 'ハサミ練習の教材を見る',
-        ids: [],
+        label: 'ハサミ練習に使える教材',
+        ids: ['rabbit-simple-1', 'cat-simple', 'dog-simple', 'panda-simple-1'],
       },
     ],
   },
@@ -517,7 +517,7 @@ export const columns: Column[] = [
       {
         type: 'materials',
         label: '雨の日におすすめの教材',
-        ids: [],
+        ids: ['tyrannosaurus-easy-1', 'shinkansen-easy-1', 'lion-easy-1', 'panda-easy-1'],
       },
     ],
   },
@@ -606,7 +606,7 @@ export const columns: Column[] = [
       {
         type: 'materials',
         label: '季節・行事の教材を見る',
-        ids: [],
+        ids: ['rabbit-normal-1', 'bear-normal-1', 'cat-normal', 'elephant-normal-1'],
       },
     ],
   },
@@ -702,8 +702,8 @@ export const columns: Column[] = [
       },
       {
         type: 'materials',
-        label: 'ひらがな練習の教材を見る',
-        ids: [],
+        label: 'ひらがな練習に役立つ教材',
+        ids: ['rabbit-easy-1', 'cat-easy', 'panda-easy-1', 'dog-simple'],
       },
     ],
   },
@@ -782,8 +782,8 @@ export const columns: Column[] = [
       },
       {
         type: 'materials',
-        label: '迷路プリントを見る',
-        ids: [],
+        label: '迷路と組み合わせたい教材',
+        ids: ['tiger-normal-1', 'wolf-easy-1', 'zebra-easy-1', 'turtle-easy-1'],
       },
     ],
   },
@@ -873,7 +873,7 @@ export const columns: Column[] = [
       {
         type: 'materials',
         label: '折り紙と組み合わせたいぬりえ教材',
-        ids: [],
+        ids: ['rabbit-easy-1', 'turtle-easy-1', 'panda-easy-1', 'whale-easy-1'],
       },
     ],
   },
@@ -954,7 +954,7 @@ export const columns: Column[] = [
       {
         type: 'materials',
         label: '読み聞かせと組み合わせたいぬりえ',
-        ids: [],
+        ids: ['bear-normal-1', 'rabbit-normal-1', 'lion-normal-1', 'elephant-normal-1'],
       },
     ],
   },
@@ -1022,7 +1022,7 @@ export const columns: Column[] = [
       {
         type: 'materials',
         label: '気軽に始めやすい教材',
-        ids: [],
+        ids: ['cat-simple', 'dog-simple', 'rabbit-simple-1', 'bear-simple-1'],
       },
     ],
   },
@@ -1083,7 +1083,7 @@ export const columns: Column[] = [
       {
         type: 'materials',
         label: 'まずは楽しめる難易度から',
-        ids: [],
+        ids: ['cat-easy', 'rabbit-easy-1', 'panda-easy-1', 'bear-easy-1'],
       },
     ],
   },

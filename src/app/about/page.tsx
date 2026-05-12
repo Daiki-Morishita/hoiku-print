@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Printer, Heart, Users, Sparkles, ChevronRight } from 'lucide-react'
+import { Printer, Heart, Users, Sparkles, ChevronRight, BookOpen, Shield } from 'lucide-react'
 
 export const metadata = {
   title: 'ぬりえプリントについて',
@@ -69,6 +69,36 @@ export default function AboutPage() {
       </ul>
 
       <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+        <BookOpen className="w-5 h-5 text-primary" />
+        コンテンツの作成方針
+      </h2>
+      <div className="mb-10 text-sm leading-relaxed space-y-3">
+        <p>
+          掲載するコラム記事と教材は、文部科学省「幼稚園教育要領」、厚生労働省「保育所保育指針」など、公的機関が公開する保育・幼児教育のガイドラインを基準に作成しています。発達心理学・教育心理学の確立された研究成果も参照しており、引用する際は出典を明記しています。
+        </p>
+        <p>
+          また、実際に保育・幼児教育に携わる方々の知見を参考にしながら、現場で本当に役立つ視点を取り入れるよう努めています。詳しくは
+          <Link href="/editorial-policy" className="text-primary underline mx-1">編集方針</Link>
+          をご覧ください。
+        </p>
+      </div>
+
+      <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+        <Shield className="w-5 h-5 text-primary" />
+        運営者情報
+      </h2>
+      <div className="mb-10 text-sm leading-relaxed space-y-3">
+        <p>
+          ぬりえプリントは、保育士・幼稚園教諭の先生方、ご家庭で幼児と関わる方々に向けて教材プリントとコラム記事を配信する個人運営サイトです。営利目的の販売活動は行っておらず、運営費は本サイトに掲載される広告収入によってまかなっています。
+        </p>
+        <p>
+          サイトの内容についてのご質問・ご指摘・教材リクエストは、
+          <Link href="/contact" className="text-primary underline mx-1">お問い合わせフォーム</Link>
+          よりお気軽にご連絡ください。
+        </p>
+      </div>
+
+      <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
         <Printer className="w-5 h-5 text-primary" />
         利用について
       </h2>
@@ -78,12 +108,15 @@ export default function AboutPage() {
         <li className="flex gap-2"><span className="text-primary">•</span>ライセンスは CC BY-NC 4.0（非商用）に準じます。</li>
       </ul>
 
-      <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3">
         <Link href="/materials" className="block bg-primary text-white text-center px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors">
-          教材一覧を見る
+          教材一覧
         </Link>
-        <Link href="/privacy" className="block bg-white border border-border text-center px-4 py-3 rounded-xl text-sm font-medium hover:bg-muted transition-colors">
-          プライバシーポリシー
+        <Link href="/editorial-policy" className="block bg-white border border-border text-center px-4 py-3 rounded-xl text-sm font-medium hover:bg-muted transition-colors">
+          編集方針
+        </Link>
+        <Link href="/terms" className="block bg-white border border-border text-center px-4 py-3 rounded-xl text-sm font-medium hover:bg-muted transition-colors">
+          利用規約
         </Link>
         <Link href="/contact" className="block bg-white border border-border text-center px-4 py-3 rounded-xl text-sm font-medium hover:bg-muted transition-colors">
           お問い合わせ

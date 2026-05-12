@@ -55,7 +55,10 @@ export function Footer() {
         <div className="mt-10 pt-6 border-t border-border space-y-4">
           <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
             <Link href="/about" className="hover:text-foreground transition-colors">このサイトについて</Link>
+            <Link href="/editorial-policy" className="hover:text-foreground transition-colors">編集方針</Link>
+            <Link href="/terms" className="hover:text-foreground transition-colors">利用規約</Link>
             <Link href="/privacy" className="hover:text-foreground transition-colors">プライバシーポリシー</Link>
+            <Link href="/faq" className="hover:text-foreground transition-colors">よくある質問</Link>
             <Link href="/contact" className="hover:text-foreground transition-colors">お問い合わせ</Link>
           </div>
           <div className="flex flex-col sm:flex-row justify-between items-center gap-2">

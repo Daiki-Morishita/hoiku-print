@@ -1,9 +1,10 @@
 import Link from 'next/link'
-import { Star, ArrowRight, Printer, Heart, Users } from 'lucide-react'
+import { Star, ArrowRight, Printer, Heart, Users, BookOpen, Clock } from 'lucide-react'
 import { MaterialCard } from '@/components/materials/MaterialCard'
 import { getPopularMaterials, materials, getMaterialById } from '@/lib/data'
 import { CATEGORY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
 import { HomeSearch } from '@/components/HomeSearch'
+import { columns } from '@/lib/columns'
 
 export default function HomePage() {
   const popular = getPopularMaterials(6)
@@ -233,6 +234,36 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* コラム抜粋 */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        <SectionHeader title="保育・幼児教育のコラム" subtitle="教材の選び方や発達の話など、現場で役立つ知識を解説" href="/columns" />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+          {columns.slice(0, 3).map(col => (
+            <Link key={col.slug} href={`/columns/${col.slug}`}
+              className="bg-white border border-border rounded-2xl overflow-hidden hover:border-primary/40 hover:shadow-md transition-all group">
+              <div className="relative h-40 bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
+                {col.heroSrc ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={col.heroSrc} alt={col.heroAlt} className="w-full h-full object-cover" />
+                ) : (
+                  <BookOpen className="w-12 h-12 text-primary/30" />
+                )}
+              </div>
+              <div className="p-5">
+                <div className="flex items-center gap-2 mb-2 text-xs text-muted-foreground">
+                  <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">{col.category}</span>
+                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" />約{col.readingTime}分</span>
+                </div>
+                <h3 className="font-bold text-sm leading-snug mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                  {col.title}
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{col.description}</p>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
