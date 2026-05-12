@@ -555,6 +555,8 @@ ERROR_PHRASES = [
     "image generation failed",
     "couldn't generate",
     "unable to generate",
+    "画像作成の制限に達しました",
+    "制限に達しました",
 ]
 
 
