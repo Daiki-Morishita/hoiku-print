@@ -1,13 +1,10 @@
 import type { MetadataRoute } from 'next'
-import { materials } from '@/lib/data'
+import { materials, filterMaterials } from '@/lib/data'
 import { columns } from '@/lib/columns'
 
 const BASE_URL = 'https://nurie-print.com'
 
 const AGES = [2, 3, 4, 5, 6]
-const CATEGORIES = ['coloring', 'hiragana', 'numbers', 'drawing', 'maze', 'dotconnect', 'craft', 'scissors']
-const SEASONS = ['spring', 'summer', 'autumn', 'winter']
-const EVENTS = ['hinamatsuri', 'childrensday', 'tanabata', 'summerfestival', 'sports', 'halloween', 'christmas', 'setsubun', 'graduation']
 const THEMES = ['animals', 'dinosaurs', 'vehicles', 'sea']
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -19,12 +16,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...(m.imageUrl ? { images: [m.imageUrl] } : {}),
   }))
 
+  // Only include category/season pages that have actual materials
+  const seasonPages = ['spring', 'summer', 'autumn', 'winter']
+    .filter(s => filterMaterials({ season: s as Parameters<typeof filterMaterials>[0]['season'] }).length > 0)
+    .map(s => ({ url: `${BASE_URL}/category/season/${s}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6 }))
+
   const categoryPages = [
     ...AGES.map(age => ({ url: `${BASE_URL}/category/age/${age}`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 })),
-    ...CATEGORIES.map(c => ({ url: `${BASE_URL}/category/type/${c}`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 })),
-    ...SEASONS.map(s => ({ url: `${BASE_URL}/category/season/${s}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6 })),
-    ...EVENTS.map(e => ({ url: `${BASE_URL}/category/event/${e}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6 })),
+    { url: `${BASE_URL}/category/type/coloring`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.8 },
     ...THEMES.map(t => ({ url: `${BASE_URL}/category/theme/${t}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 })),
+    ...seasonPages,
   ]
 
   return [
