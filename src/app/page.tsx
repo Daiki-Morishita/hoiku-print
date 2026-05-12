@@ -104,7 +104,7 @@ export default function HomePage() {
           {[
             { label: '雨の日', emoji: '🌧️', query: '?age=3', desc: '室内で静かに' },
             { label: '朝の受け入れ', emoji: '🌅', query: '?age=2', desc: 'すぐ取り組める' },
-            { label: '自由時間', emoji: '⏰', query: '?category=coloring', desc: '手軽に楽しめる' },
+            { label: '自由時間', emoji: '⏰', query: '?difficulty=2', desc: '手軽に楽しめる' },
             { label: '行事前', emoji: '🎉', query: '?season=autumn', desc: '季節・行事テーマ' },
             { label: '帰り待ち', emoji: '🎒', query: '?age=5', desc: '5〜6歳向け' },
             { label: '延長保育', emoji: '🌙', query: '?age=4', desc: '4〜5歳向け' },
