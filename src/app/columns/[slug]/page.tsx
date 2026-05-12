@@ -17,6 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: col.title,
     description: col.description,
+    alternates: { canonical: `https://nurie-print.com/columns/${slug}` },
     openGraph: {
       title: col.title,
       description: col.description,

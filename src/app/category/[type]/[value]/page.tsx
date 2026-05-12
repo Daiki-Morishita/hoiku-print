@@ -61,7 +61,11 @@ function getPageInfo(type: string, value: string): { title: string; description:
 export async function generateMetadata({ params }: { params: Promise<{ type: string; value: string }> }) {
   const { type, value } = await params
   const { title, description } = getPageInfo(type, value)
-  return { title, description }
+  return {
+    title,
+    description,
+    alternates: { canonical: `https://nurie-print.com/category/${type}/${value}` },
+  }
 }
 
 const BASE_URL = 'https://nurie-print.com'

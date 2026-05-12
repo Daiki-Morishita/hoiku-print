@@ -23,6 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return {
     title: `${material.title}｜${ageLabel}向け無料プリント`,
     description: seoDesc,
+    alternates: { canonical: `https://nurie-print.com/materials/${id}` },
     openGraph: {
       title: material.title,
       description: seoDesc,
