@@ -4,6 +4,7 @@ import { ChevronRight, BookOpen, ShieldCheck, RefreshCw, AlertCircle } from 'luc
 export const metadata = {
   title: '編集方針｜ぬりえプリント',
   description: 'ぬりえプリントの編集方針・コンテンツ作成基準・情報の更新頻度について。公的機関の資料や専門書に基づき、保育現場の知見を参考にコンテンツを作成しています。',
+  alternates: { canonical: 'https://nurie-print.com/editorial-policy' },
 }
 
 export default function EditorialPolicyPage() {

@@ -4,6 +4,7 @@ import { ChevronRight, HelpCircle } from 'lucide-react'
 export const metadata = {
   title: 'よくある質問（FAQ）｜ぬりえプリント',
   description: 'ぬりえプリントについてよくいただく質問をまとめています。教材の使い方・印刷方法・商用利用の可否・教材のリクエストなど。',
+  alternates: { canonical: 'https://nurie-print.com/faq' },
 }
 
 type FAQ = { q: string; a: string }

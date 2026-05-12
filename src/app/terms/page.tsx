@@ -4,6 +4,7 @@ import { ChevronRight, FileText } from 'lucide-react'
 export const metadata = {
   title: '利用規約｜ぬりえプリント',
   description: 'ぬりえプリントの利用規約。教材の使用範囲、商用利用、免責事項、規約の変更などについて定めています。',
+  alternates: { canonical: 'https://nurie-print.com/terms' },
 }
 
 export default function TermsPage() {

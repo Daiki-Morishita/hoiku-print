@@ -4,6 +4,7 @@ import { ChevronRight, Mail, MessageSquare } from 'lucide-react'
 export const metadata = {
   title: 'お問い合わせ',
   description: 'ぬりえプリントへのお問い合わせ・ご要望・不具合報告の窓口です。教材の追加リクエストもお気軽にお寄せください。',
+  alternates: { canonical: 'https://nurie-print.com/contact' },
 }
 
 export default function ContactPage() {

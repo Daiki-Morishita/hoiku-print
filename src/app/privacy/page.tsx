@@ -4,6 +4,7 @@ import { ChevronRight } from 'lucide-react'
 export const metadata = {
   title: 'プライバシーポリシー',
   description: 'ぬりえプリントのプライバシーポリシー。個人情報の取り扱い、Cookie・アクセス解析・広告配信に関する方針を記載しています。',
+  alternates: { canonical: 'https://nurie-print.com/privacy' },
 }
 
 export default function PrivacyPage() {
