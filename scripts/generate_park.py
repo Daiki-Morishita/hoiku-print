@@ -511,6 +511,40 @@ def git_commit_push(item_id, variant):
     log(f"  push 完了: {item_id}-{variant}")
 
 
+PLAN_FILE = Path.home() / ".claude" / "plans" / "park-theme-generation.md"
+
+def check_plan(item_id, variant):
+    """プランファイルの該当バリアントのチェックボックスを ✅ に更新"""
+    try:
+        content = PLAN_FILE.read_text()
+        content = content.replace(
+            f"| `{item_id}` |",
+            content  # まずIDを探す
+        )
+        # "| item_id | ... | ☐ |" の該当variant列だけ置換
+        lines = content.splitlines()
+        new_lines = []
+        for line in lines:
+            if f"| {item_id} |" in line or f"`{item_id}`" in line:
+                # variant列（-1/-2/-3）のn番目の☐を✅に
+                count = 0
+                new_line = ""
+                for ch in line:
+                    if ch == '☐':
+                        count += 1
+                        if count == variant:
+                            new_line += '✅'
+                            continue
+                    new_line += ch
+                new_lines.append(new_line)
+            else:
+                new_lines.append(line)
+        PLAN_FILE.write_text('\n'.join(new_lines))
+        log(f"  プラン更新: {item_id}-{variant} ✅")
+    except Exception as e:
+        log(f"  プラン更新失敗: {e}")
+
+
 # =========================================================
 # ChatGPT 操作（generate_dinosaur.py と同じ）
 # =========================================================
@@ -737,6 +771,7 @@ def run_variant(pw, state, item_id, variant, client):
     if supabase_urls:
         if add_to_data_ts(entries, supabase_urls, item_id):
             git_commit_push(item_id, variant)
+    check_plan(item_id, variant)
     log(f"完了: {item_id}-{variant} ({len(supabase_urls)}/4枚)")
     return len(supabase_urls)
 
@@ -773,7 +808,7 @@ def main():
             for iid, item in PARK_ITEMS.items():
                 for v in item["variants"]:
                     run_variant(p, state, iid, v, client)
-                    time.sleep(10)
+                    time.sleep(60)
         else:
             run_variant(p, state, args.item, args.variant, client)
 
