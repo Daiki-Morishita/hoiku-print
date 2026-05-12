@@ -5,7 +5,7 @@ import { columns } from '@/lib/columns'
 
 export const metadata = {
   title: 'コラム｜保育・幼児教育の知識とアイデア',
-  description: 'ぬりえの発達効果・年齢別ぬりえ選び・季節の保育活動・ひらがな練習の始め方など、保育士・保護者に役立つ幼児教育コラム44本を掲載。',
+  description: 'ぬりえの発達効果・年齢別ぬりえ選び・季節の保育活動・ひらがな練習・ハサミ工作など、保育士・保護者に役立つ幼児教育コラム48本を掲載。',
   alternates: { canonical: 'https://nurie-print.com/columns' },
 }
 
