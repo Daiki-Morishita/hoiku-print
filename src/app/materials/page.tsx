@@ -56,6 +56,11 @@ export default async function MaterialsPage({
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
       <div className="mb-6">
         <h1 className="text-2xl font-bold">教材を探す</h1>
+        {activeCount === 0 && (
+          <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+            ぬりえ・点つなぎ・運筆など{filtered.length}点以上の教材を無料配布中。年齢・テーマ・季節で絞り込めます。
+          </p>
+        )}
       </div>
 
       {/* キーワード検索バー */}
