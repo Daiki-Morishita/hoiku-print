@@ -26,6 +26,7 @@ export type Theme =
   | 'insects'       // 虫
   | 'flowers'       // 花・植物
   | 'characters'    // キャラクター風
+  | 'park'          // 公園・遊具
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   coloring: 'ぬりえ',
