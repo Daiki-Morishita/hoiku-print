@@ -109,15 +109,14 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             />
           </div>
         )}
-        {/* 右端ブランディング（ぬりえプリントのみ） */}
+        {/* 右下ブランディング（ぬりえプリントのみ） */}
         <div style={{
           position: 'absolute',
-          right: '0',
+          right: '8mm',
           bottom: '5mm',
           backgroundColor: '#eeeeee',
           padding: '0.5mm 1.5mm',
-          borderTopLeftRadius: '1mm',
-          borderBottomLeftRadius: '1mm',
+          borderRadius: '1mm',
           fontSize: '9pt',
           fontWeight: 'bold',
           color: '#333',
