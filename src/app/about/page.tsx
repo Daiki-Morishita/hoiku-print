@@ -11,7 +11,7 @@ const orgJsonLd = {
   '@type': 'Organization',
   name: 'ぬりえプリント',
   url: 'https://nurie-print.com',
-  logo: { '@type': 'ImageObject', url: 'https://nurie-print.com/icon.png' },
+  logo: { '@type': 'ImageObject', url: 'https://nurie-print.com/icon.svg' },
   description: '保育士・幼稚園教諭・ご家庭で使える無料の幼児向け教材プリント配布サービス。',
   contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', url: 'https://nurie-print.com/contact' },
   sameAs: [],

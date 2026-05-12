@@ -28,7 +28,7 @@ const organizationJsonLd = {
   '@type': 'Organization',
   name: 'ぬりえプリント',
   url: 'https://nurie-print.com',
-  logo: { '@type': 'ImageObject', url: 'https://nurie-print.com/icon.png', width: 512, height: 512 },
+  logo: { '@type': 'ImageObject', url: 'https://nurie-print.com/icon.svg', width: 512, height: 512 },
   description: '保育士・幼稚園教諭向け無料教材プリントサービス。年齢・季節別に340種類以上の教材を無料配布。',
   contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', url: 'https://nurie-print.com/contact', availableLanguage: 'Japanese' },
 }
