@@ -5,8 +5,8 @@ export function Footer() {
   return (
     <footer className="border-t border-border bg-white mt-16">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-7 h-7 bg-primary rounded-lg flex items-center justify-center">
                 <Printer className="w-3.5 h-3.5 text-white" />
@@ -20,23 +20,13 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-sm mb-3">カテゴリ</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/category/type/coloring" className="hover:text-foreground transition-colors">ぬりえ</Link></li>
-              <li><Link href="/category/type/hiragana" className="hover:text-foreground transition-colors">ひらがな練習</Link></li>
-              <li><Link href="/category/type/maze" className="hover:text-foreground transition-colors">迷路</Link></li>
-              <li><Link href="/category/type/drawing" className="hover:text-foreground transition-colors">運筆プリント</Link></li>
-            </ul>
-          </div>
-
-          <div>
             <h3 className="font-semibold text-sm mb-3">コラム</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link href="/columns/benefits-of-coloring-for-kids" className="hover:text-foreground transition-colors">ぬりえの発達効果</Link></li>
               <li><Link href="/columns/coloring-for-2-year-olds" className="hover:text-foreground transition-colors">2歳からのぬりえ入門</Link></li>
-              <li><Link href="/columns/dot-connect-benefits-for-kids" className="hover:text-foreground transition-colors">点つなぎの教育効果</Link></li>
-              <li><Link href="/columns/sensory-play-benefits" className="hover:text-foreground transition-colors">感覚遊びの発達効果</Link></li>
-              <li><Link href="/columns/outdoor-play-benefits" className="hover:text-foreground transition-colors">外遊びの発達効果</Link></li>
+              <li><Link href="/columns/coloring-for-3-year-olds" className="hover:text-foreground transition-colors">3歳のぬりえガイド</Link></li>
+              <li><Link href="/columns/autumn-activities-for-kids" className="hover:text-foreground transition-colors">秋の保育活動アイデア</Link></li>
+              <li><Link href="/columns/winter-coloring-activities" className="hover:text-foreground transition-colors">冬のぬりえ活動</Link></li>
               <li><Link href="/columns" className="hover:text-foreground transition-colors">コラム一覧 →</Link></li>
             </ul>
           </div>
@@ -53,12 +43,14 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-sm mb-3">テーマで探す</h3>
+            <h3 className="font-semibold text-sm mb-3">テーマ・季節</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link href="/category/theme/animals" className="hover:text-foreground transition-colors">動物ぬりえ</Link></li>
               <li><Link href="/category/theme/dinosaurs" className="hover:text-foreground transition-colors">恐竜ぬりえ</Link></li>
               <li><Link href="/category/theme/vehicles" className="hover:text-foreground transition-colors">のりものぬりえ</Link></li>
-              <li><Link href="/category/theme/sea" className="hover:text-foreground transition-colors">海の生き物ぬりえ</Link></li>
+              <li><Link href="/category/season/spring" className="hover:text-foreground transition-colors">春の教材</Link></li>
+              <li><Link href="/category/season/autumn" className="hover:text-foreground transition-colors">秋の教材</Link></li>
+              <li><Link href="/category/season/winter" className="hover:text-foreground transition-colors">冬の教材</Link></li>
             </ul>
           </div>
         </div>
