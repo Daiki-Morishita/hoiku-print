@@ -35,6 +35,7 @@ export const columns: Column[] = [
     category: '発達・知育',
     heroQuery: 'child coloring drawing happy',
     heroAlt: 'ぬりえをする子ども',
+    heroSrc: '/columns/col1-hero.jpg',
     publishedAt: '2026-05-12',
     updatedAt: '2026-05-12',
     readingTime: 7,
@@ -48,6 +49,7 @@ export const columns: Column[] = [
         query: 'child coloring book table concentrated',
         alt: '集中してぬりえに取り組む子ども',
         caption: '集中してぬりえに向かう子ども。この「夢中になる時間」が発達を促す。',
+        src: '/columns/col1-sec1.jpg',
       },
       { type: 'h2', text: '① 微細運動（手先の器用さ）を育てる' },
       {
@@ -85,6 +87,7 @@ export const columns: Column[] = [
         query: 'child painting creative art expression happy',
         alt: '色を選んで楽しそうに塗る子ども',
         caption: '色の選択は感情表現の一形態。「なぜこの色を選んだの？」と話しかけるだけでコミュニケーションが広がる。',
+        src: '/columns/col1-sec2.jpg',
       },
       {
         type: 'evidence',
@@ -145,6 +148,7 @@ export const columns: Column[] = [
     category: '発達・知育',
     heroQuery: 'children different ages drawing coloring together',
     heroAlt: '様々な年齢の子どもたちが一緒にぬりえをしている',
+    heroSrc: '/columns/col2-hero.jpg',
     publishedAt: '2026-05-12',
     updatedAt: '2026-05-12',
     readingTime: 8,
@@ -190,6 +194,7 @@ export const columns: Column[] = [
         query: 'three year old child coloring crayon',
         alt: '3歳児がクレヨンでぬりえをしている',
         caption: '3歳頃から「この部分はどの色にしようかな」という思考が加わる。',
+        src: '/columns/col2-sec1.jpg',
       },
       { type: 'h2', text: '4歳のぬりえ選び' },
       {
@@ -234,6 +239,7 @@ export const columns: Column[] = [
     category: '運筆・書き方',
     heroQuery: 'child learning write pencil tracing paper',
     heroAlt: '鉛筆の練習をする子ども',
+    heroSrc: '/columns/col3-hero.jpg',
     publishedAt: '2026-05-12',
     updatedAt: '2026-05-12',
     readingTime: 8,
@@ -274,6 +280,7 @@ export const columns: Column[] = [
         query: 'child correct pencil grip holding pencil',
         alt: '正しい鉛筆の持ち方（3点持ち）',
         caption: '正しい3点持ち。強く握りすぎず、力を抜いて持てるのが理想。',
+        src: '/columns/col3-sec1.jpg',
       },
       {
         type: 'callout',
@@ -318,6 +325,7 @@ export const columns: Column[] = [
     category: '工作・ハサミ',
     heroQuery: 'child using scissors craft paper cutting',
     heroAlt: 'ハサミで工作する子ども',
+    heroSrc: '/columns/col4-hero.jpg',
     publishedAt: '2026-05-12',
     updatedAt: '2026-05-12',
     readingTime: 6,
@@ -359,6 +367,7 @@ export const columns: Column[] = [
         query: 'child cutting paper scissors step by step craft',
         alt: 'ハサミで紙を切る練習をする子ども',
         caption: 'まずは「1回切り」から。成功体験を積み重ねることが上達への近道。',
+        src: '/columns/col4-sec1.jpg',
       },
       { type: 'h2', text: 'ハサミの選び方' },
       {
@@ -393,6 +402,7 @@ export const columns: Column[] = [
     category: '遊び・アイデア',
     heroQuery: 'rainy day children indoor playing crafts cozy',
     heroAlt: '雨の日に室内で遊ぶ子どもたち',
+    heroSrc: '/columns/col5-hero.jpg',
     publishedAt: '2026-05-12',
     updatedAt: '2026-05-12',
     readingTime: 7,
@@ -406,6 +416,7 @@ export const columns: Column[] = [
         query: 'cozy indoor children playing rainy window',
         alt: '雨の日に室内で過ごす子どもたち',
         caption: '雨の日は「巣ごもり時間」。創造力を育てる絶好のチャンス。',
+        src: '/columns/col5-sec1.jpg',
       },
       { type: 'h2', text: '🖍️ プリント・描く系（1〜5）' },
       {
@@ -469,6 +480,7 @@ export const columns: Column[] = [
     category: '季節・行事',
     heroQuery: 'kindergarten seasonal craft decoration holiday children',
     heroAlt: '季節の制作活動をする子どもたち',
+    heroSrc: '/columns/col6-hero.jpg',
     publishedAt: '2026-05-12',
     updatedAt: '2026-05-12',
     readingTime: 8,
@@ -482,6 +494,7 @@ export const columns: Column[] = [
         query: 'nursery school seasonal decoration wall art children',
         alt: '季節の飾りで彩られた保育室',
         caption: '季節の制作物で飾られた保育室は、子どもたちの誇りと愛着を育てる空間に。',
+        src: '/columns/col6-sec1.jpg',
       },
       { type: 'h2', text: '🌸 春（3〜5月）' },
       {
