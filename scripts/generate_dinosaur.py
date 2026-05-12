@@ -14,7 +14,7 @@
   python3 scripts/generate_dinosaur.py --all
 """
 
-import os, sys, time, subprocess, argparse
+import os, sys, time, re, subprocess, argparse
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 from supabase import create_client
@@ -70,6 +70,32 @@ def make_entries(theme_id, jp_name, variant, titles, descs):
 
 # 恐竜定義: 各恐竜の特徴と共通注意点
 DINOSAURS = {
+    "spinosaurus": {
+        "jp": "スピノサウルス",
+        "note": "スピノサウルスの背中の大きな帆と細長いワニのような頭、長い尻尾をシンプルでかわいく描く。背中の帆は輪郭線のみで模様は入れない。",
+        "variants": {
+            1: {
+                "scenes": {
+                    "simple": "かわいいスピノサウルスの塗り絵。スピノサウルス1匹のみ・横向きで立つ姿・背景なし・余白たっぷり。背中の大きな帆がよくわかる構図。",
+                    "easy":   "かわいいスピノサウルスの塗り絵。スピノサウルスが川辺で魚を探している構図。水と岸辺つき。",
+                    "normal": "かわいいスピノサウルスの塗り絵。親子のスピノサウルスが水辺でくつろいでいる構図。川と植物が点在。",
+                    "rich":   "かわいいスピノサウルスの塗り絵。スピノサウルスの家族が古代の川辺で過ごすにぎやかな構図。川・魚・シダ・空が点在。",
+                },
+                "titles": {
+                    "simple": "かわいいスピノサウルス",
+                    "easy":   "かわのスピノサウルス",
+                    "normal": "スピノサウルスのおやこ",
+                    "rich":   "スピノサウルスのかぞく",
+                },
+                "descs": {
+                    "simple": "シンプルなスピノサウルスの線画。背中の大きな帆が特徴。",
+                    "easy":   "川辺で魚を探すスピノサウルスの線画。水と岸辺つき。",
+                    "normal": "水辺でくつろぐ親子スピノサウルスの線画。",
+                    "rich":   "古代の川辺で過ごすスピノサウルス家族のにぎやかな線画。魚つき。",
+                },
+            },
+        },
+    },
     "tyrannosaurus": {
         "jp": "ティラノサウルス",
         "note": "ティラノサウルスの大きな頭と鋭い歯、小さな前足、太い後ろ足と長い尻尾をシンプルでかわいく描く。歯は鋭くしすぎず、子ども向けに親しみやすい表情にする。",
@@ -199,6 +225,31 @@ def download_image(page, img_src, out_path):
     return False
 
 
+def delete_current_chat(page):
+    """現在開いているチャットを削除（is_visible: false）"""
+    try:
+        url = page.url
+        m = re.search(r"/c/([0-9a-f-]+)", url)
+        if not m:
+            return False
+        conv_id = m.group(1)
+        result = page.evaluate("""async (id) => {
+            const r = await fetch(`/backend-api/conversation/${id}`, {
+                method: 'PATCH',
+                credentials: 'include',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({is_visible: false}),
+            });
+            return r.ok;
+        }""", conv_id)
+        if result:
+            log(f"  チャット削除: {conv_id[:8]}...")
+        return bool(result)
+    except Exception as e:
+        log(f"  チャット削除失敗: {e}")
+        return False
+
+
 def generate_one(page, file_id, prompt, out_path):
     if out_path.exists():
         log(f"  スキップ（既存）: {file_id}")
@@ -222,6 +273,7 @@ def generate_one(page, file_id, prompt, out_path):
     ok = download_image(page, img_src, out_path)
     if ok:
         log(f"  ローカル保存: {out_path}")
+        delete_current_chat(page)
     return ok
 
 
