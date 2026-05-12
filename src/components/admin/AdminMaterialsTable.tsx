@@ -155,17 +155,18 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
 
   const q = normalizeQuery(search)
   const filtered = materials.filter(m => {
-    if (filterCategory !== 'all' && m.category !== filterCategory) return false
-    if (filterTheme !== 'all' && m.theme !== filterTheme) return false
-    if (filterStatus !== 'all' && (m.imageStatus ?? 'placeholder') !== filterStatus) return false
+    // 検索ボックスに入力がある場合はフィルタを無視して全件から検索
     if (q) {
       const raw = [
         m.id, m.title, m.description, m.category, m.theme ?? '',
         ...m.tags, m.illustNotes ?? '',
       ].join(' ')
       const hay = normalizeText(raw) + ' ' + normalizeQuery(raw)
-      if (!hay.includes(q)) return false
+      return hay.includes(q)
     }
+    if (filterCategory !== 'all' && m.category !== filterCategory) return false
+    if (filterTheme !== 'all' && m.theme !== filterTheme) return false
+    if (filterStatus !== 'all' && (m.imageStatus ?? 'placeholder') !== filterStatus) return false
     return true
   })
 
@@ -205,18 +206,31 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
         />
       )}
 
-      {/* 検索＆フィルタ */}
-      <div className="px-4 py-2 border-b border-gray-100 bg-gray-50/30 flex flex-wrap items-center gap-2 text-xs">
+      {/* 検索バー */}
+      <div className="px-4 py-2 border-b border-gray-100 bg-gray-50/30 flex items-center gap-2 text-xs">
         <input
           type="text"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="🔍 ID / タイトル / 説明 / タグ / メモ を検索"
-          className="flex-1 min-w-[200px] border border-gray-200 rounded px-2.5 py-1.5"
+          placeholder="🔍 全件から検索（ID / タイトル / 説明 / タグ / メモ）— フィルタは無視"
+          className="flex-1 border border-gray-200 rounded px-2.5 py-1.5"
         />
+        {search && (
+          <button
+            onClick={() => setSearch('')}
+            className="text-gray-500 hover:text-gray-700 underline"
+          >クリア</button>
+        )}
+        <span className="text-gray-400">{sorted.length} / {materials.length}件</span>
+      </div>
+
+      {/* フィルタ行 */}
+      <div className={`px-4 py-2 border-b border-gray-100 bg-gray-50/20 flex flex-wrap items-center gap-2 text-xs ${search ? 'opacity-40' : ''}`}>
+        <span className="text-gray-500">絞り込み:</span>
         <select
           value={filterCategory}
           onChange={e => setFilterCategory(e.target.value as Category | 'all')}
+          disabled={!!search}
           className="border border-gray-200 rounded px-2 py-1.5"
         >
           <option value="all">全カテゴリ</option>
@@ -227,6 +241,7 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
         <select
           value={filterTheme}
           onChange={e => setFilterTheme(e.target.value as Theme | 'all')}
+          disabled={!!search}
           className="border border-gray-200 rounded px-2 py-1.5"
         >
           <option value="all">全テーマ</option>
@@ -237,6 +252,7 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
         <select
           value={filterStatus}
           onChange={e => setFilterStatus(e.target.value as ImageStatus | 'all')}
+          disabled={!!search}
           className="border border-gray-200 rounded px-2 py-1.5"
         >
           <option value="all">全ステータス</option>
@@ -244,13 +260,12 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
             <option key={s} value={s}>{IMAGE_STATUS_LABELS[s]}</option>
           ))}
         </select>
-        {(search || filterCategory !== 'all' || filterTheme !== 'all' || filterStatus !== 'all') && (
+        {(filterCategory !== 'all' || filterTheme !== 'all' || filterStatus !== 'all') && !search && (
           <button
-            onClick={() => { setSearch(''); setFilterCategory('all'); setFilterTheme('all'); setFilterStatus('all') }}
+            onClick={() => { setFilterCategory('all'); setFilterTheme('all'); setFilterStatus('all') }}
             className="text-gray-500 hover:text-gray-700 underline"
-          >クリア</button>
+          >フィルタクリア</button>
         )}
-        <span className="text-gray-400">{sorted.length} / {materials.length}件</span>
       </div>
 
       {/* ツールバー */}
