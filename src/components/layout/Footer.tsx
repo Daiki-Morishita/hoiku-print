@@ -24,9 +24,9 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link href="/columns/benefits-of-coloring-for-kids" className="hover:text-foreground transition-colors">ぬりえの発達効果</Link></li>
               <li><Link href="/columns/coloring-for-2-year-olds" className="hover:text-foreground transition-colors">2歳からのぬりえ入門</Link></li>
-              <li><Link href="/columns/coloring-for-3-year-olds" className="hover:text-foreground transition-colors">3歳のぬりえガイド</Link></li>
-              <li><Link href="/columns/autumn-activities-for-kids" className="hover:text-foreground transition-colors">秋の保育活動アイデア</Link></li>
-              <li><Link href="/columns/winter-coloring-activities" className="hover:text-foreground transition-colors">冬のぬりえ活動</Link></li>
+              <li><Link href="/columns/dot-connect-benefits-for-kids" className="hover:text-foreground transition-colors">点つなぎの教育効果</Link></li>
+              <li><Link href="/columns/sensory-play-benefits" className="hover:text-foreground transition-colors">感覚遊びの発達効果</Link></li>
+              <li><Link href="/columns/outdoor-play-benefits" className="hover:text-foreground transition-colors">外遊びの発達効果</Link></li>
               <li><Link href="/columns" className="hover:text-foreground transition-colors">コラム一覧 →</Link></li>
             </ul>
           </div>
