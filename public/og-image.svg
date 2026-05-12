@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f0f9ff"/>
+  <rect x="0" y="0" width="1200" height="630" fill="url(#bg)"/>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e0f2fe;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#f0fdf4;stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+  <!-- Decorative circles -->
+  <circle cx="100" cy="100" r="80" fill="#bae6fd" opacity="0.4"/>
+  <circle cx="1100" cy="530" r="120" fill="#bbf7d0" opacity="0.4"/>
+  <circle cx="1050" cy="80" r="60" fill="#fde68a" opacity="0.4"/>
+  <circle cx="150" cy="550" r="90" fill="#ddd6fe" opacity="0.3"/>
+  <!-- Logo area -->
+  <rect x="540" y="160" width="120" height="120" rx="24" fill="#2563eb"/>
+  <rect x="568" y="190" width="64" height="8" rx="4" fill="white"/>
+  <rect x="568" y="206" width="64" height="8" rx="4" fill="white"/>
+  <rect x="568" y="222" width="64" height="8" rx="4" fill="white"/>
+  <rect x="568" y="246" width="24" height="8" rx="4" fill="white"/>
+  <rect x="600" y="246" width="32" height="8" rx="4" fill="white" opacity="0.6"/>
+  <!-- Title -->
+  <text x="600" y="340" font-family="'Noto Sans JP', sans-serif" font-size="60" font-weight="700" fill="#1e293b" text-anchor="middle">ぬりえプリント</text>
+  <!-- Subtitle -->
+  <text x="600" y="400" font-family="'Noto Sans JP', sans-serif" font-size="28" fill="#475569" text-anchor="middle">保育士のための無料教材プリント</text>
+  <!-- Description -->
+  <text x="600" y="460" font-family="'Noto Sans JP', sans-serif" font-size="20" fill="#64748b" text-anchor="middle">340点以上の教材 | 年齢別 | 季節別 | テーマ別</text>
+  <!-- URL -->
+  <text x="600" y="540" font-family="'Noto Sans JP', sans-serif" font-size="18" fill="#94a3b8" text-anchor="middle">nurie-print.com</text>
+</svg>
