@@ -17,7 +17,7 @@ const websiteJsonLd = {
   '@type': 'WebSite',
   name: 'ぬりえプリント',
   url: 'https://nurie-print.com',
-  description: `保育士・幼稚園教諭のための無料教材プリントサービス。ぬりえ塗り絵・動物・恐竜・乗り物など${totalMaterials}種類以上を無料配布。`,
+  description: `保育士・幼稚園教諭のための無料ぬりえプリントサービス。動物・恐竜・乗り物など${totalMaterials}種類以上を無料配布。`,
   potentialAction: {
     '@type': 'SearchAction',
     target: { '@type': 'EntryPoint', urlTemplate: 'https://nurie-print.com/materials?search={search_term_string}' },
