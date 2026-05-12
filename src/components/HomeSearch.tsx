@@ -21,7 +21,7 @@ export function HomeSearch() {
           type="text"
           value={query}
           onChange={e => setQuery(e.target.value)}
-          placeholder="教材を検索（年齢・季節・行事など）"
+          placeholder="教材を検索（動物・恐竜・夏など）"
           className="flex-1 px-3 py-3.5 text-sm sm:text-base bg-transparent outline-none text-foreground placeholder:text-muted-foreground"
         />
         <button
