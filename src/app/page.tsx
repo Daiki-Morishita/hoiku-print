@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Star, ArrowRight, Printer, Heart, Users, BookOpen, Clock } from 'lucide-react'
 import { MaterialCard } from '@/components/materials/MaterialCard'
-import { getPopularMaterials, materials, getMaterialById } from '@/lib/data'
+import { getPopularMaterials, materials, getMaterialById, filterMaterials } from '@/lib/data'
 import { CATEGORY_LABELS, SEASON_LABELS } from '@/lib/types'
 import { HomeSearch } from '@/components/HomeSearch'
 import { columns } from '@/lib/columns'
@@ -179,6 +179,9 @@ export default function HomePage() {
             { href: '/category/theme/dinosaurs', emoji: '🦕', label: '恐竜' },
             { href: '/category/theme/vehicles', emoji: '🚒', label: 'のりもの' },
             { href: '/category/theme/sea', emoji: '🐟', label: '海の生き物' },
+            ...(filterMaterials({ theme: 'park' }).length > 0
+              ? [{ href: '/category/theme/park', emoji: '🌳', label: '公園・遊具' }]
+              : []),
           ].map(({ href, emoji, label }) => (
             <Link key={href} href={href}
               className="bg-white border border-border rounded-xl p-3 flex items-center gap-3 hover:border-primary/40 hover:shadow-sm transition-all">
