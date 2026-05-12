@@ -38,9 +38,6 @@ export const metadata: Metadata = {
     title: 'ぬりえプリント | 保育士のための無料教材プリント',
     description: '保育園・幼稚園の先生向け無料ぬりえ・知育プリント配布サイト。すぐ印刷して使えます。',
   },
-  alternates: {
-    canonical: 'https://nurie-print.com',
-  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

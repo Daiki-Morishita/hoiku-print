@@ -6,6 +6,10 @@ import { CATEGORY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
 import { HomeSearch } from '@/components/HomeSearch'
 import { columns } from '@/lib/columns'
 
+export const metadata = {
+  alternates: { canonical: 'https://nurie-print.com' },
+}
+
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
