@@ -28,11 +28,14 @@ export function Header() {
             <Link href="/materials" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               教材を探す
             </Link>
+            <Link href="/columns" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              コラム
+            </Link>
             <Link href="/category/age/3" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               年齢で探す
             </Link>
-            <Link href="/category/season/summer" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              季節で探す
+            <Link href="/faq" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              よくある質問
             </Link>
           </nav>
 
@@ -86,11 +89,14 @@ export function Header() {
             <Link href="/materials" className="py-2 px-3 rounded-lg text-sm hover:bg-muted transition-colors" onClick={() => setMobileOpen(false)}>
               教材を探す
             </Link>
+            <Link href="/columns" className="py-2 px-3 rounded-lg text-sm hover:bg-muted transition-colors" onClick={() => setMobileOpen(false)}>
+              コラム
+            </Link>
             <Link href="/category/age/3" className="py-2 px-3 rounded-lg text-sm hover:bg-muted transition-colors" onClick={() => setMobileOpen(false)}>
               年齢で探す
             </Link>
-            <Link href="/category/season/summer" className="py-2 px-3 rounded-lg text-sm hover:bg-muted transition-colors" onClick={() => setMobileOpen(false)}>
-              季節で探す
+            <Link href="/faq" className="py-2 px-3 rounded-lg text-sm hover:bg-muted transition-colors" onClick={() => setMobileOpen(false)}>
+              よくある質問
             </Link>
           </div>
         </div>
