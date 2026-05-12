@@ -131,14 +131,14 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
                   </span>
                 </td>
 
-                <td className="px-4 py-1.5">
+                <td className="px-4 py-1.5 max-w-[180px]">
                   {hasIllust ? (
-                    <code className="text-xs text-green-700 bg-green-50 px-1.5 py-0.5 rounded">
-                      {m.illustUrl}
+                    <code className="text-xs text-green-700 bg-green-50 px-1.5 py-0.5 rounded block truncate" title={m.illustUrl!}>
+                      {m.illustUrl!.split('/').pop()}
                     </code>
                   ) : (
                     <code className="text-xs text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded">
-                      /materials/{m.id}-illust.jpg
+                      未設定
                     </code>
                   )}
                 </td>
