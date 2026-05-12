@@ -1,8 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import type { Material, ImageStatus } from '@/lib/types'
-import { IMAGE_STATUS_LABELS } from '@/lib/types'
+import type { Material, ImageStatus, Category, Theme } from '@/lib/types'
+import { IMAGE_STATUS_LABELS, CATEGORY_LABELS, THEME_LABELS } from '@/lib/types'
 
 type Props = {
   material: Material
@@ -21,6 +21,8 @@ export function EditMaterialModal({ material, onClose, onSaved }: Props) {
   const [tags, setTags] = useState(material.tags.join(', '))
   const [imageStatus, setImageStatus] = useState<ImageStatus>(material.imageStatus ?? 'pending_review')
   const [illustNotes, setIllustNotes] = useState(material.illustNotes ?? '')
+  const [category, setCategory] = useState<Category>(material.category)
+  const [theme, setTheme] = useState<Theme | ''>(material.theme ?? '')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
@@ -39,6 +41,8 @@ export function EditMaterialModal({ material, onClose, onSaved }: Props) {
           tags: tags.split(',').map(s => s.trim()).filter(Boolean),
           imageStatus,
           illustNotes: illustNotes || undefined,
+          category,
+          theme: theme || undefined,
         }),
       })
       const data = await res.json()
@@ -53,6 +57,8 @@ export function EditMaterialModal({ material, onClose, onSaved }: Props) {
   }
 
   const statuses: ImageStatus[] = ['pending_review', 'approved', 'needs_revision', 'placeholder']
+  const categories = Object.keys(CATEGORY_LABELS) as Category[]
+  const themes = Object.keys(THEME_LABELS) as Theme[]
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={onClose}>
@@ -108,6 +114,35 @@ export function EditMaterialModal({ material, onClose, onSaved }: Props) {
                 className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 mb-1.5"
               />
             ))}
+          </div>
+
+          {/* カテゴリ & テーマ */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">カテゴリ</label>
+              <select
+                value={category}
+                onChange={e => setCategory(e.target.value as Category)}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                {categories.map(c => (
+                  <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">テーマ</label>
+              <select
+                value={theme}
+                onChange={e => setTheme(e.target.value as Theme | '')}
+                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                <option value="">（未設定）</option>
+                {themes.map(t => (
+                  <option key={t} value={t}>{THEME_LABELS[t]}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* タグ */}

@@ -10,6 +10,8 @@ type UpdatePayload = {
   imageStatus?: string
   illustNotes?: string
   tags?: string[]
+  category?: string
+  theme?: string
 }
 
 function escapeForTs(str: string): string {
@@ -67,6 +69,19 @@ export async function PATCH(request: Request) {
         /activityIdeas: \[[\s\S]*?\n    \]/,
         `activityIdeas: [\n${ideas}\n    ]`
       )
+    }
+
+    if ('category' in fields && fields.category !== undefined) {
+      block = block.replace(/category: '.*?'/, `category: '${fields.category}'`)
+    }
+
+    if ('theme' in fields && fields.theme !== undefined) {
+      if (block.match(/theme: '.*?'/)) {
+        block = block.replace(/theme: '.*?'/, `theme: '${fields.theme}'`)
+      } else {
+        // categoryの後ろに追加
+        block = block.replace(/(category: '.*?',)/, `$1 theme: '${fields.theme}',`)
+      }
     }
 
     if ('tags' in fields && fields.tags !== undefined) {
