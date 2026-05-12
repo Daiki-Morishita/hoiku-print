@@ -17,7 +17,7 @@ const websiteJsonLd = {
   '@type': 'WebSite',
   name: 'ぬりえプリント',
   url: 'https://nurie-print.com',
-  description: `保育士・幼稚園教諭のための無料教材プリントサービス。ぬりえ・ひらがな・迷路など${totalMaterials}種類以上を無料配布。`,
+  description: `保育士・幼稚園教諭のための無料教材プリントサービス。ぬりえ塗り絵・動物・恐竜・乗り物など${totalMaterials}種類以上を無料配布。`,
   potentialAction: {
     '@type': 'SearchAction',
     target: { '@type': 'EntryPoint', urlTemplate: 'https://nurie-print.com/materials?search={search_term_string}' },
@@ -58,7 +58,7 @@ export default function HomePage() {
           </h1>
 
           <p className="text-base sm:text-lg text-muted-foreground max-w-xl mx-auto mb-8 leading-relaxed">
-            ぬりえ・ひらがな・迷路など、現場で本当に使える教材を無料配布。
+            動物・恐竜・乗り物など豊富なテーマのぬりえを無料配布。
             年齢・季節・行事で絞り込んで、すぐ印刷できます。
           </p>
 
@@ -88,7 +88,7 @@ export default function HomePage() {
           <p className="text-sm leading-relaxed text-muted-foreground mb-3">
             「ぬりえプリント」は、<strong className="text-foreground">保育士・幼稚園教諭の先生方とご家庭</strong>のために、
             すぐに印刷して使える幼児向け教材プリントを<strong className="text-foreground">無料で配布</strong>するサービスです。
-            ぬりえ・ひらがな・数字・運筆・迷路など、現場で本当に使いやすい教材を、年齢・難易度・テーマで絞り込んで探せます。
+            年齢・季節・テーマに合わせたぬりえを、難易度別に4段階で用意しています。
           </p>
           <p className="text-sm leading-relaxed text-muted-foreground">
             すべての教材はA4・白黒印刷に最適化されており、会員登録なしで何度でもご利用いただけます。

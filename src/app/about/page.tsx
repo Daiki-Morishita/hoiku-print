@@ -55,7 +55,7 @@ export default function AboutPage() {
         <li className="flex gap-2"><span className="text-primary">•</span>
           <span><strong>年齢別の難易度設計</strong>：2〜6歳までの発達段階に応じて4段階（simple／easy／normal／rich）で構成。</span></li>
         <li className="flex gap-2"><span className="text-primary">•</span>
-          <span><strong>豊富なテーマ</strong>：ぬりえ・ひらがな・数字・迷路・運筆など、動物・恐竜・乗り物・公園など多様な題材を用意。</span></li>
+          <span><strong>豊富なテーマ</strong>：動物・恐竜・乗り物・海の生き物・公園など多様なぬりえテーマを用意。季節に合わせた教材も充実。</span></li>
         <li className="flex gap-2"><span className="text-primary">•</span>
           <span><strong>活動アイデア付き</strong>：各教材に「保育・家庭での活用例」を添えています。</span></li>
       </ul>
