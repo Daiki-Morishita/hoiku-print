@@ -161,8 +161,16 @@ export default async function ColumnPage({ params }: { params: Promise<{ slug: s
     description: col.description,
     datePublished: col.publishedAt,
     dateModified: col.updatedAt,
-    publisher: { '@type': 'Organization', name: 'ぬりえプリント', url: 'https://nurie-print.com' },
+    author: { '@type': 'Organization', name: 'ぬりえプリント編集部', url: 'https://nurie-print.com/about' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ぬりえプリント',
+      url: 'https://nurie-print.com',
+      logo: { '@type': 'ImageObject', url: 'https://nurie-print.com/icon.png' },
+    },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://nurie-print.com/columns/${col.slug}` },
     inLanguage: 'ja',
+    ...(col.heroSrc ? { image: `https://nurie-print.com${col.heroSrc}` } : {}),
   }
 
   return (
