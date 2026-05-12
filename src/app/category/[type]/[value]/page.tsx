@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { MaterialCard } from '@/components/materials/MaterialCard'
 import { filterMaterials } from '@/lib/data'
-import { CATEGORY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
-import type { Category, Season } from '@/lib/types'
+import { CATEGORY_LABELS, SEASON_LABELS, EVENT_LABELS, THEME_LABELS } from '@/lib/types'
+import type { Category, Season, Theme } from '@/lib/types'
 
 type CategoryType = 'age' | 'type' | 'season' | 'event' | 'theme'
 
@@ -36,6 +36,13 @@ function getPageInfo(type: string, value: string): { title: string; description:
         description: `${label}で使える無料プリント教材一覧。保育園・幼稚園の行事に合わせて選べるぬりえ・工作素材が揃っています。`,
       }
     }
+    case 'theme': {
+      const label = THEME_LABELS[value as Theme] ?? value
+      return {
+        title: `${label}のぬりえプリント｜無料印刷`,
+        description: `${label}をテーマにした無料ぬりえプリント一覧。保育園・幼稚園・ご家庭でA4印刷してすぐ使えます。難易度別・年齢別に選べます。`,
+      }
+    }
     default:
       return { title: '教材一覧', description: '保育園・幼稚園向け無料プリント教材を探せます。' }
   }
@@ -59,6 +66,7 @@ export default async function CategoryPage({
   else if (type === 'type') filterParams.category = value
   else if (type === 'season') filterParams.season = value
   else if (type === 'event') filterParams.event = value
+  else if (type === 'theme') filterParams.theme = value
   else notFound()
 
   const filtered = filterMaterials(filterParams as Parameters<typeof filterMaterials>[0])

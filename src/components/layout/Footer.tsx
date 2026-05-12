@@ -51,6 +51,16 @@ export function Footer() {
               <li><Link href="/category/age/6" className="hover:text-foreground transition-colors">6歳向け</Link></li>
             </ul>
           </div>
+
+          <div>
+            <h3 className="font-semibold text-sm mb-3">テーマで探す</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><Link href="/category/theme/animals" className="hover:text-foreground transition-colors">動物ぬりえ</Link></li>
+              <li><Link href="/category/theme/dinosaurs" className="hover:text-foreground transition-colors">恐竜ぬりえ</Link></li>
+              <li><Link href="/category/theme/vehicles" className="hover:text-foreground transition-colors">のりものぬりえ</Link></li>
+              <li><Link href="/category/theme/sea" className="hover:text-foreground transition-colors">海の生き物ぬりえ</Link></li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-10 pt-6 border-t border-border space-y-4">

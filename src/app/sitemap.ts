@@ -8,6 +8,7 @@ const AGES = [2, 3, 4, 5, 6]
 const CATEGORIES = ['coloring', 'hiragana', 'numbers', 'drawing', 'maze', 'dotconnect', 'craft', 'scissors']
 const SEASONS = ['spring', 'summer', 'autumn', 'winter']
 const EVENTS = ['hinamatsuri', 'childrensday', 'tanabata', 'summerfestival', 'sports', 'halloween', 'christmas', 'setsubun', 'graduation']
+const THEMES = ['animals', 'dinosaurs', 'vehicles', 'sea']
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const materialPages = materials.map(m => ({
@@ -23,6 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...CATEGORIES.map(c => ({ url: `${BASE_URL}/category/type/${c}`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 })),
     ...SEASONS.map(s => ({ url: `${BASE_URL}/category/season/${s}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6 })),
     ...EVENTS.map(e => ({ url: `${BASE_URL}/category/event/${e}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.6 })),
+    ...THEMES.map(t => ({ url: `${BASE_URL}/category/theme/${t}`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.7 })),
   ]
 
   return [
