@@ -27,6 +27,7 @@ const categoryColor: Record<string, string> = {
   '工作・ハサミ': 'bg-orange-100 text-orange-700',
   '遊び・アイデア': 'bg-purple-100 text-purple-700',
   '季節・行事': 'bg-pink-100 text-pink-700',
+  '教育・学習': 'bg-indigo-100 text-indigo-700',
 }
 
 function Section({ section }: { section: ColumnSection }) {
