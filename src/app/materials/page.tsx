@@ -20,6 +20,16 @@ interface SearchParams {
 export const metadata = {
   title: '教材を探す',
   description: '保育園・幼稚園向け無料教材プリント一覧。年齢・種類・季節・行事で絞り込めます。',
+  alternates: { canonical: 'https://nurie-print.com/materials' },
+}
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://nurie-print.com' },
+    { '@type': 'ListItem', position: 2, name: '教材一覧', item: 'https://nurie-print.com/materials' },
+  ],
 }
 
 export default async function MaterialsPage({
@@ -41,6 +51,8 @@ export default async function MaterialsPage({
   const activeCount = [params.age, params.category, params.season, params.event, params.search].filter(Boolean).length
 
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
       <div className="mb-6">
         <h1 className="text-2xl font-bold">教材を探す</h1>
@@ -106,5 +118,6 @@ export default async function MaterialsPage({
         </div>
       </div>
     </div>
+    </>
   )
 }

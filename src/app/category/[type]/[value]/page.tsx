@@ -64,6 +64,8 @@ export async function generateMetadata({ params }: { params: Promise<{ type: str
   return { title, description }
 }
 
+const BASE_URL = 'https://nurie-print.com'
+
 export default async function CategoryPage({
   params,
 }: {
@@ -81,8 +83,31 @@ export default async function CategoryPage({
 
   const filtered = filterMaterials(filterParams as Parameters<typeof filterMaterials>[0])
   const { title, description } = getPageInfo(type, value)
+  const pageUrl = `${BASE_URL}/category/${type}/${value}`
+
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'ホーム', item: BASE_URL },
+      { '@type': 'ListItem', position: 2, name: '教材一覧', item: `${BASE_URL}/materials` },
+      { '@type': 'ListItem', position: 3, name: title, item: pageUrl },
+    ],
+  }
+
+  const collectionLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: title,
+    description,
+    url: pageUrl,
+    numberOfItems: filtered.length,
+  }
 
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionLd) }} />
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
       {/* パンくず */}
       <nav className="flex items-center gap-1.5 text-xs text-muted-foreground mb-6">
@@ -115,5 +140,6 @@ export default async function CategoryPage({
         </div>
       )}
     </div>
+    </>
   )
 }
