@@ -16,12 +16,16 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params
   const material = getMaterialById(id)
   if (!material) return {}
+  const ageLabel = material.ageMin === material.ageMax
+    ? `${material.ageMin}歳`
+    : `${material.ageMin}〜${material.ageMax}歳`
+  const seoDesc = `${material.description}${material.ageMin ? `${ageLabel}向け、A4印刷対応の無料ぬりえプリントです。` : ''}`
   return {
-    title: `${material.title}｜無料プリント`,
-    description: material.description,
+    title: `${material.title}｜${ageLabel}向け無料プリント`,
+    description: seoDesc,
     openGraph: {
       title: material.title,
-      description: material.description,
+      description: seoDesc,
       type: 'article',
       ...(material.imageUrl ? { images: [{ url: material.imageUrl, alt: material.title }] } : {}),
     },
