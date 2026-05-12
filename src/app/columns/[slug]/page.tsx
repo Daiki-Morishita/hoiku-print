@@ -167,7 +167,7 @@ export default async function ColumnPage({ params }: { params: Promise<{ slug: s
       '@type': 'Organization',
       name: 'ぬりえプリント',
       url: 'https://nurie-print.com',
-      logo: { '@type': 'ImageObject', url: 'https://nurie-print.com/icon.png' },
+      logo: { '@type': 'ImageObject', url: 'https://nurie-print.com/icon.svg' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://nurie-print.com/columns/${col.slug}` },
     inLanguage: 'ja',

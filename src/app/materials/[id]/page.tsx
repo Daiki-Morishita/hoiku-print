@@ -85,7 +85,7 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
       '@type': 'Organization',
       name: 'ぬりえプリント',
       url: 'https://nurie-print.com',
-      logo: { '@type': 'ImageObject', url: 'https://nurie-print.com/icon.png' },
+      logo: { '@type': 'ImageObject', url: 'https://nurie-print.com/icon.svg' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://nurie-print.com/materials/${material.id}` },
     ...(material.imageUrl ? { image: `https://nurie-print.com${material.imageUrl}` } : {}),
