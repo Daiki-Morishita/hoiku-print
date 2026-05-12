@@ -11,24 +11,33 @@ type CategoryType = 'age' | 'type' | 'season' | 'event' | 'theme'
 function getPageInfo(type: string, value: string): { title: string; description: string } {
   switch (type) {
     case 'age':
-      return { title: `${value}歳向け教材`, description: `${value}歳のお子さんに最適な難易度の教材を集めました。` }
-    case 'type':
       return {
-        title: `${CATEGORY_LABELS[value as Category] ?? value}プリント`,
-        description: `${CATEGORY_LABELS[value as Category] ?? value}の教材一覧です。`
+        title: `${value}歳向け無料プリント教材`,
+        description: `${value}歳の子どもに合った難易度の無料プリント教材一覧。ぬりえ・運筆・迷路など、A4印刷してすぐ使えます。`,
       }
-    case 'season':
+    case 'type': {
+      const label = CATEGORY_LABELS[value as Category] ?? value
       return {
-        title: `${SEASON_LABELS[value as Season] ?? value}の教材`,
-        description: `${SEASON_LABELS[value as Season] ?? value}の季節にぴったりの教材を集めました。`
+        title: `${label}プリント｜無料印刷`,
+        description: `保育園・幼稚園・ご家庭で使える${label}の無料プリント一覧。年齢・難易度別に探せて、すぐに印刷できます。`,
       }
-    case 'event':
+    }
+    case 'season': {
+      const label = SEASON_LABELS[value as Season] ?? value
       return {
-        title: `${EVENT_LABELS[value] ?? value}の教材`,
-        description: `${EVENT_LABELS[value] ?? value}で使える教材を集めました。`
+        title: `${label}の教材プリント｜無料印刷`,
+        description: `${label}の季節にぴったりな無料プリント教材一覧。ぬりえ・工作・製作など、保育現場やご家庭で使えます。`,
       }
+    }
+    case 'event': {
+      const label = EVENT_LABELS[value] ?? value
+      return {
+        title: `${label}の教材プリント｜無料印刷`,
+        description: `${label}で使える無料プリント教材一覧。保育園・幼稚園の行事に合わせて選べるぬりえ・工作素材が揃っています。`,
+      }
+    }
     default:
-      return { title: '教材一覧', description: '教材を探せます。' }
+      return { title: '教材一覧', description: '保育園・幼稚園向け無料プリント教材を探せます。' }
   }
 }
 

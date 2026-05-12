@@ -6,11 +6,26 @@ import { CATEGORY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
 import { HomeSearch } from '@/components/HomeSearch'
 import { columns } from '@/lib/columns'
 
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'ぬりえプリント',
+  url: 'https://nurie-print.com',
+  description: '保育士・幼稚園教諭のための無料教材プリントサービス。ぬりえ・ひらがな・迷路など339種類以上を無料配布。',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: { '@type': 'EntryPoint', urlTemplate: 'https://nurie-print.com/materials?q={search_term_string}' },
+    'query-input': 'required name=search_term_string',
+  },
+}
+
 export default function HomePage() {
   const popular = getPopularMaterials(6)
   const totalCount = materials.length
 
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
     <div>
       {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-b from-primary/8 to-background pb-16 pt-12 sm:pt-20">
@@ -287,6 +302,7 @@ export default function HomePage() {
         </div>
       </section>
     </div>
+    </>
   )
 }
 
