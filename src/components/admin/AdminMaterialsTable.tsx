@@ -19,6 +19,27 @@ const STATUS_ORDER: Record<ImageStatus | 'placeholder', number> = {
   placeholder: 3,
 }
 
+const DIFFICULTY_RANK: Record<string, number> = {
+  simple: 0,
+  easy: 1,
+  normal: 2,
+  rich: 3,
+}
+
+/** id を {theme, difficulty順, variant} に分解してソート用キーを返す */
+function parseId(id: string): { theme: string; diff: number; variant: number } {
+  // パターン: {theme}-{simple|easy|normal|rich}-{N}
+  const m = id.match(/^(.+)-(simple|easy|normal|rich)(?:-(\d+))?$/)
+  if (m) {
+    return {
+      theme: m[1],
+      diff: DIFFICULTY_RANK[m[2]] ?? 99,
+      variant: m[3] ? parseInt(m[3], 10) : 1,
+    }
+  }
+  return { theme: id, diff: 99, variant: 0 }
+}
+
 const STATUS_OPTIONS: ImageStatus[] = ['placeholder', 'pending_review', 'approved', 'needs_revision']
 
 const TILE_SIZES: Record<TileSize, { cols: string; w: number; h: number }> = {
@@ -46,7 +67,7 @@ async function updateStatus(id: string, status: ImageStatus) {
 }
 
 export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
-  const [sortKey, setSortKey] = useState<SortKey>('status')
+  const [sortKey, setSortKey] = useState<SortKey>('id')
   const [sortDir, setSortDir] = useState<SortDir>('asc')
   const [editTarget, setEditTarget] = useState<Material | null>(null)
   const [viewMode, setViewMode] = useState<ViewMode>('list')
@@ -110,7 +131,11 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
   const sorted = [...materials].sort((a, b) => {
     let cmp = 0
     if (sortKey === 'id') {
-      cmp = a.id.localeCompare(b.id)
+      const pa = parseId(a.id)
+      const pb = parseId(b.id)
+      cmp = pa.theme.localeCompare(pb.theme)
+        || (pa.variant - pb.variant)
+        || (pa.diff - pb.diff)
     } else if (sortKey === 'status') {
       const sa = STATUS_ORDER[a.imageStatus ?? 'placeholder'] ?? 99
       const sb = STATUS_ORDER[b.imageStatus ?? 'placeholder'] ?? 99
