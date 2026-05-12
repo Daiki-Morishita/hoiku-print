@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, Clock, Users, Wrench, Lightbulb, Printer, ChevronRight } from 'lucide-react'
+import { ArrowLeft, Clock, Users, Wrench, Lightbulb, Printer, ChevronRight, ChevronLeft } from 'lucide-react'
 import { getMaterialById, getRelatedMaterials, materials } from '@/lib/data'
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
 import { MaterialCard } from '@/components/materials/MaterialCard'
@@ -46,6 +46,10 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
   const { id } = await params
   const material = getMaterialById(id)
   if (!material) notFound()
+
+  const idx = materials.findIndex(m => m.id === id)
+  const prevMaterial = idx > 0 ? materials[idx - 1] : null
+  const nextMaterial = idx >= 0 && idx < materials.length - 1 ? materials[idx + 1] : null
 
   const related = getRelatedMaterials(material, 4)
   const ageLabel = material.ageMin === material.ageMax
@@ -128,6 +132,26 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
           <div>
             {/* 教材プレビュー（画面表示用・next/imageで最適化） */}
             <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl overflow-hidden mb-6 relative flex items-center justify-center min-h-64">
+              {prevMaterial && (
+                <Link
+                  href={`/materials/${prevMaterial.id}`}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-white/90 hover:bg-white border border-border rounded-full shadow-md flex items-center justify-center text-foreground hover:text-primary transition-all"
+                  title={`前: ${prevMaterial.title}`}
+                  aria-label="前の教材"
+                >
+                  <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+                </Link>
+              )}
+              {nextMaterial && (
+                <Link
+                  href={`/materials/${nextMaterial.id}`}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-10 h-10 sm:w-12 sm:h-12 bg-white/90 hover:bg-white border border-border rounded-full shadow-md flex items-center justify-center text-foreground hover:text-primary transition-all"
+                  title={`次: ${nextMaterial.title}`}
+                  aria-label="次の教材"
+                >
+                  <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                </Link>
+              )}
               {hasImage ? (
                 <Image
                   src={material.imageUrl}
