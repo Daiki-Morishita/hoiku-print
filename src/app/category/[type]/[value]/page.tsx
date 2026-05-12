@@ -12,7 +12,7 @@ export function generateStaticParams() {
   const params = [
     ...[2, 3, 4, 5, 6].map(age => ({ type: 'age', value: String(age) })),
     { type: 'type', value: 'coloring' },
-    ...['animals', 'dinosaurs', 'vehicles', 'sea'].map(t => ({ type: 'theme', value: t })),
+    ...['animals', 'dinosaurs', 'vehicles', 'sea', 'park'].map(t => ({ type: 'theme', value: t })),
     ...['spring', 'summer', 'autumn', 'winter'].map(s => ({ type: 'season', value: s })),
   ]
   return params
