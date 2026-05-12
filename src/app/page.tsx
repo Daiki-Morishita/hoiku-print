@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Star, ArrowRight, Printer, Heart, Users, BookOpen, Clock } from 'lucide-react'
 import { MaterialCard } from '@/components/materials/MaterialCard'
 import { getPopularMaterials, materials, getMaterialById } from '@/lib/data'
-import { CATEGORY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
+import { CATEGORY_LABELS, SEASON_LABELS } from '@/lib/types'
 import { HomeSearch } from '@/components/HomeSearch'
 import { columns } from '@/lib/columns'
 
@@ -261,25 +261,24 @@ export default function HomePage() {
             </div>
 
             <div>
-              <SectionHeader title="行事で探す" />
+              <SectionHeader title="年齢で探す" />
               <div className="grid grid-cols-2 gap-3 mt-4">
-                {Object.entries(EVENT_LABELS).slice(0, 6).map(([key, label]) => {
-                  const icons: Record<string, string> = {
-                    tanabata: '🎋', setsubun: '🫘', summerfestival: '🏮',
-                    halloween: '🎃', christmas: '🎄', hinamatsuri: '🎎',
-                    sports: '🏃', graduation: '🎓', mothers: '💐', fathers: '👔',
-                  }
-                  return (
-                    <Link
-                      key={key}
-                      href={`/category/event/${key}`}
-                      className="bg-white border border-border rounded-xl p-3 flex items-center gap-2.5 hover:border-primary/40 hover:shadow-sm transition-all"
-                    >
-                      <span className="text-xl shrink-0">{icons[key]}</span>
-                      <span className="text-sm font-medium">{label}</span>
-                    </Link>
-                  )
-                })}
+                {[
+                  { age: 2, emoji: '🧒', label: '2歳向け' },
+                  { age: 3, emoji: '🧒', label: '3歳向け' },
+                  { age: 4, emoji: '👦', label: '4歳向け' },
+                  { age: 5, emoji: '👦', label: '5歳向け' },
+                  { age: 6, emoji: '🎒', label: '6歳向け（小学校準備）' },
+                ].map(({ age, emoji, label }) => (
+                  <Link
+                    key={age}
+                    href={`/category/age/${age}`}
+                    className="bg-white border border-border rounded-xl p-3 flex items-center gap-2.5 hover:border-primary/40 hover:shadow-sm transition-all"
+                  >
+                    <span className="text-xl shrink-0">{emoji}</span>
+                    <span className="text-sm font-medium">{label}</span>
+                  </Link>
+                ))}
               </div>
             </div>
           </div>
