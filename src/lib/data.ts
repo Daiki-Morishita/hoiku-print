@@ -4333,7 +4333,7 @@ export const materials: Material[] = [
   },
   {
     id: 'shinkansen-easy-1',
-    title: 'そらをとぶしんかんせん',
+    title: 'ふじさんとしんかんせん',
     description: '富士山を背景にしんかんせんが走る線画。',
     ageMin: 3, ageMax: 4, difficulty: 2, duration: 15,
     category: 'coloring', theme: 'vehicles',
@@ -5353,8 +5353,8 @@ export const materials: Material[] = [
   },
   {
     id: 'hot-air-balloon-simple-1',
-    title: 'かわいいねつきゅうき',
-    description: 'シンプルなねつきゅうきの線画。大きな風船部分が塗りやすい。',
+    title: 'かわいいねつききゅう',
+    description: 'シンプルなねつききゅうの線画。大きな風船部分が塗りやすい。',
     ageMin: 2, ageMax: 3, difficulty: 1, duration: 10,
     category: 'coloring', theme: 'vehicles',
     tags: ['hot-air-balloon', 'のりもの', 'ぬりえ'],
@@ -5373,8 +5373,8 @@ export const materials: Material[] = [
   },
   {
     id: 'hot-air-balloon-easy-1',
-    title: 'そらをとぶねつきゅうき',
-    description: '青空をゆったり飛ぶねつきゅうきの線画。雲と太陽つき。',
+    title: 'そらをとぶねつききゅう',
+    description: '青空をゆったり飛ぶねつききゅうの線画。雲と太陽つき。',
     ageMin: 3, ageMax: 4, difficulty: 2, duration: 15,
     category: 'coloring', theme: 'vehicles',
     tags: ['hot-air-balloon', 'のりもの', 'ぬりえ'],
@@ -5393,8 +5393,8 @@ export const materials: Material[] = [
   },
   {
     id: 'hot-air-balloon-normal-1',
-    title: 'やまのうえのねつきゅうき',
-    description: '2つのねつきゅうきが山と川の上空を飛ぶ線画。',
+    title: 'やまのうえのねつききゅう',
+    description: '2つのねつききゅうが山と川の上空を飛ぶ線画。',
     ageMin: 3, ageMax: 5, difficulty: 3, duration: 20,
     category: 'coloring', theme: 'vehicles',
     tags: ['hot-air-balloon', 'のりもの', 'ぬりえ'],
@@ -5414,7 +5414,7 @@ export const materials: Material[] = [
   {
     id: 'hot-air-balloon-rich-1',
     title: 'にぎやかなきゅうきまつり',
-    description: 'たくさんのねつきゅうきが青空を飛ぶにぎやかな線画。',
+    description: 'たくさんのねつききゅうが青空を飛ぶにぎやかな線画。',
     ageMin: 4, ageMax: 6, difficulty: 4, duration: 30,
     category: 'coloring', theme: 'vehicles',
     tags: ['hot-air-balloon', 'のりもの', 'ぬりえ'],
