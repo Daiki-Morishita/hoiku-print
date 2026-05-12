@@ -2,7 +2,7 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
-import { CATEGORY_LABELS, SEASON_LABELS, EVENT_LABELS, DIFFICULTY_LABELS } from '@/lib/types'
+import { SEASON_LABELS, DIFFICULTY_LABELS } from '@/lib/types'
 
 const ages = [2, 3, 4, 5, 6]
 
@@ -22,9 +22,7 @@ export function SearchFilters() {
 
   const current = {
     age: searchParams.get('age'),
-    category: searchParams.get('category'),
     season: searchParams.get('season'),
-    event: searchParams.get('event'),
     difficulty: searchParams.get('difficulty'),
   }
 
@@ -44,34 +42,6 @@ export function SearchFilters() {
         </div>
       </FilterSection>
 
-      {/* カテゴリ */}
-      <FilterSection label="種類">
-        <div className="flex flex-wrap gap-2">
-          {Object.entries(CATEGORY_LABELS).map(([key, label]) => (
-            <FilterChip
-              key={key}
-              label={label}
-              active={current.category === key}
-              onClick={() => updateParam('category', key)}
-            />
-          ))}
-        </div>
-      </FilterSection>
-
-      {/* 季節 */}
-      <FilterSection label="季節">
-        <div className="flex flex-wrap gap-2">
-          {Object.entries(SEASON_LABELS).map(([key, label]) => (
-            <FilterChip
-              key={key}
-              label={label}
-              active={current.season === key}
-              onClick={() => updateParam('season', key)}
-            />
-          ))}
-        </div>
-      </FilterSection>
-
       {/* 難易度 */}
       <FilterSection label="難易度">
         <div className="flex flex-wrap gap-2">
@@ -86,15 +56,15 @@ export function SearchFilters() {
         </div>
       </FilterSection>
 
-      {/* 行事 */}
-      <FilterSection label="行事">
+      {/* 季節 */}
+      <FilterSection label="季節">
         <div className="flex flex-wrap gap-2">
-          {Object.entries(EVENT_LABELS).map(([key, label]) => (
+          {Object.entries(SEASON_LABELS).map(([key, label]) => (
             <FilterChip
               key={key}
               label={label}
-              active={current.event === key}
-              onClick={() => updateParam('event', key)}
+              active={current.season === key}
+              onClick={() => updateParam('season', key)}
             />
           ))}
         </div>
