@@ -30,6 +30,16 @@ export function Footer() {
           </div>
 
           <div>
+            <h3 className="font-semibold text-sm mb-3">コラム</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><Link href="/columns/benefits-of-coloring-for-kids" className="hover:text-foreground transition-colors">ぬりえの発達効果</Link></li>
+              <li><Link href="/columns/coloring-by-age-guide" className="hover:text-foreground transition-colors">年齢別ぬりえの選び方</Link></li>
+              <li><Link href="/columns/rainy-day-indoor-activities" className="hover:text-foreground transition-colors">雨の日のおうち遊び</Link></li>
+              <li><Link href="/columns" className="hover:text-foreground transition-colors">コラム一覧 →</Link></li>
+            </ul>
+          </div>
+
+          <div>
             <h3 className="font-semibold text-sm mb-3">年齢で探す</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li><Link href="/category/age/2" className="hover:text-foreground transition-colors">2歳向け</Link></li>
