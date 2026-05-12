@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: m.createdAt,
     changeFrequency: 'monthly' as const,
     priority: 0.8,
+    ...(m.imageUrl ? { images: [m.imageUrl] } : {}),
   }))
 
   const categoryPages = [
