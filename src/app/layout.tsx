@@ -16,7 +16,7 @@ const notoSansJP = Noto_Sans_JP({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://nurie.vercel.app'),
+  metadataBase: new URL('https://nurie-print.com'),
   title: {
     default: 'ぬりえプリント | 保育士のための無料教材プリント',
     template: '%s | ぬりえプリント',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'ja_JP',
-    url: 'https://nurie.vercel.app',
+    url: 'https://nurie-print.com',
     siteName: 'ぬりえプリント',
     title: 'ぬりえプリント | 保育士のための無料教材プリント',
     description: '保育園・幼稚園の先生向け無料ぬりえ・知育プリント配布サイト。すぐ印刷して使えます。',
