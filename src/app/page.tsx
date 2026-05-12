@@ -263,22 +263,24 @@ export default function HomePage() {
             </div>
 
             <div>
-              <SectionHeader title="年齢で探す" />
-              <div className="grid grid-cols-2 gap-3 mt-4">
+              <SectionHeader title="難易度で探す" />
+              <div className="grid grid-cols-1 gap-3 mt-4">
                 {[
-                  { age: 2, emoji: '🧒', label: '2歳向け' },
-                  { age: 3, emoji: '🧒', label: '3歳向け' },
-                  { age: 4, emoji: '👦', label: '4歳向け' },
-                  { age: 5, emoji: '👦', label: '5歳向け' },
-                  { age: 6, emoji: '🎒', label: '6歳向け（小学校準備）' },
-                ].map(({ age, emoji, label }) => (
+                  { diff: 1, label: 'かんたん（2〜3歳）', desc: 'シンプルで大きな線画', emoji: '⭐' },
+                  { diff: 2, label: 'やさしい（3歳〜）', desc: '背景ありの親しみやすいシーン', emoji: '⭐⭐' },
+                  { diff: 3, label: 'ふつう（3〜5歳）', desc: '親子や複数体の構成', emoji: '⭐⭐⭐' },
+                  { diff: 4, label: 'たのしい（4〜6歳）', desc: 'にぎやかな背景と細かい描写', emoji: '⭐⭐⭐⭐' },
+                ].map(({ diff, label, desc, emoji }) => (
                   <Link
-                    key={age}
-                    href={`/category/age/${age}`}
-                    className="bg-white border border-border rounded-xl p-3 flex items-center gap-2.5 hover:border-primary/40 hover:shadow-sm transition-all"
+                    key={diff}
+                    href={`/materials?difficulty=${diff}`}
+                    className="bg-white border border-border rounded-xl p-3 flex items-center gap-3 hover:border-primary/40 hover:shadow-sm transition-all"
                   >
-                    <span className="text-xl shrink-0">{emoji}</span>
-                    <span className="text-sm font-medium">{label}</span>
+                    <span className="text-sm shrink-0 w-16 text-center">{emoji}</span>
+                    <div>
+                      <span className="text-sm font-medium block">{label}</span>
+                      <span className="text-xs text-muted-foreground">{desc}</span>
+                    </div>
                   </Link>
                 ))}
               </div>
