@@ -21,15 +21,15 @@ export const metadata: Metadata = {
     default: 'ぬりえプリント | 保育士のための無料教材プリント',
     template: '%s | ぬりえプリント',
   },
-  description: '保育園・幼稚園の先生向け無料ぬりえ・知育プリント配布サイト。年齢別・テーマ別・季節別に検索でき、すぐに印刷して使えます。',
-  keywords: ['ぬりえ', '塗り絵', '保育園', '幼稚園', '無料プリント', '知育', '保育士', '教材'],
+  description: '保育園・幼稚園の先生向け無料ぬりえプリント配布サイト。動物・恐竜・乗り物など年齢別・テーマ別・季節別に検索でき、すぐに印刷して使えます。',
+  keywords: ['ぬりえ', '塗り絵', '保育園', '幼稚園', '無料プリント', '保育士', '教材', '幼児'],
   openGraph: {
     type: 'website',
     locale: 'ja_JP',
     url: 'https://nurie-print.com',
     siteName: 'ぬりえプリント',
     title: 'ぬりえプリント | 保育士のための無料教材プリント',
-    description: '保育園・幼稚園の先生向け無料ぬりえ・知育プリント配布サイト。すぐ印刷して使えます。',
+    description: '保育園・幼稚園の先生向け無料ぬりえプリント配布サイト。動物・恐竜・乗り物など豊富なテーマをすぐ印刷できます。',
     images: [{ url: '/og-image.svg', width: 1200, height: 630, alt: 'ぬりえプリント' }],
   },
   robots: { index: true, follow: true },
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@nurie_print',
     title: 'ぬりえプリント | 保育士のための無料教材プリント',
-    description: '保育園・幼稚園の先生向け無料ぬりえ・知育プリント配布サイト。すぐ印刷して使えます。',
+    description: '保育園・幼稚園の先生向け無料ぬりえプリント配布サイト。動物・恐竜・乗り物など豊富なテーマをすぐ印刷できます。',
   },
 }
 
