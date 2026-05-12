@@ -24,6 +24,7 @@ const categoryEmoji: Record<string, string> = {
 const themeEmoji: Record<string, string> = {
   animals: '🐾', dinosaurs: '🦕', vehicles: '🚒', trains: '🚃',
   food: '🍎', sea: '🐟', flowers: '🌸', insects: '🐛', characters: '⭐',
+  park: '🌳',
 }
 
 export function MaterialCard({ material }: MaterialCardProps) {
