@@ -217,6 +217,28 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
               </div>
             </div>
 
+            {/* 解説テキスト */}
+            <div className="bg-white border border-border rounded-xl p-5 mb-4 leading-relaxed text-sm space-y-3">
+              <h2 className="font-semibold text-base mb-1">この教材について</h2>
+              <p>
+                「{material.title}」は、{ageLabel}のお子様向けに作られた{CATEGORY_LABELS[material.category]}プリントです。
+                {DIFFICULTY_LABELS[material.difficulty]}難易度・所要時間の目安は約{material.duration}分で、
+                ご家庭でのおうち時間や保育園・幼稚園での自由遊び、設定保育の教材としてお使いいただけます。
+              </p>
+              <p>
+                {material.description}
+                線画はA4横長・白黒印刷に最適化されており、家庭用プリンタでそのまま印刷してすぐご利用いただけます。
+                {material.tools.length > 0 && (
+                  <>使用する道具は{material.tools.join('、')}など、身近なもので取り組めます。</>
+                )}
+              </p>
+              <p>
+                ぬりえや運筆は、手先の発達・色彩感覚・集中力を育てる大切な遊びです。
+                完成した作品はお部屋に飾ったり、季節の制作物として活用したり、お子様の成長記録としてアルバムに残すのもおすすめです。
+                同じ題材でも年齢や難易度に応じて構図を変えて練習できるため、繰り返しの活動にもご活用ください。
+              </p>
+            </div>
+
             {/* 活動提案 */}
             <div className="bg-white border border-border rounded-xl p-4">
               <h2 className="font-semibold flex items-center gap-2 mb-3 text-sm">

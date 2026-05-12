@@ -48,6 +48,22 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* サービス紹介 */}
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 pt-10 pb-2">
+        <div className="bg-white border border-border rounded-2xl p-6 sm:p-8">
+          <h2 className="text-lg sm:text-xl font-bold mb-3">ぬりえプリントとは</h2>
+          <p className="text-sm leading-relaxed text-muted-foreground mb-3">
+            「ぬりえプリント」は、<strong className="text-foreground">保育士・幼稚園教諭の先生方とご家庭</strong>のために、
+            すぐに印刷して使える幼児向け教材プリントを<strong className="text-foreground">無料で配布</strong>するサービスです。
+            ぬりえ・ひらがな・数字・運筆・迷路など、現場で本当に使いやすい教材を、年齢・難易度・テーマで絞り込んで探せます。
+          </p>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            すべての教材はA4・白黒印刷に最適化されており、会員登録なしで何度でもご利用いただけます。
+            <Link href="/about" className="text-primary underline ml-1">サービスについて詳しく</Link>
+          </p>
+        </div>
+      </section>
+
       {/* 状況で探す（保育士の課題に直結） */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-4">
         <SectionHeader title="今の状況で探す" subtitle="保育現場のあの場面に、すぐ使える教材を" />

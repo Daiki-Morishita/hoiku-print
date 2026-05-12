@@ -41,9 +41,16 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row justify-between items-center gap-2">
-          <p className="text-xs text-muted-foreground">© 2026 ぬりえプリント. All rights reserved.</p>
-          <p className="text-xs text-muted-foreground">教材は保育・教育目的での使用に限り無料です</p>
+        <div className="mt-10 pt-6 border-t border-border space-y-4">
+          <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
+            <Link href="/about" className="hover:text-foreground transition-colors">このサイトについて</Link>
+            <Link href="/privacy" className="hover:text-foreground transition-colors">プライバシーポリシー</Link>
+            <Link href="/contact" className="hover:text-foreground transition-colors">お問い合わせ</Link>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
+            <p className="text-xs text-muted-foreground">© 2026 ぬりえプリント. All rights reserved.</p>
+            <p className="text-xs text-muted-foreground">教材は保育・教育目的での使用に限り無料です</p>
+          </div>
         </div>
       </div>
     </footer>
