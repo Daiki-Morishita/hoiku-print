@@ -155,18 +155,17 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
 
   const q = normalizeQuery(search)
   const filtered = materials.filter(m => {
-    // 検索ボックスに入力がある場合はフィルタを無視して全件から検索
+    if (filterCategory !== 'all' && m.category !== filterCategory) return false
+    if (filterTheme !== 'all' && m.theme !== filterTheme) return false
+    if (filterStatus !== 'all' && (m.imageStatus ?? 'placeholder') !== filterStatus) return false
     if (q) {
       const raw = [
         m.id, m.title, m.description, m.category, m.theme ?? '',
         ...m.tags, m.illustNotes ?? '',
       ].join(' ')
       const hay = normalizeText(raw) + ' ' + normalizeQuery(raw)
-      return hay.includes(q)
+      if (!hay.includes(q)) return false
     }
-    if (filterCategory !== 'all' && m.category !== filterCategory) return false
-    if (filterTheme !== 'all' && m.theme !== filterTheme) return false
-    if (filterStatus !== 'all' && (m.imageStatus ?? 'placeholder') !== filterStatus) return false
     return true
   })
 
@@ -212,7 +211,7 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
           type="text"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="🔍 全件から検索（ID / タイトル / 説明 / タグ / メモ）— フィルタは無視"
+          placeholder="🔍 ID / タイトル / 説明 / タグ / メモ を検索"
           className="flex-1 border border-gray-200 rounded px-2.5 py-1.5"
         />
         {search && (
@@ -225,12 +224,11 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
       </div>
 
       {/* フィルタ行 */}
-      <div className={`px-4 py-2 border-b border-gray-100 bg-gray-50/20 flex flex-wrap items-center gap-2 text-xs ${search ? 'opacity-40' : ''}`}>
+      <div className="px-4 py-2 border-b border-gray-100 bg-gray-50/20 flex flex-wrap items-center gap-2 text-xs">
         <span className="text-gray-500">絞り込み:</span>
         <select
           value={filterCategory}
           onChange={e => setFilterCategory(e.target.value as Category | 'all')}
-          disabled={!!search}
           className="border border-gray-200 rounded px-2 py-1.5"
         >
           <option value="all">全カテゴリ</option>
@@ -241,7 +239,6 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
         <select
           value={filterTheme}
           onChange={e => setFilterTheme(e.target.value as Theme | 'all')}
-          disabled={!!search}
           className="border border-gray-200 rounded px-2 py-1.5"
         >
           <option value="all">全テーマ</option>
@@ -252,7 +249,6 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
         <select
           value={filterStatus}
           onChange={e => setFilterStatus(e.target.value as ImageStatus | 'all')}
-          disabled={!!search}
           className="border border-gray-200 rounded px-2 py-1.5"
         >
           <option value="all">全ステータス</option>
@@ -260,7 +256,7 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
             <option key={s} value={s}>{IMAGE_STATUS_LABELS[s]}</option>
           ))}
         </select>
-        {(filterCategory !== 'all' || filterTheme !== 'all' || filterStatus !== 'all') && !search && (
+        {(filterCategory !== 'all' || filterTheme !== 'all' || filterStatus !== 'all') && (
           <button
             onClick={() => { setFilterCategory('all'); setFilterTheme('all'); setFilterStatus('all') }}
             className="text-gray-500 hover:text-gray-700 underline"
