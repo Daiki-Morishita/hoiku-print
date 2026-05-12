@@ -12,7 +12,7 @@ export const materials: Material[] = [
     tools: ['クレヨン', '色鉛筆'],
     activityIdeas: ['好きな色でくまさんを塗ってオリジナルのぬいぐるみを作ろう', '塗ったあとに名前をつけて発表ごっこをしよう'],
     imageUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/bear-simple-illust.png', illustUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/bear-simple-illust.png',
-    illustVersion: 1, imageStatus: 'approved', pdfUrl: '', createdAt: '2026-05-08', popular: false,
+    illustVersion: 1, imageStatus: 'approved', pdfUrl: '', createdAt: '2026-05-08', popular: truee,
   },
   {
     id: 'bear-easy-1',
@@ -114,7 +114,7 @@ export const materials: Material[] = [
       '首輪を好きな色にカラフルに塗って自分だけの子犬を作ろう',
     ],
     imageUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/dog-simple-illust.png', illustUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/dog-simple-illust.png',
-    illustVersion: 1, imageStatus: 'approved', pdfUrl: '', createdAt: '2026-05-08', popular: false,
+    illustVersion: 1, imageStatus: 'approved', pdfUrl: '', createdAt: '2026-05-08', popular: truee,
   },
   {
     id: 'dog-normal',
@@ -160,7 +160,7 @@ export const materials: Material[] = [
       'ピンクや白などお気に入りの色でうさぎさんを自由に塗ってみよう',
     ],
     imageUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/rabbit-simple-illust.png', illustUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/rabbit-simple-illust.png',
-    illustVersion: 1, imageStatus: 'approved', pdfUrl: '', createdAt: '2026-05-08', popular: false,
+    illustVersion: 1, imageStatus: 'approved', pdfUrl: '', createdAt: '2026-05-08', popular: truee,
   },
   {
     id: 'rabbit-easy-1',
@@ -314,7 +314,7 @@ export const materials: Material[] = [
     imageStatus: 'approved',
     pdfUrl: '',
     createdAt: '2026-05-08',
-    popular: false,
+    popular: truee,
   },
   {
     id: 'giraffe-rich-1',
@@ -522,7 +522,7 @@ export const materials: Material[] = [
     imageStatus: 'approved',
     pdfUrl: '',
     createdAt: '2026-05-09',
-    popular: false,
+    popular: truee,
   },
   {
     id: 'panda-rich-1',
@@ -626,7 +626,7 @@ export const materials: Material[] = [
     imageStatus: 'approved',
     pdfUrl: '',
     createdAt: '2026-05-09',
-    popular: false,
+    popular: truee,
   },
   {
     id: 'penguin-rich-1',
@@ -2691,7 +2691,7 @@ export const materials: Material[] = [
     imageStatus: 'approved',
     pdfUrl: '',
     createdAt: '2026-05-11',
-    popular: false,
+    popular: truee,
   },
   {
     id: 'dolphin-easy-1',
@@ -4089,7 +4089,7 @@ export const materials: Material[] = [
     imageStatus: 'approved',
     pdfUrl: '',
     createdAt: '2026-05-12',
-    popular: false,
+    popular: truee,
   },
   {
     id: 'car-easy-1',
@@ -5929,7 +5929,7 @@ export const materials: Material[] = [
     imageStatus: 'approved',
     pdfUrl: '',
     createdAt: '2026-05-12',
-    popular: false,
+    popular: truee,
   },
   {
     id: 'tyrannosaurus-easy-1',
@@ -7169,7 +7169,10 @@ export function filterMaterials(params: {
 }
 
 export function getPopularMaterials(limit = 6): Material[] {
-  return materials.filter(m => m.popular).slice(0, limit)
+  const popular = materials.filter(m => m.popular)
+  if (popular.length >= limit) return popular.slice(0, limit)
+  const extra = materials.filter(m => !m.popular).slice(0, limit - popular.length)
+  return [...popular, ...extra]
 }
 
 export function getMaterialById(id: string): Material | undefined {
