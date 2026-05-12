@@ -353,7 +353,7 @@ export const columns: Column[] = [
       },
       {
         type: 'materials',
-        label: '運筆練習の教材を見る',
+        label: '手先を使うシンプルなぬりえ教材',
         ids: ['rabbit-simple-1', 'bear-simple-1', 'cat-simple', 'panda-simple-1'],
       },
     ],
@@ -702,7 +702,7 @@ export const columns: Column[] = [
       },
       {
         type: 'materials',
-        label: 'ひらがな練習に役立つ教材',
+        label: '手先の発達を促すぬりえ教材',
         ids: ['rabbit-easy-1', 'cat-easy', 'panda-easy-1', 'dog-simple'],
       },
     ],
@@ -782,7 +782,7 @@ export const columns: Column[] = [
       },
       {
         type: 'materials',
-        label: '迷路と組み合わせたい教材',
+        label: '迷路と一緒に楽しめるぬりえ',
         ids: ['tiger-normal-1', 'wolf-easy-1', 'zebra-easy-1', 'turtle-easy-1'],
       },
     ],
@@ -1501,7 +1501,7 @@ export const columns: Column[] = [
       },
       {
         type: 'materials',
-        label: 'ひらがな練習の前に：運筆プリントで手を慣らす',
+        label: 'ひらがな練習前の手先トレーニングにもなるぬりえ',
         ids: ['bear-normal-1', 'rabbit-normal-1', 'cat-normal', 'dog-normal'],
       },
     ],
