@@ -106,7 +106,7 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
           right: '0',
           bottom: '5mm',
           backgroundColor: '#eeeeee',
-          padding: '1.5mm 3mm',
+          padding: '0.5mm 1.5mm',
           borderTopLeftRadius: '1mm',
           borderBottomLeftRadius: '1mm',
           fontSize: '9pt',
