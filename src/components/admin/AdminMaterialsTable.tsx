@@ -141,6 +141,42 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
     }
   }
 
+  async function handleBulkDownload() {
+    if (selectedIds.size === 0) return
+    setBusy(true)
+    try {
+      const res = await fetch('/api/admin/download-zip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: Array.from(selectedIds) }),
+      })
+      if (!res.ok) throw new Error('ZIP生成失敗')
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `nurie-print-materials-${new Date().toISOString().slice(0,10)}.zip`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    } catch (e) {
+      alert(e instanceof Error ? e.message : 'エラー')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  function downloadSingle(url: string, id: string) {
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `${id}.${url.endsWith('.svg') ? 'svg' : 'png'}`
+    a.target = '_blank'
+    document.body.appendChild(a)
+    a.click()
+    a.remove()
+  }
+
   async function handleBulkStatusChange() {
     if (selectedIds.size === 0) return
     if (!confirm(`${selectedIds.size}件のステータスを「${IMAGE_STATUS_LABELS[bulkStatus]}」に変更しますか？`)) return
@@ -318,6 +354,11 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
             disabled={busy || selectedIds.size === 0}
             className="px-2.5 py-1 rounded bg-blue-500 text-white hover:bg-blue-600 disabled:bg-gray-200 disabled:text-gray-400"
           >一括変更</button>
+          <button
+            onClick={handleBulkDownload}
+            disabled={busy || selectedIds.size === 0}
+            className="px-2.5 py-1 rounded bg-emerald-500 text-white hover:bg-emerald-600 disabled:bg-gray-200 disabled:text-gray-400"
+          >⬇ 一括DL</button>
           {selectedIds.size > 0 && (
             <button
               onClick={() => setSelectedIds(new Set())}
@@ -448,6 +489,13 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
                       >
                         編集
                       </button>
+                      {m.illustUrl && (
+                        <button
+                          onClick={() => downloadSingle(m.illustUrl!, m.id)}
+                          title="ダウンロード"
+                          className="text-xs text-emerald-600 hover:text-emerald-800 border border-emerald-200 hover:border-emerald-400 px-2 py-0.5 rounded"
+                        >⬇</button>
+                      )}
                       {m.illustUrl && <DeleteButton illustUrl={m.illustUrl} />}
                     </td>
                   </tr>
@@ -519,6 +567,13 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
                       >
                         編集
                       </button>
+                      {m.illustUrl && (
+                        <button
+                          onClick={() => downloadSingle(m.illustUrl!, m.id)}
+                          title="ダウンロード"
+                          className="text-[10px] text-emerald-600 hover:text-emerald-800 border border-emerald-200 hover:border-emerald-400 px-1.5 py-0.5 rounded"
+                        >⬇</button>
+                      )}
                       {m.illustUrl && <DeleteButton illustUrl={m.illustUrl} />}
                     </div>
                   </div>
