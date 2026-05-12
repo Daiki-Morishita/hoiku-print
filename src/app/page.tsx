@@ -10,12 +10,14 @@ export const metadata = {
   alternates: { canonical: 'https://nurie-print.com' },
 }
 
+const totalMaterials = materials.length
+
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'ぬりえプリント',
   url: 'https://nurie-print.com',
-  description: '保育士・幼稚園教諭のための無料教材プリントサービス。ぬりえ・ひらがな・迷路など339種類以上を無料配布。',
+  description: `保育士・幼稚園教諭のための無料教材プリントサービス。ぬりえ・ひらがな・迷路など${totalMaterials}種類以上を無料配布。`,
   potentialAction: {
     '@type': 'SearchAction',
     target: { '@type': 'EntryPoint', urlTemplate: 'https://nurie-print.com/materials?search={search_term_string}' },
@@ -29,7 +31,7 @@ const organizationJsonLd = {
   name: 'ぬりえプリント',
   url: 'https://nurie-print.com',
   logo: { '@type': 'ImageObject', url: 'https://nurie-print.com/icon.svg', width: 512, height: 512 },
-  description: '保育士・幼稚園教諭向け無料教材プリントサービス。年齢・季節別に340種類以上の教材を無料配布。',
+  description: `保育士・幼稚園教諭向け無料教材プリントサービス。年齢・季節別に${totalMaterials}種類以上の教材を無料配布。`,
   contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', url: 'https://nurie-print.com/contact', availableLanguage: 'Japanese' },
 }
 
