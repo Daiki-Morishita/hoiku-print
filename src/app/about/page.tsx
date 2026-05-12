@@ -4,6 +4,7 @@ import { Printer, Heart, Users, Sparkles, ChevronRight, BookOpen, Shield } from 
 export const metadata = {
   title: 'ぬりえプリントについて',
   description: '保育士・幼稚園教諭・ご家庭で使える無料の幼児向け教材プリント配布サイト「ぬりえプリント」の運営理念とサービス内容のご紹介。',
+  alternates: { canonical: 'https://nurie-print.com/about' },
 }
 
 const orgJsonLd = {

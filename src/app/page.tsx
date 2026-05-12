@@ -100,12 +100,12 @@ export default function HomePage() {
         <SectionHeader title="今の状況で探す" subtitle="保育現場のあの場面に、すぐ使える教材を" />
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-6">
           {[
-            { label: '雨の日', emoji: '🌧️', query: '?category=coloring&age=3', desc: '室内で静かに' },
-            { label: '朝の受け入れ', emoji: '🌅', query: '?difficulty=1&age=3', desc: 'すぐ取り組める' },
+            { label: '雨の日', emoji: '🌧️', query: '?age=3', desc: '室内で静かに' },
+            { label: '朝の受け入れ', emoji: '🌅', query: '?age=2', desc: 'すぐ取り組める' },
             { label: '自由時間', emoji: '⏰', query: '?category=coloring', desc: '手軽に楽しめる' },
-            { label: '行事前', emoji: '🎉', query: '?season=summer', desc: '季節・行事テーマ' },
-            { label: '帰り待ち', emoji: '🎒', query: '?duration=5', desc: '5〜10分でできる' },
-            { label: '延長保育', emoji: '🌙', query: '?category=maze', desc: '集中力を育てる' },
+            { label: '行事前', emoji: '🎉', query: '?season=autumn', desc: '季節・行事テーマ' },
+            { label: '帰り待ち', emoji: '🎒', query: '?age=5', desc: '5〜6歳向け' },
+            { label: '延長保育', emoji: '🌙', query: '?age=4', desc: '4〜5歳向け' },
           ].map(({ label, emoji, query, desc }) => (
             <Link
               key={label}

@@ -49,6 +49,7 @@ export function Footer() {
               <li><Link href="/category/theme/dinosaurs" className="hover:text-foreground transition-colors">恐竜ぬりえ</Link></li>
               <li><Link href="/category/theme/vehicles" className="hover:text-foreground transition-colors">のりものぬりえ</Link></li>
               <li><Link href="/category/season/spring" className="hover:text-foreground transition-colors">春の教材</Link></li>
+              <li><Link href="/category/season/summer" className="hover:text-foreground transition-colors">夏の教材</Link></li>
               <li><Link href="/category/season/autumn" className="hover:text-foreground transition-colors">秋の教材</Link></li>
               <li><Link href="/category/season/winter" className="hover:text-foreground transition-colors">冬の教材</Link></li>
             </ul>
