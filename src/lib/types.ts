@@ -19,7 +19,7 @@ export type Category =
 export type Theme =
   | 'animals'       // 動物
   | 'dinosaurs'     // 恐竜
-  | 'vehicles'      // はたらくくるま
+  | 'vehicles'      // のりもの
   | 'trains'        // 電車
   | 'food'          // 食べ物
   | 'sea'           // 海の生き物
@@ -41,8 +41,8 @@ export const CATEGORY_LABELS: Record<Category, string> = {
 export const THEME_LABELS: Record<Theme, string> = {
   animals: '動物',
   dinosaurs: '恐竜',
-  vehicles: 'はたらくくるま',
-  trains: '電車・乗り物',
+  vehicles: 'のりもの',
+  trains: '電車',
   food: '食べ物',
   sea: '海の生き物',
   insects: '虫',
