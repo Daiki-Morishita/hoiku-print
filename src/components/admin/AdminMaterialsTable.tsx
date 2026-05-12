@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import type { Material, ImageStatus } from '@/lib/types'
-import { IMAGE_STATUS_LABELS, IMAGE_STATUS_COLOR } from '@/lib/types'
+import type { Material, ImageStatus, Category, Theme } from '@/lib/types'
+import { IMAGE_STATUS_LABELS, IMAGE_STATUS_COLOR, CATEGORY_LABELS, THEME_LABELS } from '@/lib/types'
 import { DeleteButton } from './DeleteButton'
 import { EditMaterialModal } from './EditMaterialModal'
 
@@ -91,6 +91,10 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [bulkStatus, setBulkStatus] = useState<ImageStatus>('approved')
   const [busy, setBusy] = useState(false)
+  const [filterCategory, setFilterCategory] = useState<Category | 'all'>('all')
+  const [filterTheme, setFilterTheme] = useState<Theme | 'all'>('all')
+  const [filterStatus, setFilterStatus] = useState<ImageStatus | 'all'>('all')
+  const [search, setSearch] = useState('')
 
   function handleSort(key: SortKey) {
     if (sortKey === key) {
@@ -144,7 +148,26 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
     }
   }
 
-  const sorted = [...materials].sort((a, b) => {
+  // データに実在する category / theme を抽出
+  const availableCategories = Array.from(new Set(materials.map(m => m.category))).sort()
+  const availableThemes = Array.from(new Set(materials.map(m => m.theme).filter(Boolean) as Theme[])).sort()
+
+  const q = search.trim().toLowerCase()
+  const filtered = materials.filter(m => {
+    if (filterCategory !== 'all' && m.category !== filterCategory) return false
+    if (filterTheme !== 'all' && m.theme !== filterTheme) return false
+    if (filterStatus !== 'all' && (m.imageStatus ?? 'placeholder') !== filterStatus) return false
+    if (q) {
+      const hay = [
+        m.id, m.title, m.description, m.category, m.theme ?? '',
+        ...m.tags, m.illustNotes ?? '',
+      ].join(' ').toLowerCase()
+      if (!hay.includes(q)) return false
+    }
+    return true
+  })
+
+  const sorted = [...filtered].sort((a, b) => {
     let cmp = 0
     if (sortKey === 'id') {
       const pa = parseId(a.id)
@@ -179,6 +202,54 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
           onSaved={() => window.location.reload()}
         />
       )}
+
+      {/* 検索＆フィルタ */}
+      <div className="px-4 py-2 border-b border-gray-100 bg-gray-50/30 flex flex-wrap items-center gap-2 text-xs">
+        <input
+          type="text"
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="🔍 ID / タイトル / 説明 / タグ / メモ を検索"
+          className="flex-1 min-w-[200px] border border-gray-200 rounded px-2.5 py-1.5"
+        />
+        <select
+          value={filterCategory}
+          onChange={e => setFilterCategory(e.target.value as Category | 'all')}
+          className="border border-gray-200 rounded px-2 py-1.5"
+        >
+          <option value="all">全カテゴリ</option>
+          {availableCategories.map(c => (
+            <option key={c} value={c}>{CATEGORY_LABELS[c] ?? c}</option>
+          ))}
+        </select>
+        <select
+          value={filterTheme}
+          onChange={e => setFilterTheme(e.target.value as Theme | 'all')}
+          className="border border-gray-200 rounded px-2 py-1.5"
+        >
+          <option value="all">全テーマ</option>
+          {availableThemes.map(t => (
+            <option key={t} value={t}>{THEME_LABELS[t] ?? t}</option>
+          ))}
+        </select>
+        <select
+          value={filterStatus}
+          onChange={e => setFilterStatus(e.target.value as ImageStatus | 'all')}
+          className="border border-gray-200 rounded px-2 py-1.5"
+        >
+          <option value="all">全ステータス</option>
+          {STATUS_OPTIONS.map(s => (
+            <option key={s} value={s}>{IMAGE_STATUS_LABELS[s]}</option>
+          ))}
+        </select>
+        {(search || filterCategory !== 'all' || filterTheme !== 'all' || filterStatus !== 'all') && (
+          <button
+            onClick={() => { setSearch(''); setFilterCategory('all'); setFilterTheme('all'); setFilterStatus('all') }}
+            className="text-gray-500 hover:text-gray-700 underline"
+          >クリア</button>
+        )}
+        <span className="text-gray-400">{sorted.length} / {materials.length}件</span>
+      </div>
 
       {/* ツールバー */}
       <div className="px-4 py-2 border-b border-gray-100 bg-gray-50/50 flex flex-wrap items-center gap-3 text-xs">
