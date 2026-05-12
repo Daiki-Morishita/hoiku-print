@@ -173,9 +173,20 @@ export default async function ColumnPage({ params }: { params: Promise<{ slug: s
     ...(col.heroSrc ? { image: `https://nurie-print.com${col.heroSrc}` } : {}),
   }
 
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'ホーム', item: 'https://nurie-print.com' },
+      { '@type': 'ListItem', position: 2, name: 'コラム', item: 'https://nurie-print.com/columns' },
+      { '@type': 'ListItem', position: 3, name: col.title, item: `https://nurie-print.com/columns/${col.slug}` },
+    ],
+  }
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
         {/* パンくず */}
         <nav className="flex items-center gap-1.5 text-xs text-muted-foreground mb-6 flex-wrap">
