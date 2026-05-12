@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import QRCode from 'qrcode'
 import { ArrowLeft, Clock, Users, Wrench, Lightbulb, Printer, ChevronRight, ChevronLeft } from 'lucide-react'
 import { getMaterialById, getRelatedMaterials, materials } from '@/lib/data'
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
@@ -51,6 +52,10 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
   const prevMaterial = idx > 0 ? materials[idx - 1] : null
   const nextMaterial = idx >= 0 && idx < materials.length - 1 ? materials[idx + 1] : null
 
+  // QRコード（個別ページのURL）
+  const qrUrl = `https://nurie-print.com/materials/${material.id}`
+  const qrDataUrl = await QRCode.toDataURL(qrUrl, { margin: 0, width: 120 })
+
   const related = getRelatedMaterials(material, 4)
   const ageLabel = material.ageMin === material.ageMax
     ? `${material.ageMin}歳`
@@ -100,16 +105,38 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             />
           </div>
         )}
-        {/* 右下ブランディング */}
+        {/* 右下ブランディング（ロゴ + サイト名 + QR） */}
         <div style={{
           position: 'absolute',
           right: '6mm',
-          bottom: '4mm',
-          fontSize: '7pt',
-          color: '#999',
-          letterSpacing: '0.05em',
+          bottom: '5mm',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '4mm',
         }}>
-          nurie-print.com
+          <div style={{ display: 'flex', alignItems: 'center', gap: '2mm' }}>
+            {/* ロゴアイコン */}
+            <div style={{
+              width: '7mm',
+              height: '7mm',
+              backgroundColor: '#5b8def',
+              borderRadius: '1.5mm',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <svg width="4mm" height="4mm" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 6 2 18 2 18 9"/>
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                <rect x="6" y="14" width="12" height="8"/>
+              </svg>
+            </div>
+            <span style={{ fontSize: '9pt', fontWeight: 'bold', color: '#222', letterSpacing: '0.02em' }}>
+              ぬりえプリント
+            </span>
+          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={qrDataUrl} alt="QR" style={{ width: '14mm', height: '14mm' }} />
         </div>
       </div>
 
