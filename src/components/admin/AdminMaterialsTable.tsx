@@ -44,10 +44,9 @@ function formatDate(dateStr: string): string {
   if (diffDays === 0) return `今日${timeStr}`
   if (diffDays === 1) return `昨日${timeStr}`
   if (diffDays === 2) return `一昨日${timeStr}`
-  if (today.getFullYear() === d.getFullYear()) {
-    return `${d.getMonth() + 1}/${d.getDate()}${timeStr}`
-  }
-  return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}${timeStr}`
+  const mm = String(d.getMonth() + 1).padStart(2, '0')
+  const dd = String(d.getDate()).padStart(2, '0')
+  return `${d.getFullYear()}/${mm}/${dd}${timeStr}`
 }
 
 /** id を {theme, difficulty順, variant} に分解してソート用キーを返す */
