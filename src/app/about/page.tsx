@@ -6,8 +6,21 @@ export const metadata = {
   description: '保育士・幼稚園教諭・ご家庭で使える無料の幼児向け教材プリント配布サイト「ぬりえプリント」の運営理念とサービス内容のご紹介。',
 }
 
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'ぬりえプリント',
+  url: 'https://nurie-print.com',
+  logo: { '@type': 'ImageObject', url: 'https://nurie-print.com/icon.png' },
+  description: '保育士・幼稚園教諭・ご家庭で使える無料の幼児向け教材プリント配布サービス。',
+  contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', url: 'https://nurie-print.com/contact' },
+  sameAs: [],
+}
+
 export default function AboutPage() {
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
       <nav className="flex items-center gap-1.5 text-xs text-muted-foreground mb-6">
         <Link href="/" className="hover:text-foreground">ホーム</Link>
@@ -123,5 +136,6 @@ export default function AboutPage() {
         </Link>
       </div>
     </div>
+    </>
   )
 }
