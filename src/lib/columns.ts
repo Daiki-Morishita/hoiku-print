@@ -1703,8 +1703,8 @@ export const columns: Column[] = [
       },
       {
         type: 'materials',
-        label: '点つなぎ教材はこちら',
-        ids: ['dotconnect-animals-1', 'dotconnect-animals-2', 'dotconnect-animals-3'],
+        label: '運筆練習にもなるシンプルぬりえ',
+        ids: ['cat-simple', 'dog-simple', 'rabbit-simple-1', 'bear-simple-1'],
       },
     ],
   },
@@ -1787,7 +1787,7 @@ export const columns: Column[] = [
       {
         type: 'materials',
         label: '2歳向けシンプルぬりえ',
-        ids: ['cat-simple', 'dog-simple', 'bear-simple', 'rabbit-simple'],
+        ids: ['cat-simple', 'dog-simple', 'bear-simple-1', 'rabbit-simple-1'],
       },
     ],
   },
@@ -1863,7 +1863,7 @@ export const columns: Column[] = [
       {
         type: 'materials',
         label: '色の学習にも使えるシンプルぬりえ',
-        ids: ['apple-simple', 'strawberry-simple', 'banana-simple'],
+        ids: ['cat-simple', 'rabbit-simple-1', 'frog-easy-1'],
       },
     ],
   },
@@ -1947,8 +1947,8 @@ export const columns: Column[] = [
       },
       {
         type: 'materials',
-        label: '数字練習プリント',
-        ids: ['numbers-1-5-trace', 'numbers-1-10-trace', 'numbers-easy-1'],
+        label: '運筆・なぞり書きの練習にもなるぬりえ',
+        ids: ['cat-simple', 'bear-easy-1', 'elephant-easy-1'],
       },
     ],
   },
@@ -2022,8 +2022,8 @@ export const columns: Column[] = [
       },
       {
         type: 'materials',
-        label: '感覚遊びと組み合わせやすい教材',
-        ids: ['drawing-straight-lines-1', 'drawing-curves-1'],
+        label: '感覚遊びと組み合わせやすいぬりえ教材',
+        ids: ['cat-simple', 'dog-simple'],
       },
     ],
   },
