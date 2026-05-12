@@ -152,7 +152,7 @@ def add_to_data_ts(entries, supabase_urls, theme_id):
     illustVersion: 1,
     imageStatus: 'pending_review',
     pdfUrl: '',
-    createdAt: '2026-05-12',
+    createdAt: '{time.strftime("%Y-%m-%dT%H:%M")}',
     popular: false,
   }},
 """

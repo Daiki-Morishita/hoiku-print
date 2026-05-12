@@ -27,20 +27,27 @@ const DIFFICULTY_RANK: Record<string, number> = {
   rich: 3,
 }
 
-/** Finder風の日付表記（今日/昨日/一昨日/日付） */
+/** Finder風の日付表記（今日HH:MM / 昨日HH:MM / 一昨日 / 日付） */
 function formatDate(dateStr: string): string {
-  const d = new Date(dateStr + 'T00:00:00')
+  // 時刻情報を含むISO形式 or 日付のみ
+  const hasTime = /T\d{2}:\d{2}/.test(dateStr)
+  const d = hasTime ? new Date(dateStr) : new Date(dateStr + 'T00:00:00')
   if (isNaN(d.getTime())) return dateStr
   const today = new Date()
   today.setHours(0, 0, 0, 0)
-  const diffDays = Math.round((today.getTime() - d.getTime()) / (1000 * 60 * 60 * 24))
-  if (diffDays === 0) return '今日'
-  if (diffDays === 1) return '昨日'
-  if (diffDays === 2) return '一昨日'
+  const dDay = new Date(d)
+  dDay.setHours(0, 0, 0, 0)
+  const diffDays = Math.round((today.getTime() - dDay.getTime()) / (1000 * 60 * 60 * 24))
+  const timeStr = hasTime
+    ? ` ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+    : ''
+  if (diffDays === 0) return `今日${timeStr}`
+  if (diffDays === 1) return `昨日${timeStr}`
+  if (diffDays === 2) return `一昨日${timeStr}`
   if (today.getFullYear() === d.getFullYear()) {
-    return `${d.getMonth() + 1}/${d.getDate()}`
+    return `${d.getMonth() + 1}/${d.getDate()}${timeStr}`
   }
-  return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`
+  return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}${timeStr}`
 }
 
 /** id を {theme, difficulty順, variant} に分解してソート用キーを返す */
