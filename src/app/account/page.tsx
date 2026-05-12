@@ -7,6 +7,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'マイページ',
+  robots: { index: false, follow: false },
 }
 
 const FACILITY_LABELS: Record<string, string> = {

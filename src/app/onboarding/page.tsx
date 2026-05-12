@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db'
 import { redirect } from 'next/navigation'
 import { OnboardingForm } from './OnboardingForm'
 
-export const metadata = { title: '初期設定 | ぬりえプリント' }
+export const metadata = { title: '初期設定 | ぬりえプリント', robots: { index: false, follow: false } }
 
 export default async function OnboardingPage() {
   const session = await auth()
