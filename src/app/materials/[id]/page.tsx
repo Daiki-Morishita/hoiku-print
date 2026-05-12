@@ -82,11 +82,20 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {/* ===== 印刷専用エリア（画面では非表示・横A4・画像のみ） ===== */}
+      {/* ===== 印刷専用エリア（画面では非表示・横A4・画像のみ・モノクロ） ===== */}
       <style>{`
         @page { size: A4 landscape; margin: 0; }
         @media print {
-          html, body { margin: 0 !important; padding: 0 !important; background: white !important; }
+          html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            background: white !important;
+            -webkit-print-color-adjust: economy;
+            print-color-adjust: economy;
+          }
+          .print-area {
+            filter: grayscale(100%) contrast(1) !important;
+          }
         }
       `}</style>
       <div className="hidden print:block print-area" style={{ position: 'relative', width: '297mm', height: '210mm', boxSizing: 'border-box', overflow: 'hidden' }}>
