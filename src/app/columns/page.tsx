@@ -17,8 +17,29 @@ const categoryColor: Record<string, string> = {
   '教育・学習': 'bg-indigo-100 text-indigo-700',
 }
 
+const BASE_URL = 'https://nurie-print.com'
+
+function buildItemListJsonLd() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: '保育・幼児教育コラム一覧',
+    url: `${BASE_URL}/columns`,
+    numberOfItems: columns.length,
+    itemListElement: columns.map((col, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: col.title,
+      url: `${BASE_URL}/columns/${col.slug}`,
+    })),
+  }
+}
+
 export default function ColumnsPage() {
+  const jsonLd = buildItemListJsonLd()
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
       <nav className="flex items-center gap-1.5 text-xs text-muted-foreground mb-6">
         <Link href="/" className="hover:text-foreground">ホーム</Link>
@@ -75,5 +96,6 @@ export default function ColumnsPage() {
         ))}
       </div>
     </div>
+    </>
   )
 }
