@@ -17,8 +17,7 @@ export function SortSelector() {
 
   function select(key: SortKey, requiresLogin: boolean) {
     if (requiresLogin) {
-      // ログイン実装後にここで router.push('/login') に置き換える
-      alert('お気に入り順はログイン後にご利用いただけます。')
+      router.push('/login')
       return
     }
     const params = new URLSearchParams(searchParams.toString())
