@@ -23,7 +23,7 @@ function getPageInfo(type: string, value: string): { title: string; description:
     case 'age':
       return {
         title: `${value}歳向け無料プリント教材`,
-        description: `${value}歳の子どもに合った難易度の無料プリント教材一覧。ぬりえ・運筆・迷路など、A4印刷してすぐ使えます。`,
+        description: `${value}歳の子どもに合った難易度の無料ぬりえプリント一覧。動物・恐竜・乗り物など豊富なテーマをA4印刷してすぐ使えます。`,
       }
     case 'type': {
       const label = CATEGORY_LABELS[value as Category] ?? value

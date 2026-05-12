@@ -28,7 +28,7 @@ export default async function OGImage() {
           保育士のための無料教材プリント
         </div>
         <div style={{ fontSize: 22, color: '#6B7280' }}>
-          ぬりえ・ひらがな・迷路・運筆 | 年齢・季節・行事で検索
+          動物・恐竜・乗り物など豊富なテーマ | 年齢・季節別に探せます
         </div>
       </div>
     ),
