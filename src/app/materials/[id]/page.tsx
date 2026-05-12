@@ -82,37 +82,34 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {/* ===== 印刷専用エリア（画面では非表示） ===== */}
-      <div className="hidden print:block print-area">
-        <div style={{ padding: '10mm 15mm' }}>
-          {/* 名前欄 */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6mm', borderBottom: '2px solid #000', paddingBottom: '3mm' }}>
-            <span style={{ fontSize: '14pt', fontWeight: 'bold', whiteSpace: 'nowrap' }}>お名前：</span>
-            <div style={{ flex: 1 }} />
-            <span style={{ fontSize: '10pt', color: '#666' }}>ぬりえプリント</span>
+      {/* ===== 印刷専用エリア（画面では非表示・横A4・画像のみ） ===== */}
+      <style>{`
+        @page { size: A4 landscape; margin: 0; }
+        @media print {
+          html, body { margin: 0 !important; padding: 0 !important; background: white !important; }
+        }
+      `}</style>
+      <div className="hidden print:block print-area" style={{ position: 'relative', width: '297mm', height: '210mm', boxSizing: 'border-box', overflow: 'hidden' }}>
+        {printImageUrl && (
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '5mm' }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={printImageUrl}
+              alt={material.title}
+              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+            />
           </div>
-
-          {/* タイトル */}
-          <h1 style={{ fontSize: '18pt', fontWeight: 'bold', textAlign: 'center', marginBottom: '4mm' }}>
-            {material.title}
-          </h1>
-
-          {/* 教材画像（印刷用高解像度APIから取得） */}
-          {printImageUrl && (
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '6mm' }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={printImageUrl}
-                alt={material.title}
-                style={{ width: '170mm', height: 'auto', maxHeight: '220mm', objectFit: 'contain' }}
-              />
-            </div>
-          )}
-
-          {/* 活動メモ */}
-          <div style={{ borderTop: '1px solid #ccc', paddingTop: '3mm', fontSize: '9pt', color: '#444' }}>
-            対象年齢：{ageLabel}　　難易度：{DIFFICULTY_LABELS[material.difficulty]}　　目安時間：{material.duration}分
-          </div>
+        )}
+        {/* 右下ブランディング */}
+        <div style={{
+          position: 'absolute',
+          right: '6mm',
+          bottom: '4mm',
+          fontSize: '7pt',
+          color: '#999',
+          letterSpacing: '0.05em',
+        }}>
+          nurie-print.com
         </div>
       </div>
 

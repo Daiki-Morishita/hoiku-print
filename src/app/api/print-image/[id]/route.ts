@@ -26,26 +26,36 @@ export async function GET(
     return new NextResponse('Not found', { status: 404 })
   }
 
-  const relativePath = material.imageUrl          // 例: /materials/cat-simple.svg
-  const absolutePath = path.join(process.cwd(), 'public', relativePath)
+  const imageUrl = material.imageUrl              // Supabase URL または /materials/...
+  const isRemote = /^https?:\/\//.test(imageUrl)
 
-  if (!fs.existsSync(absolutePath)) {
-    return new NextResponse('Image file not found', { status: 404 })
+  // 画像バッファを取得
+  let inputBuffer: Buffer
+  if (isRemote) {
+    try {
+      const res = await fetch(imageUrl)
+      if (!res.ok) return new NextResponse('Failed to fetch remote image', { status: 404 })
+      inputBuffer = Buffer.from(await res.arrayBuffer())
+    } catch {
+      return new NextResponse('Failed to fetch remote image', { status: 502 })
+    }
+  } else {
+    const absolutePath = path.join(process.cwd(), 'public', imageUrl)
+    if (!fs.existsSync(absolutePath)) {
+      return new NextResponse('Image file not found', { status: 404 })
+    }
+    inputBuffer = fs.readFileSync(absolutePath)
   }
 
   // ── SVG はそのまま返す ──────────────────────────────────────
-  if (relativePath.endsWith('.svg')) {
-    const svg = fs.readFileSync(absolutePath)
-    return new NextResponse(svg as unknown as BodyInit, {
+  if (imageUrl.endsWith('.svg')) {
+    return new NextResponse(inputBuffer as unknown as BodyInit, {
       headers: {
         'Content-Type': 'image/svg+xml',
         'Cache-Control': 'public, max-age=86400',
       },
     })
   }
-
-  // ── JPG / PNG → Sharpでアップスケール ───────────────────────
-  const inputBuffer = fs.readFileSync(absolutePath)
 
   const outputBuffer = await sharp(inputBuffer)
     .resize({
