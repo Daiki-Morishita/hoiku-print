@@ -26,6 +26,22 @@ const DIFFICULTY_RANK: Record<string, number> = {
   rich: 3,
 }
 
+/** Finder風の日付表記（今日/昨日/一昨日/日付） */
+function formatDate(dateStr: string): string {
+  const d = new Date(dateStr + 'T00:00:00')
+  if (isNaN(d.getTime())) return dateStr
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const diffDays = Math.round((today.getTime() - d.getTime()) / (1000 * 60 * 60 * 24))
+  if (diffDays === 0) return '今日'
+  if (diffDays === 1) return '昨日'
+  if (diffDays === 2) return '一昨日'
+  if (today.getFullYear() === d.getFullYear()) {
+    return `${d.getMonth() + 1}/${d.getDate()}`
+  }
+  return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`
+}
+
 /** id を {theme, difficulty順, variant} に分解してソート用キーを返す */
 function parseId(id: string): { theme: string; diff: number; variant: number } {
   // パターン: {theme}-{simple|easy|normal|rich}-{N}
@@ -326,8 +342,8 @@ export function AdminMaterialsTable({ materials }: { materials: Material[] }) {
                       {m.illustVersion ? `v${m.illustVersion}` : '—'}
                     </td>
 
-                    <td className="px-4 py-1.5 text-xs text-gray-400">
-                      {m.createdAt}
+                    <td className="px-4 py-1.5 text-xs text-gray-500" title={m.createdAt}>
+                      {formatDate(m.createdAt)}
                     </td>
 
                     <td className="px-4 py-1.5 text-xs text-gray-500 max-w-[160px] truncate">
