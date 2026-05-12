@@ -12,7 +12,7 @@ export const materials: Material[] = [
     tools: ['クレヨン', '色鉛筆'],
     activityIdeas: ['好きな色でくまさんを塗ってオリジナルのぬいぐるみを作ろう', '塗ったあとに名前をつけて発表ごっこをしよう'],
     imageUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/bear-simple-illust.png', illustUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/bear-simple-illust.png',
-    illustVersion: 1, imageStatus: 'approved', pdfUrl: '', createdAt: '2026-05-08', popular: truee,
+    illustVersion: 1, imageStatus: 'approved', pdfUrl: '', createdAt: '2026-05-08', popular: true,
   },
   {
     id: 'bear-easy-1',
@@ -114,7 +114,7 @@ export const materials: Material[] = [
       '首輪を好きな色にカラフルに塗って自分だけの子犬を作ろう',
     ],
     imageUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/dog-simple-illust.png', illustUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/dog-simple-illust.png',
-    illustVersion: 1, imageStatus: 'approved', pdfUrl: '', createdAt: '2026-05-08', popular: truee,
+    illustVersion: 1, imageStatus: 'approved', pdfUrl: '', createdAt: '2026-05-08', popular: true,
   },
   {
     id: 'dog-normal',
@@ -160,7 +160,7 @@ export const materials: Material[] = [
       'ピンクや白などお気に入りの色でうさぎさんを自由に塗ってみよう',
     ],
     imageUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/rabbit-simple-illust.png', illustUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/rabbit-simple-illust.png',
-    illustVersion: 1, imageStatus: 'approved', pdfUrl: '', createdAt: '2026-05-08', popular: truee,
+    illustVersion: 1, imageStatus: 'approved', pdfUrl: '', createdAt: '2026-05-08', popular: true,
   },
   {
     id: 'rabbit-easy-1',
@@ -314,7 +314,7 @@ export const materials: Material[] = [
     imageStatus: 'approved',
     pdfUrl: '',
     createdAt: '2026-05-08',
-    popular: truee,
+    popular: true,
   },
   {
     id: 'giraffe-rich-1',
@@ -522,7 +522,7 @@ export const materials: Material[] = [
     imageStatus: 'approved',
     pdfUrl: '',
     createdAt: '2026-05-09',
-    popular: truee,
+    popular: true,
   },
   {
     id: 'panda-rich-1',
@@ -626,7 +626,7 @@ export const materials: Material[] = [
     imageStatus: 'approved',
     pdfUrl: '',
     createdAt: '2026-05-09',
-    popular: truee,
+    popular: true,
   },
   {
     id: 'penguin-rich-1',
@@ -2691,7 +2691,7 @@ export const materials: Material[] = [
     imageStatus: 'approved',
     pdfUrl: '',
     createdAt: '2026-05-11',
-    popular: truee,
+    popular: true,
   },
   {
     id: 'dolphin-easy-1',
@@ -4089,7 +4089,7 @@ export const materials: Material[] = [
     imageStatus: 'approved',
     pdfUrl: '',
     createdAt: '2026-05-12',
-    popular: truee,
+    popular: true,
   },
   {
     id: 'car-easy-1',
@@ -5929,7 +5929,7 @@ export const materials: Material[] = [
     imageStatus: 'approved',
     pdfUrl: '',
     createdAt: '2026-05-12',
-    popular: truee,
+    popular: true,
   },
   {
     id: 'tyrannosaurus-easy-1',
