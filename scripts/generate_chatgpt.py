@@ -89,6 +89,10 @@ COMMON_CONDITIONS = (
     "イラスト1点のみ・コマ割りや複数構成にしない"
 )
 
+FOOD_CONDITIONS = (
+    "食べ物・野菜・果物に顔・目・口などの表情はつけない"
+)
+
 ERROR_PHRASES = [
     "画像生成に失敗",
     "画像を作成できません",
@@ -1229,7 +1233,8 @@ def run_item(pw, state, item_id, theme_type, variant, client):
     for lv in levels:
         file_id   = f"{item_id}-{lv}-{variant}"
         scene     = vdata["scenes"][lv]
-        prompt    = f"{scene}\n{item['note']}\n{COMMON_CONDITIONS}"
+        extra     = f"\n{FOOD_CONDITIONS}" if theme_type in ("fruits", "vegetables") else ""
+        prompt    = f"{scene}\n{item['note']}\n{COMMON_CONDITIONS}{extra}"
         local_path = TMP_DIR / f"{file_id}-illust.png"
 
         ok = generate_with_recovery(pw, state, file_id, prompt, local_path)
