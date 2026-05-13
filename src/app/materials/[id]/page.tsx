@@ -46,7 +46,7 @@ const categoryEmoji: Record<string, string> = {
 }
 const themeEmoji: Record<string, string> = {
   animals: '🐾', dinosaurs: '🦕', vehicles: '🚒', trains: '🚃',
-  food: '🍎', sea: '🐟', flowers: '🌸',
+  food: '🍎', sea: '🐟', flowers: '🌸', insects: '🐛', characters: '⭐', park: '🌳',
 }
 
 export default async function MaterialDetailPage({ params }: { params: Promise<{ id: string }> }) {

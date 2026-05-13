@@ -153,6 +153,9 @@ export default function HomePage() {
             { href: '/category/theme/dinosaurs', emoji: '🦕', label: '恐竜' },
             { href: '/category/theme/vehicles', emoji: '🚒', label: 'のりもの' },
             { href: '/category/theme/sea', emoji: '🐟', label: '海の生き物' },
+            ...(filterMaterials({ theme: 'insects' }).length > 0
+              ? [{ href: '/category/theme/insects', emoji: '🐛', label: '虫' }]
+              : []),
             ...(filterMaterials({ theme: 'park' }).length > 0
               ? [{ href: '/category/theme/park', emoji: '🌳', label: '公園・遊具' }]
               : []),
