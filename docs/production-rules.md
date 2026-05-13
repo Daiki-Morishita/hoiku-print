@@ -14,6 +14,20 @@ AIアシスタントは以下のタイミングで必ず `git pull` してこの
 
 ---
 
+## ChatGPT アカウント割り当て
+
+複数アカウントでレート制限を分散させる。**PC ごとにアカウントを固定する。**
+
+| PC | アカウント名 | Chrome プロファイル |
+|---|---|---|
+| メインPC（Daiki） | Morishita Daiki | `~/.chatgpt-chrome-profile` |
+| サブPC（Akane） | Morishita Akane | `~/.chatgpt-chrome-profile` |
+
+- 同じテーマを2アカウントで同時生成してOK（ファイルIDが被らなければ競合しない）
+- アカウントを間違えたままスクリプトを走らせないこと
+
+---
+
 ## ChatGPT ブラウザ生成ルール
 
 ### レート制限（ChatGPT Plus）
