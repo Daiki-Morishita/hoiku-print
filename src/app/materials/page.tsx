@@ -19,8 +19,8 @@ interface SearchParams {
 }
 
 export const metadata = {
-  title: '教材を探す',
-  description: '保育園・幼稚園向け無料教材プリント一覧。年齢・種類・季節・行事で絞り込めます。',
+  title: '教材を探す｜無料ぬりえプリント一覧',
+  description: '保育園・幼稚園で使える無料ぬりえプリント一覧。動物・恐竜・乗り物など豊富なテーマを年齢・難易度・季節で絞り込んでA4印刷できます。',
   alternates: { canonical: 'https://nurie-print.com/materials' },
 }
 
