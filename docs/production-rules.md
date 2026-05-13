@@ -5,15 +5,6 @@
 
 ---
 
-## 生成エンジン選択
-
-| テーマ | エンジン | 理由 |
-|---|---|---|
-| 恐竜・公園 | ChatGPT ブラウザ（Playwright CDP） | 線画品質が gpt-image-2 より高い |
-| 動物・虫・乗り物 | OpenAI API（gpt-image-2） | 自動化が簡単・コスト低 |
-
----
-
 ## ChatGPT ブラウザ生成ルール
 
 ### レート制限（ChatGPT Plus）
