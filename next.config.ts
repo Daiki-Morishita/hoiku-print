@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ['sharp'],
   // 将来の画像最適化に備えてremotePatterns設定
   images: {
     remotePatterns: [
