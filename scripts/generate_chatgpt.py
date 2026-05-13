@@ -82,7 +82,7 @@ TMP_DIR.mkdir(exist_ok=True)
 COMMON_CONDITIONS = (
     "共通条件\n"
     "背景は必ず純白 #FFFFFF\n"
-    "線画スタイル\n"
+    "線画スタイル（塗りつぶしなし）\n"
     "輪郭線は太くはっきりと描き、細い線や掠れた線は使わない\n"
     "A4横長・高画質\n"
     "文字・テキスト・ラベル・枠線・フレームは一切入れない\n"
@@ -90,6 +90,13 @@ COMMON_CONDITIONS = (
 )
 
 FOOD_CONDITIONS = (
+    "共通条件\n"
+    "背景は必ず純白 #FFFFFF\n"
+    "線画スタイル（塗りつぶしなし）\n"
+    "輪郭線は太くはっきりと描き、細い線や掠れた線は使わない\n"
+    "A4横長・高画質\n"
+    "文字・テキスト・ラベル・枠線・フレームは一切入れない\n"
+    "イラスト1点のみ・コマ割りや複数構成にしない\n"
     "食べ物・野菜・果物に顔・目・口などの表情はつけない"
 )
 
@@ -1265,8 +1272,8 @@ def run_item(pw, state, item_id, theme_type, variant, client):
     for lv in levels:
         file_id   = f"{item_id}-{lv}-{variant}"
         scene     = vdata["scenes"][lv]
-        extra     = f"【重要】食べ物・野菜・果物に顔・目・口などの表情は絶対につけないこと。\n" if theme_type in ("fruits", "vegetables") else ""
-        prompt    = f"{extra}{scene}\n{item['note']}\n{COMMON_CONDITIONS}"
+        conditions = FOOD_CONDITIONS if theme_type in ("fruits", "vegetables") else COMMON_CONDITIONS
+        prompt    = f"{scene}\n{item['note']}\n{conditions}"
         local_path = TMP_DIR / f"{file_id}-illust.png"
 
         ok = generate_with_recovery(pw, state, file_id, prompt, local_path)
