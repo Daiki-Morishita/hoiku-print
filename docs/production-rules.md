@@ -58,6 +58,21 @@ python3 scripts/generate_chatgpt.py --type park --all
 python3 scripts/generate_chatgpt.py --type dinosaurs --item tyrannosaurus
 ```
 
+### 就寝時・長時間放置（ディスプレイOFF運用）
+
+スクリプト実行中に画面だけ消して離席・就寝できる。
+
+```bash
+# Mac本体のスリープを防止しつつディスプレイだけOFF
+caffeinate -i &          # システムスリープ防止（バックグラウンド）
+pmset displaysleepnow    # ディスプレイ即時OFF
+```
+
+- ディスプレイOFFでもChrome・Pythonスクリプトは動き続ける
+- 復帰はマウス・キーボードを触るだけ
+- 起床後は `kill %1`（または `killall caffeinate`）でcaffeinateを停止
+- Claude に「寝ます」または「画面OFF」と言えば上記を実行する
+
 ### エラー回復（自動3段階）
 1. 通常: max_retries=3
 2. ① 60秒クールダウン → 再試行
