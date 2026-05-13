@@ -13,6 +13,7 @@ interface SearchParams {
   category?: string
   season?: string
   event?: string
+  theme?: string
   search?: string
   difficulty?: string
   sort?: string
@@ -45,12 +46,13 @@ export default async function MaterialsPage({
     category: params.category as Category | undefined,
     season: params.season as Season | undefined,
     event: params.event,
+    theme: params.theme as Parameters<typeof filterMaterials>[0]['theme'],
     search: params.search,
     difficulty: params.difficulty ? Number(params.difficulty) : undefined,
     sort,
   })
 
-  const activeCount = [params.age, params.category, params.season, params.event, params.search, params.difficulty].filter(Boolean).length
+  const activeCount = [params.age, params.category, params.season, params.event, params.theme, params.search, params.difficulty].filter(Boolean).length
 
   return (
     <>

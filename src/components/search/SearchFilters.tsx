@@ -6,6 +6,15 @@ import { SEASON_LABELS, DIFFICULTY_LABELS } from '@/lib/types'
 
 const ages = [2, 3, 4, 5, 6]
 
+const THEME_OPTIONS = [
+  { key: 'animals',   label: '🐾 動物' },
+  { key: 'dinosaurs', label: '🦕 恐竜' },
+  { key: 'vehicles',  label: '🚒 のりもの' },
+  { key: 'sea',       label: '🐟 海の生き物' },
+  { key: 'insects',   label: '🐛 虫' },
+  { key: 'park',      label: '🌳 公園・遊具' },
+]
+
 export function SearchFilters() {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -24,10 +33,25 @@ export function SearchFilters() {
     age: searchParams.get('age'),
     season: searchParams.get('season'),
     difficulty: searchParams.get('difficulty'),
+    theme: searchParams.get('theme'),
   }
 
   return (
     <div className="space-y-5">
+      {/* テーマ */}
+      <FilterSection label="テーマ">
+        <div className="flex flex-wrap gap-2">
+          {THEME_OPTIONS.map(({ key, label }) => (
+            <FilterChip
+              key={key}
+              label={label}
+              active={current.theme === key}
+              onClick={() => updateParam('theme', key)}
+            />
+          ))}
+        </div>
+      </FilterSection>
+
       {/* 年齢 */}
       <FilterSection label="年齢">
         <div className="flex flex-wrap gap-2">
