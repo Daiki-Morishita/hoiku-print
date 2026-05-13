@@ -1100,6 +1100,37 @@ def delete_current_chat(page):
         return False
 
 
+def cleanup_old_chats(page, threshold=20):
+    """セッション数がthresholdを超えたら古いものから削除する"""
+    try:
+        result = page.evaluate("""async (threshold) => {
+            const r = await fetch(`/backend-api/conversations?offset=0&limit=50`, {
+                credentials: 'include',
+            });
+            if (!r.ok) return {count: 0, deleted: 0};
+            const data = await r.json();
+            const items = data.items || [];
+            if (items.length <= threshold) return {count: items.length, deleted: 0};
+            // 古い順（末尾）から削除してthresholdまで減らす
+            const toDelete = items.slice(threshold);
+            let deleted = 0;
+            for (const item of toDelete) {
+                const dr = await fetch(`/backend-api/conversation/${item.id}`, {
+                    method: 'PATCH',
+                    credentials: 'include',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({is_visible: false}),
+                });
+                if (dr.ok) deleted++;
+            }
+            return {count: items.length, deleted};
+        }""", threshold)
+        if result and result.get('deleted', 0) > 0:
+            log(f"  セッション整理: {result['count']}件中 {result['deleted']}件削除")
+    except Exception:
+        pass
+
+
 def jitter_sleep(current_max, rate_limited=False):
     """
     可変バックオフ＋ジッター
@@ -1226,6 +1257,7 @@ def run_item(pw, state, item_id, theme_type, variant, client):
     item  = items[item_id]
     vdata = item["variants"][variant]
     log(f"\n{'='*50}\n[{theme_type}] {item_id}-{variant} ({item['jp']})")
+    cleanup_old_chats(state['page'], threshold=20)
 
     levels = ["simple", "easy", "normal", "rich"]
     supabase_urls = {}
