@@ -213,7 +213,7 @@ FRUITS = {
         "jp": "りんご", "note": "りんごのまるい形とへたをシンプルでかわいく描く。",
         "variants": {1: {"scenes": {
             "simple": "かわいいりんごの塗り絵。りんご1個のみ・正面向き・背景なし・余白たっぷり。",
-            "easy":   "かわいいりんごの塗り絵。りんごの木に赤いりんごがたくさん実っているかわいい構図。",
+            "easy":   "かわいいりんごの塗り絵。丸みのあるかわいい木に5〜6個のりんごが自然なバランスで実っている構図。葉っぱも数枚。りんごは大きくシンプルな丸で描く。",
             "normal": "かわいいりんごの塗り絵。かごの中にりんごがいくつか入っている構図。葉っぱや木の枝も点在。",
             "rich":   "かわいいりんごの塗り絵。りんごの木・かご・りんごジュース・りんごパイが並ぶにぎやかな構図。",
         }, "titles": {
@@ -1008,13 +1008,19 @@ def add_to_data_ts(item_id, theme_type, variant, vdata, supabase_urls):
     return True
 
 
-def git_commit_push(item_id, theme_type, variant):
+def git_commit(item_id, theme_type, variant):
+    """commitのみ（push不要な--allモード用）"""
     subprocess.run(["git", "add", "src/lib/data.ts"], cwd=REPO_DIR, check=True)
     msg = f"Add {theme_type}/{item_id}-{variant} coloring pages"
     subprocess.run(["git", "commit", "-m", msg], cwd=REPO_DIR, check=True)
+    log(f"  commit 完了: {item_id}-{variant}")
+
+
+def git_push():
+    """バッチ終了時に1回だけ呼ぶ"""
     subprocess.run(["git", "pull", "--rebase", "origin", "main"], cwd=REPO_DIR, check=False)
     subprocess.run(["git", "push", "origin", "main"], cwd=REPO_DIR, check=True)
-    log(f"  push 完了: {item_id}-{variant}")
+    log("  push 完了")
 
 
 # =============================================
@@ -1191,6 +1197,10 @@ def generate_with_recovery(pw, state, file_id, prompt, out_path):
     log(f"  [復旧②] ブラウザ再起動後に再試行: {file_id}")
     new_browser = restart_chrome(pw)
     if new_browser is not None:
+        try:
+            state['page'].close()
+        except Exception:
+            pass
         state['browser'] = new_browser
         state['page'] = new_browser.contexts[0].new_page()
         ok, state['interval_max'] = generate_one(state['page'], file_id, prompt, out_path, max_retries=1, interval_max=state['interval_max'])
@@ -1234,7 +1244,7 @@ def run_item(pw, state, item_id, theme_type, variant, client):
 
     if supabase_urls:
         if add_to_data_ts(item_id, theme_type, variant, vdata, supabase_urls):
-            git_commit_push(item_id, theme_type, variant)
+            git_commit(item_id, theme_type, variant)
     log(f"完了: {item_id}-{variant} ({len(supabase_urls)}/4枚)")
     return len(supabase_urls)
 
@@ -1273,8 +1283,13 @@ def main():
                 for v in item["variants"]:
                     run_item(pw, state, iid, args.type, v, client)
                     time.sleep(10)
+            # --all 時はここで1回だけpush（Vercelデプロイ節約）
+            log("\n全テーマ完了 → push開始")
+            git_push()
         else:
             run_item(pw, state, args.item, args.type, args.variant, client)
+            # 単体実行時はすぐpush
+            git_push()
 
         state['browser'].close()
         log("\n全処理完了")
