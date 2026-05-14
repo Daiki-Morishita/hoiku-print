@@ -1,0 +1,13 @@
+2026-05-14T00:47:25 lemon-rich-1
+2026-05-14T01:23:04 melon-simple-1
+2026-05-14T01:58:29 melon-easy-1
+2026-05-14T02:36:13 melon-normal-1
+2026-05-14T03:12:15 melon-rich-1
+2026-05-14T03:49:22 pear-simple-1
+2026-05-14T04:33:19 pear-easy-1
+2026-05-14T05:06:52 pear-normal-1
+2026-05-14T05:43:01 pear-rich-1
+2026-05-14T06:14:48 kiwi-simple-1
+2026-05-14T06:51:55 kiwi-easy-1
+2026-05-14T07:19:35 kiwi-normal-1
+2026-05-14T07:45:13 kiwi-rich-1
