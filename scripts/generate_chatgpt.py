@@ -1072,6 +1072,12 @@ def wait_for_image(page, timeout=240):
             body_text = page.evaluate("() => document.body.innerText")
             for phrase in ERROR_PHRASES:
                 if phrase in body_text:
+                    # UI に再開時刻が含まれていれば抽出してログ出力
+                    # 例: "20:14 以降にもう一度お試しください"
+                    m = re.search(r'(\d{1,2}:\d{2})\s*以降', body_text)
+                    if m:
+                        log(f"  ⏰ ChatGPT再開時刻（UI表示）: {m.group(1)} 以降")
+                        notify_mac("hoiku-print", f"制限中 → {m.group(1)}以降に再開可能")
                     return ('error', None)
         except Exception:
             pass
@@ -1110,8 +1116,18 @@ def human_move_and_click(page, element):
 
 
 def human_type(page, text):
-    """1文字ごとにランダム遅延を入れてタイプ（40〜110ms/文字）"""
-    page.keyboard.type(text, delay=random.uniform(40, 110))
+    """
+    1文字ごとにランダム遅延を入れてタイプ。
+    \\n は Shift+Enter に変換する（ChatGPT の contenteditable では
+    keyboard.type('\\n') が改行にならずテキストが連結してしまうため）。
+    """
+    delay = random.uniform(40, 110)
+    for i, line in enumerate(text.split('\n')):
+        if line:
+            page.keyboard.type(line, delay=delay)
+        if i < text.count('\n'):          # 最後の行以外は改行
+            human_pause(0.04, 0.12)
+            page.keyboard.press("Shift+Enter")
     human_pause(0.15, 0.5)
 
 
