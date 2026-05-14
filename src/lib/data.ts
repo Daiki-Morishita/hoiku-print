@@ -10129,6 +10129,23 @@ export const materials: Material[] = [
     createdAt: '2026-05-14T00:47',
     popular: false,
   },
+  {
+    id: 'strawberry-easy-1',
+    title: 'いちごのはちうえ',
+    description: '植木鉢で育ついちごの線画。',
+    ageMin: 3, ageMax: 6, difficulty: 2, duration: 15,
+    category: 'coloring', theme: 'fruits',
+    tags: ['strawberry', 'くだもの', 'ぬりえ'],
+    tools: ['クレヨン'],
+    activityIdeas: ['好きな色で塗ってみよう', 'どんな味か考えながら塗ろう'],
+    imageUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/strawberry-easy-1-illust.png',
+    illustUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/strawberry-easy-1-illust.png',
+    illustVersion: 1,
+    imageStatus: 'pending_review',
+    pdfUrl: '',
+    createdAt: '2026-05-15T04:00',
+    popular: false,
+  },
 ]
 
 export type SortKey = 'newest' | 'popular' | 'favorites'
