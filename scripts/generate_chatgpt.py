@@ -79,6 +79,9 @@ CHROME_CMD = [
 
 TMP_DIR.mkdir(exist_ok=True)
 
+# 24h分散スケジュール（--daily モード用）
+_DAILY_SCHEDULE: list = []  # pop(0)で順番に消費
+
 COMMON_CONDITIONS = (
     "共通条件\n"
     "背景は必ず純白 #FFFFFF\n"
@@ -99,6 +102,20 @@ FOOD_CONDITIONS = (
     "イラスト1点のみ・コマ割りや複数構成にしない\n"
     "食べ物・野菜・果物に顔・目・口などの表情はつけない"
 )
+
+# 構造化条件リスト（build_prompt用）
+COMMON_COND_ITEMS = [
+    "背景は必ず純白 #FFFFFF",
+    "線画スタイル（塗りつぶしなし）",
+    "輪郭線は太くはっきりと描き、細い線や掠れた線は使わない",
+    "A4横長・高画質",
+    "文字・テキスト・ラベル・枠線・フレームは一切入れない",
+    "イラスト1点のみ・コマ割りや複数構成にしない",
+]
+
+FOOD_COND_ITEMS = COMMON_COND_ITEMS + [
+    "食べ物・野菜・果物に顔・目・口などの表情はつけない",
+]
 
 ERROR_PHRASES = [
     "画像生成に失敗",
@@ -970,10 +987,12 @@ def upload_to_supabase(client, local_path, remote_name):
 
 def add_to_data_ts(item_id, theme_type, variant, vdata, supabase_urls):
     levels = ["simple", "easy", "normal", "rich"]
-    first_id = f"{item_id}-simple-{variant}"
     content = DATA_TS.read_text()
-    if f"id: '{first_id}'" in content:
-        log(f"  data.ts に既存: {first_id} — スキップ")
+
+    # 全levelが既存かチェック（全部あればスキップ）
+    all_exist = all(f"id: '{item_id}-{lv}-{variant}'" in content for lv in levels)
+    if all_exist:
+        log(f"  data.ts に全level既存: {item_id}-{variant} — スキップ")
         return False
 
     tag_map = {"park": "こうえん", "dinosaurs": "きょうりゅう", "fruits": "くだもの", "vegetables": "やさい"}
@@ -989,6 +1008,10 @@ def add_to_data_ts(item_id, theme_type, variant, vdata, supabase_urls):
     for lv in levels:
         file_id = f"{item_id}-{lv}-{variant}"
         if file_id not in supabase_urls:
+            continue
+        # 既にdata.tsに存在するlevelは重複追加しない
+        if f"id: '{file_id}'" in content:
+            log(f"  data.ts に既存: {file_id} — スキップ")
             continue
         url = supabase_urls[file_id]
         title = vdata["titles"][lv]
@@ -1054,6 +1077,267 @@ def wait_for_image(page, timeout=240):
             pass
         time.sleep(3)
     return ('timeout', None)
+
+
+# =============================================
+# 人間らしい操作ヘルパー
+# =============================================
+def human_pause(lo=0.4, hi=1.2):
+    """人間らしい短い間"""
+    time.sleep(random.uniform(lo, hi))
+
+
+def human_move_and_click(page, element):
+    """マウスを中継点経由で自然に動かしてクリック"""
+    try:
+        bbox = element.bounding_box()
+        if not bbox:
+            element.click()
+            return
+        # ランダムな中継点を経由
+        page.mouse.move(
+            random.uniform(150, 700),
+            random.uniform(80, 350),
+        )
+        human_pause(0.1, 0.35)
+        target_x = bbox['x'] + bbox['width']  * random.uniform(0.25, 0.75)
+        target_y = bbox['y'] + bbox['height'] * random.uniform(0.25, 0.75)
+        page.mouse.move(target_x, target_y, steps=random.randint(8, 18))
+        human_pause(0.05, 0.2)
+        page.mouse.click(target_x, target_y)
+    except Exception:
+        element.click()  # fallback
+
+
+def human_type(page, text):
+    """1文字ごとにランダム遅延を入れてタイプ（40〜110ms/文字）"""
+    page.keyboard.type(text, delay=random.uniform(40, 110))
+    human_pause(0.15, 0.5)
+
+
+# =============================================
+# 口調グループ管理（5回以内に同一グループを出さない）
+# =============================================
+_TONE_GROUPS = {
+    'A_command':  [6, 8, 9, 18],        # 命令・指示系
+    'B_polite':   [1, 7, 11, 13, 16],   # 丁寧依頼系
+    'C_casual':   [2, 5, 19],           # カジュアル系
+    'D_business': [4, 10, 15],          # ビジネス・文書系
+    'E_flat':     [0, 3, 12, 14, 17],   # フラット・中性系
+}
+_RECENT_GROUPS: list = []  # 直近4件の使用グループ履歴
+
+
+def _pick_style() -> int:
+    """
+    直近4件で使ったグループを除外してスタイルを選ぶ。
+    5グループ × 除外4件 → 常に1グループ以上が選択可能。
+    結果として、連続5回の中に同一口調グループは出現しない。
+    """
+    global _RECENT_GROUPS
+    excluded = set(_RECENT_GROUPS[-4:])
+    available = [g for g in _TONE_GROUPS if g not in excluded]
+    chosen_group = random.choice(available)
+    style = random.choice(_TONE_GROUPS[chosen_group])
+    _RECENT_GROUPS.append(chosen_group)
+    if len(_RECENT_GROUPS) > 4:
+        _RECENT_GROUPS.pop(0)
+    log(f"  🎨 プロンプトスタイル: {chosen_group} / style {style}")
+    return style
+
+
+def build_prompt(scene: str, note: str, cond_items: list) -> str:
+    """
+    scene / note / cond_items から 20スタイルのうち1つをランダム選択してプロンプトを生成。
+    指示内容・クオリティ要件は完全同一、表現形式のみが毎回変わる。
+    口調グループ（5種）は直近4件と被らないよう制御される。
+    """
+    style = _pick_style()
+    items = cond_items[:]
+
+    def plain():    return '\n'.join(items)
+    def bullet():   return '\n'.join(f'・{c}' for c in items)
+    def numbered(): return '\n'.join(f'{i+1}. {c}' for i, c in enumerate(items))
+    def dashed():   return '\n'.join(f'- {c}' for c in items)
+    def flat():     return '、'.join(items)
+
+    def sh_bullet():
+        s = items[:]; random.shuffle(s)
+        return '\n'.join(f'・{c}' for c in s)
+    def sh_numbered():
+        s = items[:]; random.shuffle(s)
+        return '\n'.join(f'{i+1}. {c}' for i, c in enumerate(s))
+    def sh_dashed():
+        s = items[:]; random.shuffle(s)
+        return '\n'.join(f'- {c}' for c in s)
+
+    if style == 0:
+        # 標準型（改行区切り・共通条件ヘッダー）
+        return f"{scene}\n{note}\n共通条件\n{plain()}"
+
+    elif style == 1:
+        # 丁寧なお願い文・bullet・条件→内容の順
+        return (
+            f"お願いがあるのですが、以下の仕様で塗り絵イラストを作成していただけますか？\n\n"
+            f"仕様：\n{bullet()}\n\n"
+            f"内容：{scene}\n補足：{note}\n\nよろしくお願いします。"
+        )
+
+    elif style == 2:
+        # カジュアル依頼・番号リスト・条件先行
+        return (
+            f"これ作ってもらえる？\n\n"
+            f"守ってほしいこと：\n{numbered()}\n\n"
+            f"内容：{scene}\nスタイル：{note}"
+        )
+
+    elif style == 3:
+        # フラット一段落・読点つなぎ条件
+        return f"{scene}\n{note}\n条件：{flat()}"
+
+    elif style == 4:
+        # ビジネス文書スタイル・dash・条件ブロック先頭
+        return (
+            f"制約事項：\n{dashed()}\n\n"
+            f"描画対象：{scene}\n"
+            f"補足：{note}"
+        )
+
+    elif style == 5:
+        # チャット風・シャッフルbullet
+        return (
+            f"{scene}\n{note}\n\n"
+            f"条件はこちら：\n{sh_bullet()}"
+        )
+
+    elif style == 6:
+        # 命令形・シャッフル番号リスト
+        return (
+            f"以下を守って塗り絵イラストを描くこと。\n\n"
+            f"{sh_numbered()}\n\n"
+            f"テーマ：{scene}\n{note}"
+        )
+
+    elif style == 7:
+        # ですます・改行少なめ
+        cond_inline = '。'.join(items) + '。'
+        return (
+            f"こちらの塗り絵イラストを描いてください。\n\n"
+            f"{scene}{note}"
+            f"{cond_inline}"
+        )
+
+    elif style == 8:
+        # 「指示があります」から始まる
+        return (
+            f"指示があります。\n\n"
+            f"内容：{scene}\n{note}\n\n"
+            f"要件：\n{dashed()}"
+        )
+
+    elif style == 9:
+        # 「以上実行してください」で締める
+        return (
+            f"{scene}\n{note}\n\n"
+            f"次の条件をすべて満たすこと：\n{bullet()}\n\n"
+            f"以上実行してください。"
+        )
+
+    elif style == 10:
+        # 「以下に仕様を指定します」・番号リスト
+        return (
+            f"以下に仕様を指定します。\n\n"
+            f"テーマ：{scene}\n"
+            f"スタイル補足：{note}\n\n"
+            f"技術要件：\n{numbered()}"
+        )
+
+    elif style == 11:
+        # 条件ブロック先・シャッフルdash・内容あと
+        return (
+            f"次の要件をすべて満たしてください。\n{sh_dashed()}\n\n"
+            f"上記を踏まえて、{scene}\n（{note}）"
+        )
+
+    elif style == 12:
+        # 全インライン・改行なし
+        cond_inline = '。'.join(items) + '。'
+        return f"{scene} {note} {cond_inline}"
+
+    elif style == 13:
+        # 「ご確認のうえ」・丁寧・【セクション】bullet
+        return (
+            f"以下の要件をご確認のうえ、塗り絵イラストを1点生成してください。\n\n"
+            f"【テーマ】{scene}\n"
+            f"【スタイル】{note}\n"
+            f"【制約】\n{bullet()}"
+        )
+
+    elif style == 14:
+        # ミニマル・スラッシュ区切り
+        return f"{scene} / {note} / " + ' / '.join(items)
+
+    elif style == 15:
+        # 仕様書（Markdown見出し）スタイル
+        return (
+            f"# 塗り絵イラスト仕様\n\n"
+            f"## テーマ\n{scene}\n\n"
+            f"## スタイル補足\n{note}\n\n"
+            f"## 制約条件\n{numbered()}"
+        )
+
+    elif style == 16:
+        # 「これらをやっていただけますか？」アウトロ
+        return (
+            f"内容：{scene}\n補足：{note}\n\n"
+            f"条件：\n{sh_bullet()}\n\n"
+            f"これらをやっていただけますか？"
+        )
+
+    elif style == 17:
+        # 条件を括弧内インライン
+        cond_paren = '（' + '・'.join(items) + '）'
+        return f"{scene}\n{note}\n{cond_paren}"
+
+    elif style == 18:
+        # 「次の要件で」・dash・条件先
+        return (
+            f"次の要件でイラストを出力してください。\n\n"
+            f"要件：\n{dashed()}\n\n"
+            f"テーマ：{scene}（{note}）"
+        )
+
+    else:  # style == 19
+        # カジュアル・ひらがな混じり
+        return (
+            f"ぬりえのイラストをかいてほしいです！\n\n"
+            f"テーマ：{scene}\n"
+            f"スタイルのほそく：{note}\n\n"
+            f"きまり：\n{bullet()}\n\n"
+            f"おねがいします"
+        )
+
+
+def attach_rate_limit_guard(page):
+    """
+    ページに 429 Fail-Fast リスナーを1回だけ張る。
+    429 検知した瞬間にログ・通知して os._exit(1) で終了する。
+    （sys.exit はコールバックスレッドから抜けられないので os._exit を使用）
+    """
+    def _on_response(response):
+        if response.status == 429:
+            retry_raw = response.headers.get("retry-after", "")
+            try:
+                secs = int(retry_raw)
+                hint = f"{secs // 3600}h{(secs % 3600) // 60}m"
+            except (ValueError, TypeError):
+                hint = "不明"
+            log(f"  🔴 HTTP 429 Fail-Fast: {response.url[:70]}")
+            log(f"     Retry-After = {retry_raw or '(なし)'}  ({hint})")
+            notify_mac("hoiku-print", f"429検知 → 停止 (Retry-After: {hint})")
+            os._exit(1)
+
+    page.on("response", _on_response)
 
 
 def whiten_background(in_path, out_path=None, threshold=235):
@@ -1138,23 +1422,42 @@ def cleanup_old_chats(page, threshold=20):
         pass
 
 
-def jitter_sleep(current_max, rate_limited=False):
+def jitter_sleep(current_max, rate_limited=False, success_count=0):
     """
-    可変バックオフ＋ジッター
-    - 通常: 45〜current_max秒をランダムに待機
-    - レート制限検知時: current_maxを2倍に拡大して待機
-    上限はINTER_REQUEST_SLEEP_MAX_CAP秒
+    可変バックオフ＋ジッター（慣らし運転対応）
+
+    success_count: これまでの連続成功数
+      0〜1回目 : 慣らし P1 — 5〜10分（リクエスト直後に制限が来ないかを様子見）
+      2〜4回目 : 慣らし P2 — 2〜3分（徐々に短縮）
+      5回目以降: 通常運転 — INTER_REQUEST_SLEEP_MIN 〜 current_max
+    rate_limited=True の場合は current_max を2倍に拡大して待機（既存ロジック）
     """
+    # --daily モード: スケジュール済みギャップを優先使用
+    if not rate_limited and _DAILY_SCHEDULE:
+        wait = _DAILY_SCHEDULE.pop(0)
+        log(f"  📅 スケジュール待機: {wait:.0f}秒 ({wait/60:.1f}分)")
+        time.sleep(wait)
+        return current_max
+
     if rate_limited:
         current_max = min(current_max * 2, INTER_REQUEST_SLEEP_MAX_CAP)
         log(f"  レート制限検知→バックオフ拡大: 上限 {current_max}秒")
-    wait = random.uniform(INTER_REQUEST_SLEEP_MIN, current_max)
-    log(f"  インターバル待機: {wait:.1f}秒 (上限{current_max}s)")
+        wait = random.uniform(INTER_REQUEST_SLEEP_MIN, current_max)
+        log(f"  インターバル待機: {wait:.1f}秒 (上限{current_max}s)")
+    elif success_count < 2:
+        wait = random.uniform(300, 600)   # P1: 5〜10分
+        log(f"  🐢 慣らし運転 P1 ({success_count + 1}回目成功): {wait:.0f}秒待機")
+    elif success_count < 5:
+        wait = random.uniform(120, 180)   # P2: 2〜3分
+        log(f"  🐢 慣らし運転 P2 ({success_count + 1}回目成功): {wait:.0f}秒待機")
+    else:
+        wait = random.uniform(INTER_REQUEST_SLEEP_MIN, current_max)
+        log(f"  インターバル待機: {wait:.1f}秒 (上限{current_max}s)")
     time.sleep(wait)
     return current_max
 
 
-def generate_one(page, file_id, prompt, out_path, max_retries=3, interval_max=None):
+def generate_one(page, file_id, prompt, out_path, max_retries=3, interval_max=None, success_count=0):
     if out_path.exists():
         log(f"  スキップ（既存）: {file_id}")
         return True, interval_max or INTER_REQUEST_SLEEP_MAX
@@ -1165,17 +1468,19 @@ def generate_one(page, file_id, prompt, out_path, max_retries=3, interval_max=No
     for attempt in range(1, max_retries + 1):
         log(f"  生成開始 (試行 {attempt}/{max_retries}): {file_id}")
         page.goto("https://chatgpt.com/", wait_until="domcontentloaded")
-        time.sleep(2)
+        human_pause(1.8, 4.0)  # ページ表示後のランダム待機
         try:
             box = page.wait_for_selector("#prompt-textarea", timeout=30000)
         except Exception as e:
             log(f"  入力欄取得失敗: {e}")
             time.sleep(5)
             continue
-        box.click()
+        human_move_and_click(page, box)  # マウスを自然に動かしてクリック
+        human_pause(0.2, 0.6)
         box.evaluate("el => el.innerHTML = ''")
-        page.keyboard.type(prompt)
-        time.sleep(0.5)
+        varied = build_prompt(prompt['scene'], prompt['note'], prompt['cond_items'])
+        human_type(page, varied)         # ランダム速度でタイピング
+        human_pause(0.4, 1.5)            # Enterを押す前のひと呼吸
         page.keyboard.press("Enter")
         log("  プロンプト送信。生成待ち...")
 
@@ -1185,13 +1490,13 @@ def generate_one(page, file_id, prompt, out_path, max_retries=3, interval_max=No
             if ok:
                 log(f"  ローカル保存: {out_path}")
                 delete_current_chat(page)
-                interval_max = jitter_sleep(interval_max, rate_limited=False)
+                interval_max = jitter_sleep(interval_max, rate_limited=False, success_count=success_count)
                 return True, interval_max
             log("  DL失敗、リトライ")
         elif status == 'error':
             log("  ChatGPTエラー検知、リトライ")
             delete_current_chat(page)
-            interval_max = jitter_sleep(interval_max, rate_limited=True)
+            interval_max = jitter_sleep(interval_max, rate_limited=True, success_count=success_count)
         else:
             log("  タイムアウト、リトライ")
         time.sleep(5)
@@ -1226,13 +1531,14 @@ def restart_chrome(pw):
 
 
 def generate_with_recovery(pw, state, file_id, prompt, out_path):
-    ok, state['interval_max'] = generate_one(state['page'], file_id, prompt, out_path, interval_max=state['interval_max'])
+    sc = state.get('success_count', 0)
+    ok, state['interval_max'] = generate_one(state['page'], file_id, prompt, out_path, interval_max=state['interval_max'], success_count=sc)
     if ok:
         return True
 
     log(f"  [復旧①] 60秒クールダウン後に再試行: {file_id}")
     time.sleep(60)
-    ok, state['interval_max'] = generate_one(state['page'], file_id, prompt, out_path, max_retries=1, interval_max=state['interval_max'])
+    ok, state['interval_max'] = generate_one(state['page'], file_id, prompt, out_path, max_retries=1, interval_max=state['interval_max'], success_count=sc)
     if ok:
         return True
 
@@ -1245,7 +1551,8 @@ def generate_with_recovery(pw, state, file_id, prompt, out_path):
             pass
         state['browser'] = new_browser
         state['page'] = new_browser.contexts[0].new_page()
-        ok, state['interval_max'] = generate_one(state['page'], file_id, prompt, out_path, max_retries=1, interval_max=state['interval_max'])
+        attach_rate_limit_guard(state['page'])  # 新ページにもリスナーを再設定
+        ok, state['interval_max'] = generate_one(state['page'], file_id, prompt, out_path, max_retries=1, interval_max=state['interval_max'], success_count=sc)
         if ok:
             return True
 
@@ -1268,17 +1575,23 @@ def run_item(pw, state, item_id, theme_type, variant, client):
 
     levels = ["simple", "easy", "normal", "rich"]
     supabase_urls = {}
+    existing_content = DATA_TS.read_text()
 
     for lv in levels:
         file_id   = f"{item_id}-{lv}-{variant}"
+        # data.tsに既存のlevelは生成スキップ（再実行時の重複防止・レート節約）
+        if f"id: '{file_id}'" in existing_content:
+            log(f"  既存スキップ: {file_id}")
+            continue
         scene     = vdata["scenes"][lv]
-        conditions = FOOD_CONDITIONS if theme_type in ("fruits", "vegetables") else COMMON_CONDITIONS
-        prompt    = f"{scene}\n{item['note']}\n{conditions}"
+        cond_items = FOOD_COND_ITEMS if theme_type in ("fruits", "vegetables") else COMMON_COND_ITEMS
+        prompt = {'scene': scene, 'note': item['note'], 'cond_items': cond_items}
         local_path = TMP_DIR / f"{file_id}-illust.png"
 
         ok = generate_with_recovery(pw, state, file_id, prompt, local_path)
         if not ok:
             continue
+        state['success_count'] = state.get('success_count', 0) + 1
         try:
             url = upload_to_supabase(client, local_path, f"{file_id}-illust.png")
             supabase_urls[file_id] = url
@@ -1293,6 +1606,30 @@ def run_item(pw, state, item_id, theme_type, variant, client):
     return len(supabase_urls)
 
 
+def make_daily_schedule(n_items: int, total_hours: float = 24.0) -> list:
+    """
+    n_items 個の生成を total_hours 時間内にランダム分散したインターバルリストを返す。
+    - 最低間隔: 5分 (300s)
+    - 平均間隔: total_hours*3600 / n_items
+    - 各ギャップは平均±65%のランダム変動、5〜40分にクランプ
+    """
+    if n_items <= 1:
+        return []
+    total_sec = total_hours * 3600
+    base = total_sec / n_items
+    min_gap, max_gap = 300, 2400  # 5分〜40分
+    gaps = []
+    for _ in range(n_items - 1):
+        g = base * random.uniform(0.35, 1.65)
+        gaps.append(max(min_gap, min(max_gap, g)))
+    # 合計が total_sec を超える場合スケーリング
+    total_gaps = sum(gaps)
+    if total_gaps > total_sec - min_gap:
+        scale = (total_sec - min_gap) / total_gaps
+        gaps = [max(min_gap, g * scale) for g in gaps]
+    return gaps
+
+
 # =============================================
 # メイン
 # =============================================
@@ -1302,6 +1639,8 @@ def main():
     parser.add_argument("--item",    default=None,  help="アイテムID（例: swing, tyrannosaurus）")
     parser.add_argument("--variant", type=int, default=1, help="バリエーション番号（デフォルト: 1）")
     parser.add_argument("--all",     action="store_true", help="全アイテムを生成")
+    parser.add_argument("--daily",       type=int,   default=0,    help="24h分散実験: 生成ユニット数（例: 100）")
+    parser.add_argument("--daily-hours", type=float, default=24.0, help="--daily の対象時間（デフォルト24h）")
     args = parser.parse_args()
 
     items = THEMES[args.type]
@@ -1320,7 +1659,29 @@ def main():
             log(r'  /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222 --user-data-dir="$HOME/.chatgpt-chrome-profile"')
             sys.exit(1)
 
-        state = {'browser': browser, 'page': browser.contexts[0].new_page(), 'interval_max': INTER_REQUEST_SLEEP_MAX}
+        state = {
+            'browser':       browser,
+            'page':          browser.contexts[0].new_page(),
+            'interval_max':  INTER_REQUEST_SLEEP_MAX,
+            'success_count': 0,   # 慣らし運転カウンター（0〜4: 慣らし、5〜: 通常）
+        }
+        attach_rate_limit_guard(state['page'])  # 429 Fail-Fast リスナーを装着
+
+        # --daily モード: スケジュールを事前生成してログ出力
+        if args.daily > 0:
+            global _DAILY_SCHEDULE
+            _DAILY_SCHEDULE = make_daily_schedule(args.daily, args.daily_hours)
+            now = time.time()
+            log(f"\n📅 Daily schedule: {args.daily}ユニット / {args.daily_hours}h")
+            log(f"   ギャップ範囲: {min(_DAILY_SCHEDULE):.0f}s〜{max(_DAILY_SCHEDULE):.0f}s")
+            log(f"   平均間隔: {sum(_DAILY_SCHEDULE)/len(_DAILY_SCHEDULE):.0f}s ({sum(_DAILY_SCHEDULE)/len(_DAILY_SCHEDULE)/60:.1f}分)")
+            t = now
+            for i, g in enumerate(_DAILY_SCHEDULE[:10]):
+                t += g
+                log(f"   [{i+1:3d}] +{g/60:4.0f}分  ({time.strftime('%H:%M', time.localtime(t))}ごろ)")
+            if len(_DAILY_SCHEDULE) > 10:
+                log(f"   ... 以下{len(_DAILY_SCHEDULE)-10}件省略")
+            log("")
 
         if args.all:
             for iid, item in items.items():
