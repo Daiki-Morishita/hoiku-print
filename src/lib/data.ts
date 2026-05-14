@@ -10146,6 +10146,23 @@ export const materials: Material[] = [
     createdAt: '2026-05-15T04:00',
     popular: false,
   },
+  {
+    id: 'lemon-rich-1',
+    title: 'かんきつるいのなかま',
+    description: '柑橘類が並ぶにぎやかな線画。',
+    ageMin: 4, ageMax: 6, difficulty: 4, duration: 30,
+    category: 'coloring', theme: 'fruits',
+    tags: ['lemon', 'くだもの', 'ぬりえ'],
+    tools: ['色えんぴつ'],
+    activityIdeas: ['好きな色で塗ってみよう', 'どんな味か考えながら塗ろう'],
+    imageUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/lemon-rich-1-illust.png',
+    illustUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/lemon-rich-1-illust.png',
+    illustVersion: 1,
+    imageStatus: 'pending_review',
+    pdfUrl: '',
+    createdAt: '2026-05-15T04:15',
+    popular: false,
+  },
 ]
 
 export type SortKey = 'newest' | 'popular' | 'favorites'
