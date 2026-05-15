@@ -128,6 +128,14 @@ ERROR_PHRASES = [
     "制限に達しました",
 ]
 
+# コンテンツポリシー拒否フレーズ（即リトライ、タイムアウト待ち不要）
+POLICY_PHRASES = [
+    "content policies",
+    "may violate our content",
+    "content policy",
+    "violate our",
+]
+
 # =============================================
 # テーマ定義: 公園
 # =============================================
@@ -1070,6 +1078,11 @@ def wait_for_image(page, timeout=240):
                 return ('ok', src)
         try:
             body_text = page.evaluate("() => document.body.innerText")
+            # コンテンツポリシー拒否を優先検知（タイムアウト240秒を待たずに即返す）
+            for phrase in POLICY_PHRASES:
+                if phrase in body_text:
+                    log(f"  ⚠️ コンテンツポリシー検知: \"{phrase}\"")
+                    return ('policy', None)
             for phrase in ERROR_PHRASES:
                 if phrase in body_text:
                     # UI に再開時刻が含まれていれば抽出してログ出力
@@ -1160,6 +1173,27 @@ def _pick_style() -> int:
         _RECENT_GROUPS.pop(0)
     log(f"  🎨 プロンプトスタイル: {chosen_group} / style {style}")
     return style
+
+
+def _simplify_scene(scene: str) -> str:
+    """
+    コンテンツポリシー対策: シーンの複雑な修飾を削ぎ落とす。
+    - 複数文の場合は1文目のみ残す
+    - 「にぎやかな構図」「〜が並ぶ」などの複雑さを示す語を除去
+    """
+    sentences = [s.strip() for s in scene.split('。') if s.strip()]
+    if len(sentences) > 1:
+        simplified = sentences[0] + '。'
+        log(f"  🔧 シーン簡略化: {scene[:30]}... → {simplified}")
+        return simplified
+    # 1文でも複雑な表現を削ぎ落とす
+    s = re.sub(r'[、。]*(にぎやかな|がいっぱい|複数の|たくさんの|〜が並ぶ)[^。]*', '', scene).strip()
+    if s and s != scene:
+        if not s.endswith('。'):
+            s += '。'
+        log(f"  🔧 シーン簡略化: {scene[:30]}... → {s}")
+        return s
+    return scene
 
 
 def build_prompt(scene: str, note: str, cond_items: list) -> str:
@@ -1481,6 +1515,8 @@ def generate_one(page, file_id, prompt, out_path, max_retries=3, interval_max=No
     if interval_max is None:
         interval_max = INTER_REQUEST_SLEEP_MAX
 
+    policy_error_count = 0  # コンテンツポリシー拒否の累計回数
+
     for attempt in range(1, max_retries + 1):
         log(f"  生成開始 (試行 {attempt}/{max_retries}): {file_id}")
         page.goto("https://chatgpt.com/", wait_until="domcontentloaded")
@@ -1494,7 +1530,12 @@ def generate_one(page, file_id, prompt, out_path, max_retries=3, interval_max=No
         human_move_and_click(page, box)  # マウスを自然に動かしてクリック
         human_pause(0.2, 0.6)
         box.evaluate("el => el.innerHTML = ''")
-        varied = build_prompt(prompt['scene'], prompt['note'], prompt['cond_items'])
+        # ポリシー拒否が1回以上あり最終試行 → シーンを簡略化して挑む
+        current_prompt = prompt
+        if policy_error_count > 0 and attempt == max_retries:
+            current_prompt = dict(prompt)
+            current_prompt['scene'] = _simplify_scene(prompt['scene'])
+        varied = build_prompt(current_prompt['scene'], current_prompt['note'], current_prompt['cond_items'])
         human_type(page, varied)         # ランダム速度でタイピング
         human_pause(0.4, 1.5)            # Enterを押す前のひと呼吸
         page.keyboard.press("Enter")
@@ -1509,6 +1550,11 @@ def generate_one(page, file_id, prompt, out_path, max_retries=3, interval_max=No
                 interval_max = jitter_sleep(interval_max, rate_limited=False, success_count=success_count)
                 return True, interval_max
             log("  DL失敗、リトライ")
+        elif status == 'policy':
+            policy_error_count += 1
+            log(f"  ⚠️ ポリシー拒否 ({policy_error_count}回目)、スタイル変更してリトライ")
+            delete_current_chat(page)
+            time.sleep(5)
         elif status == 'error':
             log("  ChatGPTエラー検知、リトライ")
             delete_current_chat(page)
