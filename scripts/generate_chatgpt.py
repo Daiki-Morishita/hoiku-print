@@ -1425,6 +1425,7 @@ def delete_current_chat(page):
         url = page.url
         m = re.search(r"/c/([0-9a-f-]+)", url)
         if not m:
+            log(f"  [削除スキップ] URL に会話IDなし: {url[:60]}")
             return False
         conv_id = m.group(1)
         result = page.evaluate("""async (id) => {
@@ -1434,10 +1435,16 @@ def delete_current_chat(page):
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({is_visible: false}),
             });
-            return r.ok;
+            return {ok: r.ok, status: r.status};
         }""", conv_id)
-        return bool(result)
-    except Exception:
+        if result and result.get('ok'):
+            log(f"  [削除OK] {conv_id[:8]}...")
+            return True
+        else:
+            log(f"  [削除失敗] status={result.get('status') if result else 'None'} id={conv_id[:8]}...")
+            return False
+    except Exception as e:
+        log(f"  [削除例外] {e}")
         return False
 
 
@@ -1466,10 +1473,12 @@ def cleanup_old_chats(page, threshold=20):
             }
             return {count: items.length, deleted};
         }""", threshold)
-        if result and result.get('deleted', 0) > 0:
-            log(f"  セッション整理: {result['count']}件中 {result['deleted']}件削除")
-    except Exception:
-        pass
+        if result and result.get('error'):
+            log(f"  [セッション整理失敗] API status={result['error']}")
+        elif result:
+            log(f"  [セッション整理] {result['count']}件検出 → {result['deleted']}件削除")
+    except Exception as e:
+        log(f"  [セッション整理例外] {e}")
 
 
 def jitter_sleep(current_max, rate_limited=False, success_count=0):
