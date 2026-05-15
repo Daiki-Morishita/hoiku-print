@@ -4,6 +4,7 @@
  * ⚠️ 本番環境では Basic Auth や環境変数チェックで保護すること
  *    例: ADMIN_SECRET を URL パラメータ or middleware で確認
  */
+export const dynamic = 'force-dynamic'
 import { materials } from '@/lib/data'
 import type { ImageStatus } from '@/lib/types'
 import { ImageUploader } from '@/components/admin/ImageUploader'
