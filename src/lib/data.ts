@@ -11846,6 +11846,23 @@ export const materials: Material[] = [
     createdAt: '2026-05-16T08:40',
     popular: false,
   },
+  {
+    id: 'potato-normal-2',
+    title: 'じゃがいもをきろう',
+    description: 'まるごと・カットじゃがいもの線画。',
+    ageMin: 4, ageMax: 6, difficulty: 3, duration: 20,
+    category: 'coloring', theme: 'vegetables',
+    tags: ['potato', 'やさい', 'ぬりえ'],
+    tools: ['色えんぴつ'],
+    activityIdeas: ['好きな色で塗ってみよう', 'どんな料理になるか考えながら塗ろう'],
+    imageUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/potato-normal-2-illust.png',
+    illustUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/potato-normal-2-illust.png',
+    illustVersion: 1,
+    imageStatus: 'pending_review',
+    pdfUrl: '',
+    createdAt: '2026-05-16T08:40',
+    popular: false,
+  },
 ]
 
 export type SortKey = 'newest' | 'popular' | 'favorites'
