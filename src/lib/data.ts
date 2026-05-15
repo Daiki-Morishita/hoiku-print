@@ -11455,6 +11455,23 @@ export const materials: Material[] = [
     createdAt: '2026-05-15T22:57',
     popular: false,
   },
+  {
+    id: 'tomato-simple-1',
+    title: 'かわいいトマト',
+    description: 'シンプルなトマトの線画。',
+    ageMin: 3, ageMax: 5, difficulty: 1, duration: 10,
+    category: 'coloring', theme: 'vegetables',
+    tags: ['tomato', 'やさい', 'ぬりえ'],
+    tools: ['クレヨン'],
+    activityIdeas: ['好きな色で塗ってみよう', 'どんな料理になるか考えながら塗ろう'],
+    imageUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/tomato-simple-1-illust.png',
+    illustUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/tomato-simple-1-illust.png',
+    illustVersion: 1,
+    imageStatus: 'pending_review',
+    pdfUrl: '',
+    createdAt: '2026-05-16T01:03',
+    popular: false,
+  },
 ]
 
 export type SortKey = 'newest' | 'popular' | 'favorites'
