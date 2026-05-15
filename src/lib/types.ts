@@ -34,6 +34,8 @@ export type Theme =
   | 'vehicles'      // のりもの
   | 'trains'        // 電車
   | 'food'          // 食べ物
+  | 'fruits'        // 果物
+  | 'vegetables'    // 野菜
   | 'sea'           // 海の生き物
   | 'insects'       // 虫
   | 'flowers'       // 花・植物
