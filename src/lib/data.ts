@@ -11846,6 +11846,23 @@ export const materials: Material[] = [
     createdAt: '2026-05-16T08:32',
     popular: false,
   },
+  {
+    id: 'potato-rich-1',
+    title: 'じゃがいもりょうり',
+    description: 'じゃがいも料理のにぎやかな線画。',
+    ageMin: 4, ageMax: 6, difficulty: 4, duration: 30,
+    category: 'coloring', theme: 'vegetables',
+    tags: ['potato', 'やさい', 'ぬりえ'],
+    tools: ['色えんぴつ'],
+    activityIdeas: ['好きな色で塗ってみよう', 'どんな料理になるか考えながら塗ろう'],
+    imageUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/potato-rich-1-illust.png',
+    illustUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/potato-rich-1-illust.png',
+    illustVersion: 1,
+    imageStatus: 'pending_review',
+    pdfUrl: '',
+    createdAt: '2026-05-16T08:32',
+    popular: false,
+  },
 ]
 
 export type SortKey = 'newest' | 'popular' | 'favorites'
