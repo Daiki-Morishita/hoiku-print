@@ -12441,6 +12441,23 @@ export const materials: Material[] = [
     createdAt: '2026-05-16T18:31',
     popular: false,
   },
+  {
+    id: 'cabbage-normal-1',
+    title: 'はものやさい',
+    description: '葉もの野菜が並ぶ線画。',
+    ageMin: 4, ageMax: 6, difficulty: 3, duration: 20,
+    category: 'coloring', theme: 'vegetables',
+    tags: ['cabbage', 'やさい', 'ぬりえ'],
+    tools: ['色えんぴつ'],
+    activityIdeas: ['好きな色で塗ってみよう', 'どんな料理になるか考えながら塗ろう'],
+    imageUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/cabbage-normal-1-illust.png',
+    illustUrl: 'https://hdhogsjmdowevijxooiq.supabase.co/storage/v1/object/public/materials/cabbage-normal-1-illust.png',
+    illustVersion: 1,
+    imageStatus: 'pending_review',
+    pdfUrl: '',
+    createdAt: '2026-05-17T04:17',
+    popular: false,
+  },
 ]
 
 export type SortKey = 'newest' | 'popular' | 'favorites'
