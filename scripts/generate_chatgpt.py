@@ -2170,7 +2170,7 @@ def main():
 
         if args.all:
             for iid, item in items.items():
-                for v in item["variants"]:
+                for v in sorted(item["variants"])[:1]:  # 1バリアントのみ生成
                     run_item(pw, state, iid, args.type, v, client)
                     time.sleep(10)
             # --all 時はここで1回だけpush（Vercelデプロイ節約）
