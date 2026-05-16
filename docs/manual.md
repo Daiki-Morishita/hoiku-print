@@ -1,128 +1,234 @@
 # ぬりえプリント 生成マニュアル
 
+> **このファイルが唯一の正。** 別PCでも `git pull` するだけで最新ルールを参照できる。
+> ルールを変更したら必ずここを更新してコミットすること。
+
+---
+
 ## 環境セットアップ（初回のみ）
 
-### 1. リポジトリのクローン
+```bash
 git clone https://github.com/Daiki-Morishita/hoiku-print.git
 cd hoiku-print
-
-### 2. Python依存インストール
 pip install playwright supabase pillow numpy
 playwright install chromium
 
-### 3. 環境変数の設定
 export SUPABASE_URL=https://hdhogsjmdowevijxooiq.supabase.co
 export SUPABASE_SECRET_KEY=<サービスロールキー>
-※ キーは別途共有する
+# または .env.local に記載（スクリプトが自動読み込み）
+```
 
-### 4. ChromeをCDPモードで起動
+---
+
+## ChromeをCDPモードで起動（毎回必要）
+
+```bash
 /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome \
   --remote-debugging-port=9222 \
   --user-data-dir="$HOME/.chatgpt-chrome-profile"
+```
 
 - 初回のみ: 起動したChromeで https://chatgpt.com にログイン
-- 2回目以降: プロファイルが保存されているので自動でログイン済み状態になる
+- 2回目以降: プロファイルが保存されているので自動でログイン済み状態
 - Chromeはスクリプト実行中ずっと起動したままにする
 
 ---
 
-## 恐竜テーマ（dinosaurs）
+## 実行コマンド
 
-### 実行
-python3 scripts/generate_dinosaur.py --theme tyrannosaurus --variant 1
-python3 scripts/generate_dinosaur.py --all
-
-### 恐竜リスト（計17種）
-肉食: tyrannosaurus, spinosaurus, velociraptor, allosaurus, giganotosaurus, therizinosaurus
-草食: triceratops, stegosaurus, brachiosaurus, ankylosaurus, parasaurolophus, pachycephalosaurus
-翼竜・海竜: pteranodon, mosasaurus, plesiosaurus
-古代哺乳類: mammoth, smilodon
-
----
-
-## 公園テーマ（park）
-
-### 実行
-python3 scripts/generate_park.py --item swing --variant 1
-python3 scripts/generate_park.py --all
-
-### アイテムリスト（計15種）
-swing, baby-swing, tire-swing, slide, spiral-slide, tunnel-slide,
-seesaw, sandbox, jungle-gym, horizontal-bar, merry-go-round,
-spring-rider, balance-beam, climbing-wall, water-play
-
-### レート制限対策
-アイテム間に60秒のウェイトを入れている。
-それでも「リクエストが多すぎます」が出た場合は generate_park.py の
-time.sleep(60) を長くする（120秒→180秒と段階的に増やす）。
-
----
-
-## 季節の行事テーマ（seasonal-events）
-
-### 実行
 ```bash
-python3 scripts/batch_seasonal_events.py --item hinamatsuri --variant 1
-python3 scripts/batch_seasonal_events.py --all --variant 1   # 1巡目
-python3 scripts/batch_seasonal_events.py --all --variant 2   # 2巡目（別場面）
-python3 scripts/batch_seasonal_events.py --all --variant 3   # 3巡目（別場面）
+# 全アイテムを24h分散で150枚/日ペースで生成
+python3 scripts/generate_chatgpt.py --type vegetables --all --daily 150
+
+# 単体アイテム（テスト用）
+python3 scripts/generate_chatgpt.py --type vegetables --item carrot --variant 1
 ```
 
-### アイテムリスト（計21種）
-- **春**: hinamatsuri, enrollment, childrensday, mothersday, excursion
-- **夏**: fathersday, tanabata, pool, summerfestival
-- **秋**: tsukimi, sports, imohori, halloween, shichigosan
-- **冬**: christmas, mochitsuki, newyear, setsubun
-- **通年**: graduation, birthday
+### テーマ一覧
 
-### バリアントの違い（-1/-2/-3）
-同じアイテム・同じユニットで構図・登場要素を変えた別バージョン。
-3バリアントで1アイテムを多角的にカバーする。
-
-### レート制限対策
-アイテム間60秒ウェイト（generate_park.py と同じ設定）。
-引っかかった場合は time.sleep の値を 120/180 と段階的に増やす。
+| type | 内容 |
+|---|---|
+| `park` | 公園・遊具 |
+| `dinosaurs` | 恐竜 |
+| `fruits` | くだもの |
+| `vegetables` | 野菜 |
 
 ---
 
-## 共通仕様
+## ChatGPTアカウント割り当て
 
-### スクリプトが自動でやること
-1. ChatGPT にプロンプトを送信（ユニットごとに新規チャット）
+複数アカウントでレート制限を分散。**PCごとにアカウントを固定。**
+
+| PC | アカウント |
+|---|---|
+| メインPC（Daiki） | Morishita Daiki |
+| サブPC（Akane） | Morishita Akane |
+
+同じテーマを2アカウントで同時生成してOK（ファイルIDが被らなければ競合しない）。
+
+---
+
+## スクリプトが自動でやること
+
+1. ChatGPTにプロンプトを送信（ユニットごとに新規チャット）
 2. 画像生成完了 or エラーを検知（最大4分待機）
-3. 画像を tmp_materials/{file_id}-illust.png に一時保存
-4. 背景を純白 #FFFFFF に補正（PIL処理）
-5. Supabase Storage にアップロード
+3. `tmp_materials/{file_id}-illust.png` に一時保存
+4. 背景を純白 #FFFFFF に補正（PIL処理・threshold=235）
+5. Supabase Storageにアップロード
 6. ChatGPTのチャットを削除
-7. src/lib/data.ts にエントリを追記
-8. git commit & push → Vercel が自動デプロイ
+7. `src/lib/data.ts` にエントリを追記
+8. `git commit`（pushは`--all`完了時に1回のみ）
 
-### エラー時の自動回復（3段階）
-通常: 最大3回リトライ（エラー検知 / タイムアウト / DL失敗）
-①: 3回全滅 → 60秒待機 → 1回再試行
-②: それでも失敗 → Chrome再起動 → CDP再接続 → 1回再試行
-③: それでも失敗 → スキップ・failed_ids.txt 記録・macOS通知 → 次へ
+---
 
-### ログの確認
-tail -f scripts/generate_dinosaur.log
-tail -f scripts/generate_park.log
+## Vercelデプロイ管理
 
-### 命名規則
-{アイテムID}-{難易度}-{バリアント番号}
-例: swing-simple-1 / tyrannosaurus-rich-2
+- Hobby プラン: **100デプロイ/日**（main への push 1回 = 1デプロイ）
+- `--all` 中は `git commit` のみ、全テーマ完了後に `git push` を1回
+- 単体実行時（`--item`）は完了後すぐpush
 
-難易度:
-- simple: 2〜3歳 / 1つのみ・背景なし
-- easy:   3歳   / シンプルな背景つき
-- normal: 4〜5歳 / 複数・場所がわかる背景
-- rich:   4〜6歳 / にぎやかな背景
+---
 
-### 並列生成（複数環境）
-- テーマ単位で環境を分担する（同じテーマを複数環境で同時生成しない）
-- 各環境で同じセットアップを行い、担当テーマだけ実行する
+## レート制限（ChatGPT Plus）
 
-### 注意事項
-- Chrome を閉じるとCDP接続エラーで落ちる
-- tmp_materials/ は毎週日曜3時に自動削除される（cron設定済み）
-- 新しいアイテムを追加する場合は各スクリプトの辞書にエントリを追記する
-- 用語定義は docs/terms.md を参照
+- 3時間ローリングウィンドウで40〜50リクエスト
+- `--daily 150` = 150ユニット/24h分散（平均9〜10分インターバル）
+- 429検知 → `os._exit(1)` で即終了（Retry-Afterをログに記録）
+- 慣らし運転: 起動後0〜1回目は5〜10分待機、5回目以降で通常モード
+
+---
+
+## エラー自動回復（3段階）
+
+1. 通常: 最大3回リトライ
+2. ①: 60秒待機 → 再試行
+3. ②: Chrome再起動 → CDP再接続 → 再試行
+4. ③: スキップ → `scripts/failed_ids.txt` 記録 + macOS通知 → 次へ
+
+---
+
+## 就寝・長時間離席
+
+```bash
+caffeinate -i &       # システムスリープ防止
+pmset displaysleepnow # ディスプレイだけOFF
+# 復帰後: killall caffeinate
+```
+
+---
+
+## プロンプト共通ルール（全テーマ）
+
+```
+背景は必ず純白 #FFFFFF
+線画スタイル（塗りつぶしなし）
+輪郭線は太くはっきりと描き、細い線や掠れた線は使わない
+A4横長・高画質
+文字・テキスト・ラベル・枠線・フレームは一切入れない
+イラスト1点のみ・コマ割りや複数構成にしない
+```
+
+---
+
+## 難易度別構図パターン
+
+| 難易度 | 対象年齢 | 構図 |
+|---|---|---|
+| simple | 2〜3歳 | 対象1個のみ・背景なし・余白たっぷり |
+| easy | 3歳 | 複数個を自然に並べた構図 or まるごと＋日常でよく見る形（切り方・食べ方）を添える |
+| normal | 3〜5歳 | まるごと＋カット版 or 料理前の材料が並ぶ構図 |
+| rich | 4〜6歳 | 人物が登場するにぎやかな場面（複数キャラ＋背景）。野菜・果物テーマは収穫・料理の1シーンに絞る |
+
+---
+
+## 野菜・果物テーマの追加ルール
+
+### 食べ物全般（FOOD_COND_ITEMS）に適用
+
+- 食べ物・野菜・果物に顔・目・口などの表情はつけない
+- 収穫・畑シーンに切断済みの食材を描かない（収穫はまるごとの状態のみ）
+- 食卓・料理シーンは現実的な1つの食事場面に絞る（カレー＋シチュー＋ポテトを同時に並べるなど非現実的な組み合わせNG）
+- 食器・料理・食べ物のサイズは人物に対して現実的なスケールで描く（子どもの体と同じかそれ以上に大きい皿・鍋はNG）
+
+### 野菜専用（VEGETABLE_COND_ITEMS）の追加条件
+
+- 野菜の表面にはその野菜らしいスジや曲線を1〜3本程度シンプルに入れる（芽・点々・複雑な模様・過剰なディテールはNG）
+- 人物と野菜のサイズ比は現実的に（野菜が人物の頭や体と同じかそれ以上に巨大はNG・野菜は人物の手に収まる〜腕程度のサイズ感）
+- 登場する人物には必ず顔（目・鼻・口・笑顔などの表情）を描く（顔なしはNG）
+- 登場人物は1〜2人まで（多人数・にぎやかすぎる構図はNG）
+- 収穫・畑シーンに切断済みの野菜を描かない。料理シーンに土付き・茎付きの野菜を描かない（場面の文脈と食材の状態を必ず一致させる）
+- 畑のシーンは主役の野菜だけを育てている畑として描く（にんじん畑はにんじんのみ）。異なる種類の野菜を同じ畑に大量に混ぜない
+- 野菜の大きさは実物の大きさに忠実に描く（ブロッコリーは子どもの手に収まる程度・にんじんは腕の長さ程度）。木のように大きくなるのはNG
+
+### 描画前の検索指示（野菜・果物）
+
+生成前に `{野菜名} 写真` でウェブ検索し、実物の形・断面・シーンの状態を確認してから描く。
+→ スクリプトが自動でプロンプト冒頭に挿入する。
+
+---
+
+## 参照画像システム
+
+`scripts/refs/{item}-ref.png` を置くと、ChatGPT生成時に自動添付される。
+
+```
+scripts/refs/
+  broccoli-ref.png   # 設定済み（クラスター形状・適度な凹凸）
+  carrot-ref.png     # 必要に応じて追加
+```
+
+- スクリプトが `attach_ref_image(page, item_id)` を自動呼び出し
+- 添付時に「このディテール感・線の太さを参考に」と指示が付く
+- 新しいアイテムは ref ファイルを置くだけでOK
+
+---
+
+## アンチパターン（過去の失敗と対策）
+
+| 問題 | 原因 | 対策 |
+|---|---|---|
+| 野菜が豆・卵のように滑らかで識別できない | 輪郭を「シンプル」と指示しすぎ | 輪郭のでこぼこ・形状を具体的に指定 |
+| ブロッコリーのテクスチャが点々で塗りにくい | 「密集したこぶ」と指示 | こぶ数を10〜20個程度に制限・stipple禁止 |
+| 野菜が人物と同じか木サイズになる | 「大きく描く」指示の副作用 | 実物サイズを具体的に記載（手に収まる程度等） |
+| 畑にいろんな野菜が混在 | 「にぎやかな野菜畑」という記述 | 「○○畑は○○のみ」と明示 |
+| 収穫シーンに切断された野菜が描かれる | 料理シーンとの混同 | 場面ごとに食材の状態を明記 |
+| 1つの食卓にカレー・シチュー・ポテトが全部並ぶ | 複数料理を列挙 | 1食事シーンに絞り単一料理を指定 |
+| 人物に顔がない | 「食べ物に顔をつけない」ルールが人物にも適用された | 「人物には必ず顔を描く」を明記 |
+| 食べ物に顔がついた | 指定なし | FOOD_COND_ITEMSで「顔はつけない」を追加 |
+| じゃがいもの芽が大量に描かれる | 表面ディテールの指示が過剰 | note に「芽（目のような突起）は一切描かない」と明記 |
+
+---
+
+## tmp管理
+
+- `tmp_materials/` = 生成済みの中間ファイル置き場（Supabase upload後も残る）
+- **スクリプト起動時に90日以上前のファイルを自動削除**（`cleanup_tmp_materials(days=90)`）
+- 手動でリセットしたい場合: `rm tmp_materials/{item}-*.png` してスクリプト再起動
+
+### 特定アイテムの再生成手順
+
+1. `src/lib/data.ts` から該当IDのエントリを削除
+2. `tmp_materials/{file_id}-illust.png` を削除
+3. スクリプトを再起動（スキップされず再生成される）
+
+---
+
+## 並列生成（複数環境）
+
+- テーマ単位で環境を分担（同じテーマを複数環境で同時生成しない）
+- `data.ts` への書き込みは `fcntl.LOCK_EX` でロック（競合回避）
+- push前に `git pull --rebase` を実行
+
+---
+
+## 主要関数リファレンス（`scripts/generate_chatgpt.py`）
+
+| 関数 | 役割 |
+|---|---|
+| `build_prompt(scene, note, cond_items)` | 20スタイルランダム選択でプロンプト生成 |
+| `attach_ref_image(page, item_id)` | 参照画像添付（refs/{item}-ref.png） |
+| `attach_rate_limit_guard(page)` | 429 Fail-Fast リスナー |
+| `make_daily_schedule(n_items, hours)` | 24h分散スケジューラー |
+| `jitter_sleep(max, rate_limited, success_count)` | 慣らし運転対応バックオフ |
+| `cleanup_tmp_materials(days=90)` | 起動時に古いtmpファイルを自動削除 |
+| `human_pause / human_move_and_click / human_type` | 人間らしい操作ヘルパー |
