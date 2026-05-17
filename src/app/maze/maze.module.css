@@ -130,8 +130,8 @@
 .maze-stage {
   background: #fff; border-radius: 20px; border: 1.5px solid #fff;
   box-shadow: 0 0 0 2px #E8DFD2, 0 4px 0 #EFE5D2;
-  /* 上下/左右ともキャラ分の余白を確保（小さく抑える） */
-  padding: 64px 64px; margin-bottom: 14px; position: relative;
+  /* 上下は triangle 系のキャラ余白として 64px 確保、左右は square/triangle 用 56px */
+  padding: 64px 56px; margin-bottom: 14px; position: relative;
   display: flex; align-items: center; justify-content: center;
 }
 /* フレームは SVG の実寸幅に合わせる（inline-block + width:fit-content）。
@@ -141,7 +141,7 @@
   width: 100%;
   max-width: 100%;
 }
-.maze-frame > :global(svg) { width: 100%; height: auto; max-height: 125mm; display: block; }
+.maze-frame > :global(svg) { width: 100%; height: auto; max-height: 145mm; display: block; }
 .char-at-opening {
   position: absolute;
   display: flex; flex-direction: column; align-items: center; gap: 4px;

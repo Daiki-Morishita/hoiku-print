@@ -293,10 +293,12 @@ def find_polar_maze(diff_key: str, used_seeds: set[int], max_attempts: int = 500
     rings, sectors = cfg['rings'], cfg['sectors']
     tmin, tmax = cfg['turns']
     pmin, pmax = cfg['path']
-    # スタート: 外周 sector 0 から外側(OUT)へ
-    # ゴール: 外周 反対側 (sectors//2) から外側(OUT)へ
-    start = (rings - 1, 0)
-    goal = (rings - 1, sectors // 2)
+    # うさぎ(スタート)は左、にんじん(ゴール)は右に統一。
+    # SVG座標: 角度 0=右、π=左、π/2=下、3π/2=上
+    # 左 = 角度 π → sector = sectors/2
+    # 右 = 角度 0 → sector = 0
+    start = (rings - 1, sectors // 2)
+    goal = (rings - 1, 0)
     for seed in range(1, max_attempts + 1):
         if seed in used_seeds:
             continue
