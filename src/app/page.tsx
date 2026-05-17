@@ -45,12 +45,12 @@ function getTodaysPick() {
 
 // Theme summary with representative material
 const THEMES = [
-  { key: 'animals', label: '動物', sample: 'giraffe-easy-1', href: '/category/theme/animals' },
-  { key: 'dinosaurs', label: '恐竜', sample: 'tyrannosaurus-easy-1', href: '/category/theme/dinosaurs' },
-  { key: 'vehicles', label: '乗り物', sample: 'fire-truck-easy', href: '/category/theme/vehicles' },
-  { key: 'sea', label: '海', sample: 'dolphin-easy', href: '/category/theme/sea' },
-  { key: 'insects', label: '虫', sample: 'butterfly-easy-1', href: '/category/theme/insects' },
-  { key: 'fruits', label: '食べ物', sample: 'apple-easy-1', href: '/category/theme/fruits' },
+  { key: 'animals',   label: '動物',     emoji: '🐾', color: '#E66A2C', sample: 'giraffe-easy-1',       href: '/category/theme/animals' },
+  { key: 'dinosaurs', label: '恐竜',     emoji: '🦕', color: '#7AA875', sample: 'tyrannosaurus-easy-1', href: '/category/theme/dinosaurs' },
+  { key: 'vehicles',  label: '乗り物',   emoji: '🚒', color: '#C25A6E', sample: 'fire-truck-easy',      href: '/category/theme/vehicles' },
+  { key: 'sea',       label: '海',       emoji: '🐟', color: '#4FA7B8', sample: 'dolphin-easy',         href: '/category/theme/sea' },
+  { key: 'insects',   label: '虫',       emoji: '🐛', color: '#7AA875', sample: 'butterfly-easy-1',     href: '/category/theme/insects' },
+  { key: 'fruits',    label: '食べ物',   emoji: '🍎', color: '#E8B838', sample: 'apple-easy-1',         href: '/category/theme/fruits' },
 ] as const
 
 function getThemeSample(themeKey: string, sampleId: string) {
@@ -105,18 +105,17 @@ export default function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
       {/* ===== HERO ===== */}
-      <section className="pt-12 md:pt-16 pb-8 text-center relative overflow-hidden">
-        {/* Playful background dots */}
-        <div className="absolute top-12 left-8 w-3 h-3 rounded-full bg-[#4FA7B8]/40 hidden md:block" />
-        <div className="absolute top-20 right-16 w-4 h-4 rounded-full bg-[#E8B838]/40 hidden md:block" />
-        <div className="absolute bottom-8 left-20 w-2.5 h-2.5 rounded-full bg-[#C25A6E]/40 hidden md:block" />
-        <div className="absolute bottom-16 right-10 w-3 h-3 rounded-full bg-[#E66A2C]/30 hidden md:block" />
+      <section className="pt-12 md:pt-20 pb-10 text-center relative overflow-hidden">
+        {/* Decorative background: crayons + dots + scribbles */}
+        <KidsHeroDecor />
 
         <div className="max-w-[1280px] mx-auto px-6 relative">
-          <div className="font-rounded text-[12px] md:text-[13px] text-primary tracking-[0.25em] mb-4 font-bold">
-            ✿ 今日は何をぬる？ ✿
+          <div className="font-rounded text-[12px] md:text-[13px] text-primary tracking-[0.25em] mb-4 font-bold inline-flex items-center gap-2">
+            <span className="text-base">🌸</span>
+            今日は何をぬる？
+            <span className="text-base">🌸</span>
           </div>
-          <h1 className="font-rounded text-[34px] md:text-[54px] font-black leading-[1.35] tracking-[0.02em] mb-6">
+          <h1 className="font-rounded text-[34px] md:text-[58px] font-black leading-[1.35] tracking-[0.02em] mb-6">
             先生たちと、<br className="md:hidden" />
             <span className="text-primary">子どもたちへ</span>。
           </h1>
@@ -138,24 +137,27 @@ export default function HomePage() {
             </button>
           </form>
 
-          {/* Tag suggestions */}
-          <div className="text-[13px] text-muted-foreground max-w-2xl mx-auto">
-            <span className="mr-2">よく検索されています：</span>
-            {[
-              { label: 'きりん', q: 'きりん' },
-              { label: 'しんかんせん', q: '新幹線' },
-              { label: '2歳児向け', q: '?age=2', isFilter: true },
-              { label: '親子の動物', q: '親子' },
-              { label: 'ティラノサウルス', q: 'ティラノ' },
-            ].map((t, i) => (
-              <Link
-                key={i}
-                href={t.isFilter ? `/materials${t.q}` : `/materials?search=${encodeURIComponent(t.q)}`}
-                className="text-accent hover:text-primary mr-3 border-b border-dotted border-accent hover:border-primary transition-colors"
-              >
-                {t.label}
-              </Link>
-            ))}
+          {/* Tag suggestions — cute pill chips */}
+          <div className="max-w-2xl mx-auto">
+            <div className="text-[12px] text-muted-foreground mb-3 font-medium">よく検索されています</div>
+            <div className="flex flex-wrap justify-center gap-2">
+              {[
+                { label: 'きりん', emoji: '🦒', q: 'きりん', color: '#E8B838' },
+                { label: 'しんかんせん', emoji: '🚄', q: '新幹線', color: '#4FA7B8' },
+                { label: '2歳児向け', emoji: '👶', q: '?age=2', isFilter: true, color: '#E66A2C' },
+                { label: '親子の動物', emoji: '🐻', q: '親子', color: '#C25A6E' },
+                { label: 'ティラノ', emoji: '🦖', q: 'ティラノ', color: '#7AA875' },
+              ].map((t, i) => (
+                <Link
+                  key={i}
+                  href={t.isFilter ? `/materials${t.q}` : `/materials?search=${encodeURIComponent(t.q)}`}
+                  className="inline-flex items-center gap-1.5 bg-white border-2 px-3 py-1.5 rounded-full text-[12px] font-bold hover:-translate-y-0.5 transition-all shadow-sm"
+                  style={{ borderColor: t.color, color: t.color }}
+                >
+                  <span>{t.emoji}</span>{t.label}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -163,10 +165,14 @@ export default function HomePage() {
       {/* ===== TODAY'S PICK ===== */}
       <section className="pb-12">
         <div className="max-w-[1080px] mx-auto px-6">
-          <div className="bg-white border border-border rounded-xl p-7 md:p-10 grid md:grid-cols-2 gap-8 md:gap-10 items-center shadow-sm">
+          <div className="bg-white border-2 border-[#E8B838]/40 rounded-2xl p-7 md:p-10 grid md:grid-cols-2 gap-8 md:gap-10 items-center shadow-sm relative">
+            {/* Cute ribbon */}
+            <div className="absolute -top-3 left-6 md:left-10 inline-flex items-center gap-1.5 bg-[#E66A2C] text-white px-4 py-1.5 rounded-full font-rounded font-black text-[12px] shadow-md border-2 border-white">
+              <span>🌟</span>きょうのいちおし
+            </div>
             <div>
-              <div className="font-mincho text-[11px] text-muted-foreground tracking-[0.2em] mb-3">
-                No. {String(materials.indexOf(todaysPick) + 1).padStart(3, '0')}　　今日のいちおし
+              <div className="font-mincho text-[11px] text-muted-foreground tracking-[0.2em] mb-3 mt-2">
+                No. {String(materials.indexOf(todaysPick) + 1).padStart(3, '0')}
               </div>
               <h2 className="font-rounded text-[26px] md:text-[34px] font-black leading-[1.3] mb-4">
                 {todaysPick.title}
@@ -193,9 +199,9 @@ export default function HomePage() {
               </div>
               <Link
                 href={`/materials/${todaysPick.id}`}
-                className="inline-flex items-center gap-2 bg-foreground text-background px-7 py-3 rounded text-[14px] font-medium hover:bg-primary transition-colors"
+                className="inline-flex items-center gap-2 bg-primary text-white px-7 py-3 rounded-full text-[14px] font-rounded font-black hover:-translate-y-0.5 transition-all shadow-md"
               >
-                使ってみる
+                <span>🖍️</span>つかってみる
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -212,10 +218,11 @@ export default function HomePage() {
         <div className="max-w-[1280px] mx-auto px-6">
           <SectionHead
             kicker="No. 01"
-            title="人気の教材"
+            title="人気のぬりえ"
             count={`トップ ${popular.length}`}
             href="/materials"
             subtitle="過去30日でよく印刷されている教材"
+            emoji="🌟"
           />
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
             {popular.map(material => (
@@ -233,6 +240,7 @@ export default function HomePage() {
             title="テーマで探す"
             count={`全${THEMES.length}カテゴリ`}
             subtitle="お子さま・園児が好きなテーマからお選びください"
+            emoji="🎨"
           />
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
             {THEMES.map(theme => {
@@ -242,8 +250,13 @@ export default function HomePage() {
                 <Link
                   key={theme.key}
                   href={theme.href}
-                  className="group bg-white border border-border rounded-lg overflow-hidden hover:border-primary transition-all hover:-translate-y-0.5"
+                  className="group bg-white border-2 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all relative shadow-sm hover:shadow-md"
+                  style={{ borderColor: theme.color }}
                 >
+                  {/* Emoji corner badge */}
+                  <div className="absolute top-2 left-2 z-10 w-9 h-9 rounded-full flex items-center justify-center text-[20px] shadow-sm border-2 border-white" style={{ background: theme.color }}>
+                    {theme.emoji}
+                  </div>
                   <div className="aspect-[1.414/1] bg-background flex items-center justify-center overflow-hidden">
                     {sample?.imageUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -251,7 +264,7 @@ export default function HomePage() {
                     ) : null}
                   </div>
                   <div className="p-3 text-center">
-                    <div className="font-rounded text-[15px] font-black mb-0.5">{theme.label}</div>
+                    <div className="font-rounded text-[16px] font-black mb-0.5" style={{ color: theme.color }}>{theme.label}</div>
                     <div className="text-[10px] text-muted-foreground font-medium">{count}点</div>
                   </div>
                 </Link>
@@ -268,6 +281,7 @@ export default function HomePage() {
             kicker="No. 03"
             title="年齢で探す"
             subtitle="2歳のはじめてから、6歳の力作まで"
+            emoji="🎈"
           />
           <div className="grid grid-cols-5 gap-2 md:gap-3">
             {[2, 3, 4, 5, 6].map((age, i) => {
@@ -318,8 +332,9 @@ export default function HomePage() {
         <div className="max-w-[1280px] mx-auto px-6">
           <SectionHead
             kicker="No. 04"
-            title="難易度で探す"
+            title="むずかしさで探す"
             subtitle="お子さまの発達段階に合わせて選べる4段階"
+            emoji="⭐"
           />
           <div className="grid md:grid-cols-2 gap-3 md:gap-4">
             {[
@@ -359,6 +374,7 @@ export default function HomePage() {
             count="ぬりえ完全ガイド"
             href="/columns"
             subtitle="保育士・幼児教育の現場で役立つ知識を編集部が解説"
+            emoji="📖"
           />
           <div className="grid lg:grid-cols-[2fr_1fr] gap-6">
             <Link
@@ -408,6 +424,7 @@ export default function HomePage() {
             kicker="No. 06"
             title="よくある質問"
             subtitle="お問い合わせの多い質問にお答えします"
+            emoji="💬"
           />
           <div className="bg-white border border-border rounded-lg">
             {FAQS.map((faq, i) => (
@@ -432,10 +449,10 @@ export default function HomePage() {
       </section>
 
       {/* ===== CTA ===== */}
-      <section className="py-16 md:py-20 border-t border-border">
+      <section className="py-16 md:py-20 border-t border-border bg-gradient-to-b from-background to-[#FFF3E0]/60">
         <div className="max-w-[860px] mx-auto px-6 text-center">
-          <div className="font-mincho text-[11px] text-primary tracking-[0.25em] mb-4">
-            — INVITATION —
+          <div className="font-rounded text-[12px] text-primary tracking-[0.2em] mb-4 font-black inline-flex items-center gap-2">
+            <span>💌</span>INVITATION<span>💌</span>
           </div>
           <h2 className="font-rounded text-[28px] md:text-[38px] font-black leading-[1.4] mb-4">
             保育の現場を、<br />
@@ -447,9 +464,9 @@ export default function HomePage() {
           </p>
           <Link
             href="/materials"
-            className="inline-flex items-center gap-2 bg-foreground text-background px-8 py-3.5 rounded text-[14px] font-medium hover:bg-primary transition-colors"
+            className="inline-flex items-center gap-2 bg-primary text-white px-8 py-3.5 rounded-full text-[14px] font-rounded font-black hover:-translate-y-0.5 transition-all shadow-md"
           >
-            すべての教材を見る
+            <span>🎨</span>ぜんぶの教材を見る
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -489,12 +506,14 @@ function SectionHead({
   count,
   href,
   subtitle,
+  emoji,
 }: {
   kicker?: string
   title: string
   count?: string
   href?: string
   subtitle?: string
+  emoji?: string
 }) {
   return (
     <div className="mb-6 md:mb-8">
@@ -505,9 +524,10 @@ function SectionHead({
               {kicker}
             </div>
           )}
-          <div className="flex items-baseline gap-3">
+          <div className="flex items-baseline gap-2.5">
+            {emoji && <span className="text-[22px] md:text-[26px] leading-none">{emoji}</span>}
             <h2 className="font-rounded text-[22px] md:text-[28px] font-black">{title}</h2>
-            {count && <span className="text-[11px] text-primary font-bold">{count}</span>}
+            {count && <span className="text-[11px] text-primary font-bold ml-1">{count}</span>}
           </div>
         </div>
         {href && (
@@ -517,6 +537,77 @@ function SectionHead({
         )}
       </div>
       {subtitle && <p className="text-[12px] text-muted-foreground mt-2">{subtitle}</p>}
+    </div>
+  )
+}
+
+function KidsHeroDecor() {
+  return (
+    <div aria-hidden className="absolute inset-0 pointer-events-none">
+      {/* Subtle paper texture base via gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#FFF1D6]/40 via-[#FFF8EC] to-[#FFF8EC]" />
+
+      {/* Decorative SVG: crayons, dots, swirls */}
+      <svg
+        className="absolute inset-0 w-full h-full"
+        viewBox="0 0 1280 600"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        {/* Crayon 1 — left */}
+        <g transform="translate(80,120) rotate(-22)">
+          <rect x="0" y="0" width="14" height="80" rx="2" fill="#E66A2C" />
+          <polygon points="0,0 7,-12 14,0" fill="#E66A2C" />
+          <rect x="2" y="60" width="10" height="3" fill="#fff" opacity="0.4" />
+        </g>
+        {/* Crayon 2 — right */}
+        <g transform="translate(1170,80) rotate(18)">
+          <rect x="0" y="0" width="14" height="80" rx="2" fill="#4FA7B8" />
+          <polygon points="0,0 7,-12 14,0" fill="#4FA7B8" />
+          <rect x="2" y="60" width="10" height="3" fill="#fff" opacity="0.4" />
+        </g>
+        {/* Crayon 3 — bottom left */}
+        <g transform="translate(120,440) rotate(35)">
+          <rect x="0" y="0" width="14" height="80" rx="2" fill="#E8B838" />
+          <polygon points="0,0 7,-12 14,0" fill="#E8B838" />
+          <rect x="2" y="60" width="10" height="3" fill="#fff" opacity="0.4" />
+        </g>
+        {/* Crayon 4 — bottom right */}
+        <g transform="translate(1130,440) rotate(-25)">
+          <rect x="0" y="0" width="14" height="80" rx="2" fill="#C25A6E" />
+          <polygon points="0,0 7,-12 14,0" fill="#C25A6E" />
+          <rect x="2" y="60" width="10" height="3" fill="#fff" opacity="0.4" />
+        </g>
+
+        {/* Color drops */}
+        <circle cx="220" cy="80"   r="6"   fill="#E66A2C" opacity="0.6" />
+        <circle cx="1050" cy="200" r="9"   fill="#4FA7B8" opacity="0.5" />
+        <circle cx="180" cy="320"  r="5"   fill="#E8B838" opacity="0.6" />
+        <circle cx="1080" cy="400" r="7"   fill="#C25A6E" opacity="0.5" />
+        <circle cx="320" cy="520"  r="6"   fill="#7AA875" opacity="0.55" />
+        <circle cx="960" cy="520"  r="5"   fill="#E66A2C" opacity="0.5" />
+        <circle cx="60"  cy="240"  r="4"   fill="#4FA7B8" opacity="0.5" />
+        <circle cx="1220" cy="280" r="4"   fill="#E8B838" opacity="0.55" />
+
+        {/* Scribbles (hand-drawn swirls) */}
+        <path d="M 250 150 Q 280 140 300 160 T 340 150" stroke="#E66A2C" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.35" />
+        <path d="M 940 130 Q 970 120 990 140 T 1030 130" stroke="#4FA7B8" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.35" />
+        <path d="M 300 470 Q 320 460 340 470 T 380 460" stroke="#C25A6E" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.3" />
+
+        {/* Stars */}
+        <g transform="translate(380,90)">
+          <path d="M 0 -10 L 3 -3 L 10 -3 L 4 2 L 6 9 L 0 5 L -6 9 L -4 2 L -10 -3 L -3 -3 Z" fill="#E8B838" opacity="0.7" />
+        </g>
+        <g transform="translate(900,500) scale(0.8)">
+          <path d="M 0 -10 L 3 -3 L 10 -3 L 4 2 L 6 9 L 0 5 L -6 9 L -4 2 L -10 -3 L -3 -3 Z" fill="#E66A2C" opacity="0.55" />
+        </g>
+        <g transform="translate(1000,90) scale(0.7)">
+          <path d="M 0 -10 L 3 -3 L 10 -3 L 4 2 L 6 9 L 0 5 L -6 9 L -4 2 L -10 -3 L -3 -3 Z" fill="#4FA7B8" opacity="0.6" />
+        </g>
+
+        {/* Hearts */}
+        <path d="M 480 540 c -4 -8 -16 -8 -16 2 c 0 8 16 18 16 18 s 16 -10 16 -18 c 0 -10 -12 -10 -16 -2 z" fill="#C25A6E" opacity="0.45" />
+        <path d="M 800 60 c -4 -8 -16 -8 -16 2 c 0 8 16 18 16 18 s 16 -10 16 -18 c 0 -10 -12 -10 -16 -2 z" fill="#E66A2C" opacity="0.4" />
+      </svg>
     </div>
   )
 }

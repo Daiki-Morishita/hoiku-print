@@ -36,15 +36,15 @@ export function MaterialCard({ material }: MaterialCardProps) {
         )}
         {material.popular && (
           <div className="absolute top-2 left-2">
-            <span className="inline-flex items-center gap-1 text-[10px] bg-primary text-white px-2 py-0.5 rounded-full font-medium">
-              <Star className="w-2.5 h-2.5" />
-              人気
+            <span className="inline-flex items-center gap-1 text-[10px] bg-[#E66A2C] text-white px-2.5 py-1 rounded-full font-black shadow-sm border-2 border-white">
+              <Star className="w-3 h-3 fill-white" />
+              にんき
             </span>
           </div>
         )}
         <div className="absolute top-2 right-2">
-          <span className="text-[10px] bg-white/90 backdrop-blur px-2 py-0.5 rounded-full font-medium border border-border text-foreground">
-            {DIFFICULTY_LABELS[material.difficulty]}
+          <span className="inline-flex items-center gap-1 text-[10px] bg-white px-2.5 py-1 rounded-full font-bold border-2 border-[#E8B838] text-[#A87716] shadow-sm">
+            {'★'.repeat(material.difficulty)}
           </span>
         </div>
       </div>

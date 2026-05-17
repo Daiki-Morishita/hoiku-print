@@ -32,6 +32,84 @@ const websiteJsonLd = {
   description: '大人・シニア向けの本格塗り絵プリント無料配布。曼荼羅・植物・風景。',
 }
 
+function AdultHeroDecor() {
+  return (
+    <div aria-hidden className="absolute inset-0 pointer-events-none">
+      {/* Subtle gradient base */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#E8E0CC]/30 via-transparent to-[#F3EFE6]" />
+
+      {/* Decorative SVG: mandala lines, botanical leaves, dotted patterns */}
+      <svg
+        className="absolute inset-0 w-full h-full"
+        viewBox="0 0 1280 600"
+        preserveAspectRatio="xMidYMid slice"
+      >
+        <defs>
+          <pattern id="adultDots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="0.7" fill="#2D5043" opacity="0.20" />
+          </pattern>
+        </defs>
+
+        {/* Top dotted band */}
+        <rect x="0" y="0" width="1280" height="600" fill="url(#adultDots)" opacity="0.5" />
+
+        {/* Left mandala arc */}
+        <g transform="translate(120,300)" stroke="#2D5043" strokeWidth="0.7" fill="none" opacity="0.35">
+          <circle r="100" />
+          <circle r="80" />
+          <circle r="60" />
+          <circle r="40" />
+          {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
+            <line key={deg} x1="0" y1="0" x2={100 * Math.cos((deg * Math.PI) / 180)} y2={100 * Math.sin((deg * Math.PI) / 180)} />
+          ))}
+          {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
+            <circle key={`p-${deg}`} cx={100 * Math.cos((deg * Math.PI) / 180)} cy={100 * Math.sin((deg * Math.PI) / 180)} r="3" fill="#2D5043" stroke="none" />
+          ))}
+        </g>
+
+        {/* Right mandala arc */}
+        <g transform="translate(1160,300)" stroke="#2D5043" strokeWidth="0.7" fill="none" opacity="0.30">
+          <circle r="120" />
+          <circle r="95" />
+          <circle r="70" />
+          <circle r="45" />
+          <circle r="20" />
+          {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
+            <line key={deg} x1="0" y1="0" x2={120 * Math.cos((deg * Math.PI) / 180)} y2={120 * Math.sin((deg * Math.PI) / 180)} />
+          ))}
+        </g>
+
+        {/* Botanical leaves */}
+        <g transform="translate(240,80)" stroke="#2D5043" strokeWidth="1" fill="none" opacity="0.30">
+          <path d="M 0 0 Q 20 -10 30 -25 Q 25 -45 10 -55 Q -5 -45 -8 -25 Q 0 -10 0 0 Z" />
+          <line x1="0" y1="0" x2="10" y2="-55" />
+        </g>
+        <g transform="translate(960,80) rotate(180)" stroke="#2D5043" strokeWidth="1" fill="none" opacity="0.25">
+          <path d="M 0 0 Q 20 -10 30 -25 Q 25 -45 10 -55 Q -5 -45 -8 -25 Q 0 -10 0 0 Z" />
+          <line x1="0" y1="0" x2="10" y2="-55" />
+        </g>
+        <g transform="translate(180,520) rotate(45)" stroke="#2D5043" strokeWidth="1" fill="none" opacity="0.25">
+          <path d="M 0 0 Q 20 -10 30 -25 Q 25 -45 10 -55 Q -5 -45 -8 -25 Q 0 -10 0 0 Z" />
+          <line x1="0" y1="0" x2="10" y2="-55" />
+        </g>
+        <g transform="translate(1080,540) rotate(-30)" stroke="#2D5043" strokeWidth="1" fill="none" opacity="0.25">
+          <path d="M 0 0 Q 20 -10 30 -25 Q 25 -45 10 -55 Q -5 -45 -8 -25 Q 0 -10 0 0 Z" />
+          <line x1="0" y1="0" x2="10" y2="-55" />
+        </g>
+
+        {/* Seigaiha (青海波) corner — bottom right */}
+        <g transform="translate(900,460)" stroke="#2D5043" strokeWidth="0.8" fill="none" opacity="0.20">
+          {[0, 1, 2, 3, 4, 5].map((row) =>
+            [0, 1, 2, 3, 4, 5].map((col) => (
+              <path key={`${row}-${col}`} d={`M ${col * 30} ${row * 18} a 18 18 0 0 1 36 0`} />
+            ))
+          )}
+        </g>
+      </svg>
+    </div>
+  )
+}
+
 export default function AdultHomePage() {
   const popular = getPopularMaterials(8, 'adult')
 
@@ -46,8 +124,9 @@ export default function AdultHomePage() {
       </div>
 
       {/* ===== HERO ===== */}
-      <section className="pt-16 md:pt-24 pb-12 text-center">
-        <div className="max-w-[1080px] mx-auto px-6">
+      <section className="pt-16 md:pt-24 pb-14 text-center relative overflow-hidden">
+        <AdultHeroDecor />
+        <div className="max-w-[1080px] mx-auto px-6 relative">
           <div className="font-mincho text-[12px] text-primary tracking-[0.3em] mb-5">
             — A Q U I E T   H O U R —
           </div>
