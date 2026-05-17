@@ -11,23 +11,35 @@ import { ImageUploader } from '@/components/admin/ImageUploader'
 import { AdminMaterialsTable } from '@/components/admin/AdminMaterialsTable'
 import { SearchRequestsTable } from '@/components/admin/SearchRequestsTable'
 import { prisma } from '@/lib/db'
+import { loadOverrides, invalidateOverridesCache } from '@/lib/data-overrides'
 
 export const metadata = {
   title: '素材管理 | ぬりえプリント Admin',
   robots: { index: false, follow: false },  // 検索エンジンから除外
 }
 
-// ステータス別の集計
-function countByStatus(status: ImageStatus | 'placeholder') {
-  return materials.filter(m => (m.imageStatus ?? 'placeholder') === status).length
-}
-
 export default async function AdminPage() {
+  // DB override を即時取り込むため、毎回キャッシュをリセット
+  invalidateOverridesCache()
+  const overrides = await loadOverrides()
+
+  // 静的 imageStatus に override をマージしたリストを作る
+  const effective = materials.map(m => {
+    const o = overrides.get(m.id)
+    return o?.imageStatus
+      ? { ...m, imageStatus: o.imageStatus as ImageStatus, ...(o.illustNotes !== null ? { illustNotes: o.illustNotes } : {}) }
+      : (o?.illustNotes !== undefined && o?.illustNotes !== null ? { ...m, illustNotes: o.illustNotes } : m)
+  })
+
+  function countByStatus(status: ImageStatus | 'placeholder') {
+    return effective.filter(m => (m.imageStatus ?? 'placeholder') === status).length
+  }
+
   const searchRequests = await prisma.searchRequest.findMany({
     orderBy: { count: 'desc' },
   })
   const stats = {
-    total: materials.length,
+    total: effective.length,
     placeholder: countByStatus('placeholder'),
     pending: countByStatus('pending_review'),
     approved: countByStatus('approved'),
@@ -118,10 +130,10 @@ export default async function AdminPage() {
         {/* 教材一覧テーブル */}
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
           <div className="px-5 py-3.5 border-b border-gray-100 flex items-center justify-between">
-            <h2 className="font-semibold text-sm text-gray-900">教材一覧（{materials.length}件）</h2>
+            <h2 className="font-semibold text-sm text-gray-900">教材一覧（{effective.length}件）</h2>
             <p className="text-xs text-gray-400">ヘッダーをクリックでソート / data.ts を編集してステータスを更新</p>
           </div>
-          <AdminMaterialsTable materials={materials} />
+          <AdminMaterialsTable materials={effective} />
         </div>
 
         {/* 検索リクエスト */}
