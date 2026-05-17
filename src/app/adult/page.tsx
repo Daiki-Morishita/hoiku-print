@@ -32,71 +32,54 @@ const websiteJsonLd = {
   description: '大人・シニア向けの本格塗り絵プリント無料配布。曼荼羅・植物・風景。',
 }
 
-// Daily-rotating adult background using actual coloring images
+// Daily-rotating rich adult background using actual coloring images
 function AdultHeroDecor() {
-  // Use rich-difficulty samples preferentially; rotate by day-of-year
   const pool = adultMaterials.filter(m => m.imageUrl)
   const now = new Date()
   const start = new Date(now.getFullYear(), 0, 0)
   const dayOfYear = Math.floor((now.getTime() - start.getTime()) / 86400000)
 
-  // Pick 12 distinct samples deterministically
-  const TILES = 12
+  // Pick 24 distinct samples for a full-cover collage
+  const TILES = 24
   const samples: typeof pool = []
   if (pool.length > 0) {
     for (let i = 0; i < TILES; i++) {
-      samples.push(pool[(dayOfYear + i * 3) % pool.length])
+      samples.push(pool[(dayOfYear * 7 + i * 5) % pool.length])
     }
   }
 
-  // Rotation angles for each tile (slight tilt for editorial feel)
-  const tilts = [-4, 3, -2, 5, -6, 2, -3, 4, -5, 3, -2, 4]
-
   return (
     <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
-      {/* Base — warm off-white */}
-      <div className="absolute inset-0 bg-[#F3EFE6]" />
+      {/* Dark forest base for premium feel */}
+      <div className="absolute inset-0 bg-[#1E2A28]" />
 
-      {/* Material thumbnail collage — full grid */}
+      {/* Full-cover collage of actual coloring images */}
       {samples.length > 0 && (
-        <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-6 gap-3 md:gap-5 p-3 md:p-6 opacity-[0.22]">
+        <div className="absolute inset-0 grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3 p-2 md:p-4">
           {samples.map((m, i) => (
             <div
               key={`${m.id}-${i}`}
-              className={`relative ${i >= 8 ? 'hidden md:block' : ''}`}
-              style={{ transform: `rotate(${tilts[i]}deg)` }}
+              className={`relative aspect-square overflow-hidden rounded-sm bg-white shadow-xl ${i >= 12 ? 'hidden md:block' : ''}`}
+              style={{ transform: `rotate(${[-3, 2, -1, 4, -2, 3, -4, 1, -3, 2, -2, 4, -1, 3, -3, 2, -2, 4, -1, 3, -3, 2, -2, 4][i] || 0}deg)` }}
             >
-              <div className="aspect-square bg-white rounded overflow-hidden shadow-lg ring-1 ring-black/5">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={m.imageUrl} alt="" className="w-full h-full object-contain p-1" loading="lazy" />
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={m.imageUrl} alt="" className="w-full h-full object-contain p-1" loading="lazy" />
             </div>
           ))}
         </div>
       )}
 
-      {/* Soft cream wash to focus text */}
-      <div className="absolute inset-0 bg-gradient-radial from-[#F3EFE6]/95 via-[#F3EFE6]/85 to-[#F3EFE6]/65" style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(243,239,230,0.96) 0%, rgba(243,239,230,0.85) 40%, rgba(243,239,230,0.55) 75%, rgba(243,239,230,0.85) 100%)' }} />
+      {/* Layered tints for depth (premium magazine feel) */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#2D5043]/55 via-[#1E2A28]/35 to-[#2D5043]/55" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#1E2A28]/30 via-transparent to-[#F3EFE6]/95" />
 
-      {/* Bottom fade to clean cream */}
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#F3EFE6]" />
+      {/* Center text shield (radial darken-to-cream behind text) */}
+      <div className="absolute inset-0" style={{
+        background: 'radial-gradient(ellipse 50% 45% at 50% 55%, rgba(30,42,40,0.0) 0%, rgba(30,42,40,0.50) 35%, rgba(30,42,40,0.85) 100%)',
+      }} />
 
-      {/* Editorial mandala — center subtle */}
-      <svg
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[640px] h-[640px] opacity-[0.05] md:opacity-[0.07] hidden md:block"
-        viewBox="-150 -150 300 300"
-        aria-hidden
-      >
-        <g stroke="#2D5043" strokeWidth="0.8" fill="none">
-          <circle r="140" />
-          <circle r="110" />
-          <circle r="80" />
-          <circle r="50" />
-          {Array.from({ length: 24 }, (_, i) => i * 15).map((deg) => (
-            <line key={deg} x1="0" y1="0" x2={140 * Math.cos((deg * Math.PI) / 180)} y2={140 * Math.sin((deg * Math.PI) / 180)} />
-          ))}
-        </g>
-      </svg>
+      {/* Bottom fade to cream */}
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[#F3EFE6]" />
     </div>
   )
 }
@@ -115,36 +98,36 @@ export default function AdultHomePage() {
       </div>
 
       {/* ===== HERO ===== */}
-      <section className="pt-16 md:pt-24 pb-14 text-center relative overflow-hidden">
+      <section className="pt-20 md:pt-32 pb-20 md:pb-28 text-center relative overflow-hidden">
         <AdultHeroDecor />
         <div className="max-w-[1080px] mx-auto px-6 relative">
-          <div className="font-mincho text-[12px] text-primary tracking-[0.3em] mb-5">
-            — A Q U I E T   H O U R —
+          <div className="font-mincho text-[12px] text-[#E8B838] tracking-[0.3em] mb-5">
+            — A QUIET HOUR —
           </div>
-          <h1 className="font-mincho text-[32px] md:text-[56px] font-black leading-[1.3] tracking-[0.03em] mb-8">
+          <h1 className="font-mincho text-[34px] md:text-[64px] font-black leading-[1.3] tracking-[0.03em] mb-6 text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]">
             一日の終わりに、<br />
-            <span className="text-primary">一枚だけ。</span>
+            <span className="text-[#E8B838]">一枚だけ。</span>
           </h1>
-          <p className="text-[14px] md:text-[16px] text-muted-foreground max-w-xl mx-auto mb-10 leading-loose">
+          <p className="text-[14px] md:text-[16px] text-white/85 max-w-xl mx-auto mb-10 leading-loose drop-shadow-[0_1px_6px_rgba(0,0,0,0.5)]">
             曼荼羅・植物画・風景・幾何模様。<br />
             心を整えるための本格的な線画を、{totalAdult > 0 ? `${totalAdult} 点` : 'これから順次'}無料配布します。
           </p>
 
           {/* Big search */}
-          <form action="/adult/materials" method="get" className="max-w-xl mx-auto mb-6 flex border-[1.5px] border-foreground rounded overflow-hidden bg-card shadow-sm">
+          <form action="/adult/materials" method="get" className="max-w-xl mx-auto mb-6 flex border-2 border-white/30 rounded overflow-hidden bg-white/95 backdrop-blur shadow-2xl">
             <input
               name="search"
               type="text"
               placeholder="テーマで検索（曼荼羅・薔薇・風景…）"
               className="flex-1 px-5 py-4 text-[15px] outline-none bg-transparent"
             />
-            <button type="submit" className="bg-foreground text-background px-8 text-[14px] font-medium hover:bg-primary transition-colors">
+            <button type="submit" className="bg-[#1E2A28] text-white px-8 text-[14px] font-medium hover:bg-[#2D5043] transition-colors">
               さがす
             </button>
           </form>
 
           {totalAdult === 0 && (
-            <div className="mt-8 inline-block bg-card border border-border rounded px-5 py-3 text-[12px] text-muted-foreground">
+            <div className="mt-8 inline-block bg-white/95 backdrop-blur border border-white/30 rounded px-5 py-3 text-[12px] text-foreground">
               新着教材は近日公開予定です。下のテーマから先行リクエストもいただけます。
             </div>
           )}
