@@ -120,7 +120,7 @@ export default function HomePage() {
             先生たちと、<br className="md:hidden" />
             <span className="text-primary">子どもたちへ</span>。
           </h1>
-          <p className="text-[14px] md:text-[15px] text-muted-foreground max-w-xl mx-auto mb-8 leading-relaxed">
+          <p className="text-[15px] md:text-[16px] text-muted-foreground max-w-xl mx-auto mb-8 leading-relaxed">
             {totalMaterials} 点の塗り絵が、ぜんぶ無料。<br className="md:hidden" />
             年齢・季節・テーマで見つかります。
           </p>
@@ -244,7 +244,7 @@ export default function HomePage() {
                     <DifficultyBadge level={diff} />
                     <span className="text-[12px] text-muted-foreground">{age}</span>
                   </div>
-                  <p className="text-[12px] text-muted-foreground leading-relaxed">{desc}</p>
+                  <p className="text-[13px] text-muted-foreground leading-relaxed">{desc}</p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 mt-1" />
               </Link>
@@ -391,15 +391,15 @@ export default function HomePage() {
               <h3 className="font-rounded text-[20px] md:text-[24px] font-black leading-[1.4] mb-3">
                 {featuredColumn.title}
               </h3>
-              <p className="text-[13px] text-muted-foreground leading-relaxed mb-4">
+              <p className="text-[15px] text-muted-foreground leading-relaxed mb-4">
                 {featuredColumn.description}
               </p>
-              <span className="text-[13px] text-primary font-medium flex items-center gap-1">
+              <span className="text-[14px] text-primary font-medium flex items-center gap-1">
                 続きを読む <ArrowRight className="w-3.5 h-3.5" />
               </span>
             </Link>
             <aside className="bg-white border border-border rounded-lg p-5">
-              <h3 className="font-rounded text-[13px] font-bold mb-3 pb-2 border-b-2 border-primary">
+              <h3 className="font-rounded text-[14px] font-bold mb-3 pb-2 border-b-2 border-primary">
                 関連ガイド
               </h3>
               <ul className="space-y-0">
@@ -407,7 +407,7 @@ export default function HomePage() {
                   <li key={col.slug} className="border-b border-dashed border-border last:border-0">
                     <Link
                       href={`/columns/${col.slug}`}
-                      className="block py-2.5 text-[12px] text-foreground hover:text-primary transition-colors leading-snug"
+                      className="block py-2.5 text-[13px] text-foreground hover:text-primary transition-colors leading-snug"
                     >
                       {col.title.split('【')[0]}
                     </Link>
@@ -435,7 +435,7 @@ export default function HomePage() {
                   <span className="text-primary shrink-0">Q.</span>
                   <span>{faq.q}</span>
                 </div>
-                <div className="text-[13px] md:text-[14px] text-muted-foreground leading-relaxed flex gap-2 pl-0 md:pl-1">
+                <div className="text-[14px] md:text-[15px] text-muted-foreground leading-relaxed flex gap-2 pl-0 md:pl-1">
                   <span className="text-primary font-bold shrink-0">A.</span>
                   <span>{faq.a}</span>
                 </div>
@@ -460,7 +460,7 @@ export default function HomePage() {
             保育の現場を、<br />
             すこし、らくに。
           </h2>
-          <p className="text-[14px] text-muted-foreground mb-8 leading-relaxed">
+          <p className="text-[15px] text-muted-foreground mb-8 leading-relaxed">
             雨の日も、自由時間も、行事前も。<br />
             すぐ使える教材が、ここにあります。
           </p>
@@ -484,7 +484,7 @@ export default function HomePage() {
             <h3 className="font-rounded text-[20px] md:text-[26px] font-bold mb-2 tracking-[0.02em]">
               おとな・シニア向けの塗り絵もあります。
             </h3>
-            <p className="text-[13px] text-white/70 leading-relaxed">
+            <p className="text-[14px] text-white/70 leading-relaxed">
               曼荼羅・植物画・風景・幾何模様。<br className="md:hidden" />
               心を整える、もう一つのぬりえプリント。
             </p>
@@ -538,7 +538,7 @@ function SectionHead({
           </Link>
         )}
       </div>
-      {subtitle && <p className="text-[12px] text-muted-foreground mt-2">{subtitle}</p>}
+      {subtitle && <p className="text-[14px] text-muted-foreground mt-2 leading-relaxed">{subtitle}</p>}
     </div>
   )
 }

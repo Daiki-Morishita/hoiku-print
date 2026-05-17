@@ -257,7 +257,7 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             </div>
 
             {/* 解説テキスト */}
-            <div className="bg-white border border-border rounded-lg p-5 mb-4 leading-relaxed text-[13px] space-y-3">
+            <div className="bg-white border border-border rounded-lg p-5 mb-4 leading-relaxed text-[14px] space-y-3">
               <h2 className="font-rounded text-[18px] font-bold mb-1 pb-2 border-b border-border">この教材について</h2>
               <p>
                 「{material.title}」は、{ageLabel}のお子様向けに作られた{CATEGORY_LABELS[material.category]}プリントです。

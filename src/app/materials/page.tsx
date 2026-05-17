@@ -63,7 +63,7 @@ export default async function MaterialsPage({
         <div className="font-rounded font-bold text-[12px] text-primary mb-1 tracking-[0.1em]">— Materials —</div>
         <h1 className="font-rounded text-[24px] md:text-[30px] font-black">教材を探す</h1>
         {activeCount === 0 && (
-          <p className="text-[13px] text-muted-foreground mt-2 leading-relaxed">
+          <p className="text-[14px] text-muted-foreground mt-2 leading-relaxed">
             動物・恐竜・乗り物など{filtered.length}点以上のぬりえ教材を無料配布。年齢・テーマ・難易度・季節で絞り込めます。
           </p>
         )}

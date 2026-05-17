@@ -53,7 +53,7 @@ export default function ColumnsPage() {
         <h1 className="font-rounded text-[28px] sm:text-[36px] font-black mb-2">
           読みもの
         </h1>
-        <p className="text-muted-foreground text-[13px] leading-relaxed">
+        <p className="text-muted-foreground text-[14px] leading-relaxed">
           ぬりえの効果・発達段階別の教材選び・運筆・工作など、保育・幼児教育の現場で役立つ知識を編集部が解説します。
         </p>
       </div>
