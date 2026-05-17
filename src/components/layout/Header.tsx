@@ -59,7 +59,7 @@ export function Header({ materialCount = 555 }: { materialCount?: number }) {
                     : 'text-white/60 hover:text-white hover:bg-white/5'
                 }`}
               >
-                <span className="text-[20px] leading-none">🖍️</span>
+                <CrayonIcon active={!isAdult} />
                 <div className="flex flex-col items-start leading-tight py-1">
                   <span className={`text-[10px] tracking-wider ${!isAdult ? 'text-[#E66A2C]' : 'text-white/40'}`}>FOR KIDS</span>
                   <span className={`text-[13px] sm:text-[14px] font-bold ${!isAdult ? 'font-rounded' : ''}`}>こども向け</span>
@@ -73,7 +73,7 @@ export function Header({ materialCount = 555 }: { materialCount?: number }) {
                     : 'text-white/60 hover:text-white hover:bg-white/5'
                 }`}
               >
-                <span className="text-[16px] leading-none">✶</span>
+                <BrushIcon active={isAdult} />
                 <div className="flex flex-col items-start leading-tight py-1">
                   <span className={`text-[10px] tracking-wider ${isAdult ? 'text-[#2D5043]' : 'text-white/40'}`}>FOR ADULTS</span>
                   <span className={`text-[13px] sm:text-[14px] font-bold ${isAdult ? 'font-mincho' : ''}`}>おとな向け</span>
@@ -249,5 +249,46 @@ export function Header({ materialCount = 555 }: { materialCount?: number }) {
         )}
       </header>
     </div>
+  )
+}
+
+// Crayon icon — tilted with point and label band
+function CrayonIcon({ active }: { active: boolean }) {
+  const body = active ? '#E66A2C' : '#9CA3AF'
+  const tip = active ? '#332C24' : '#6B7280'
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <g transform="rotate(-30 12 12)">
+        {/* body */}
+        <rect x="8" y="6" width="8" height="14" rx="1.2" fill={body} />
+        {/* paper label band */}
+        <rect x="8" y="10" width="8" height="2" fill="#fff" opacity="0.45" />
+        <rect x="8" y="13.5" width="8" height="1" fill="#fff" opacity="0.3" />
+        {/* tip */}
+        <polygon points="8,6 12,1.5 16,6" fill={tip} />
+        {/* tip highlight */}
+        <polygon points="11,5 12,3 13,5" fill="#fff" opacity="0.6" />
+      </g>
+    </svg>
+  )
+}
+
+// Brush icon — fountain pen / sumi brush silhouette
+function BrushIcon({ active }: { active: boolean }) {
+  const handle = active ? '#1E2A28' : '#9CA3AF'
+  const bristle = active ? '#2D5043' : '#6B7280'
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <g transform="rotate(35 12 12)">
+        {/* handle */}
+        <rect x="11" y="2" width="2" height="13" rx="0.6" fill={handle} />
+        {/* ferrule */}
+        <rect x="10.2" y="14" width="3.6" height="1.8" rx="0.4" fill="#C9A66B" />
+        {/* bristle tuft */}
+        <path d="M 10.2 15.6 Q 12 22 13.8 15.6 Z" fill={bristle} />
+        {/* ink tip */}
+        <circle cx="12" cy="21.2" r="0.7" fill={bristle} />
+      </g>
+    </svg>
   )
 }

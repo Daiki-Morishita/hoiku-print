@@ -32,60 +32,19 @@ const websiteJsonLd = {
   description: '大人・シニア向けの本格塗り絵プリント無料配布。曼荼羅・植物・風景。',
 }
 
-// Daily-rotating rich adult background using actual coloring images
-function AdultHeroDecor() {
-  const pool = adultMaterials.filter(m => m.imageUrl)
+// Pick today's featured material (deterministic by day-of-year)
+function getTodaysAdultFeature() {
+  const pool = adultMaterials.filter(m => m.imageUrl && (m.difficulty ?? 0) >= 3)
+  if (pool.length === 0) return adultMaterials.find(m => m.imageUrl) ?? null
   const now = new Date()
   const start = new Date(now.getFullYear(), 0, 0)
   const dayOfYear = Math.floor((now.getTime() - start.getTime()) / 86400000)
-
-  // Pick 24 distinct samples for a full-cover collage
-  const TILES = 24
-  const samples: typeof pool = []
-  if (pool.length > 0) {
-    for (let i = 0; i < TILES; i++) {
-      samples.push(pool[(dayOfYear * 7 + i * 5) % pool.length])
-    }
-  }
-
-  return (
-    <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
-      {/* Dark forest base for premium feel */}
-      <div className="absolute inset-0 bg-[#1E2A28]" />
-
-      {/* Full-cover collage of actual coloring images */}
-      {samples.length > 0 && (
-        <div className="absolute inset-0 grid grid-cols-3 md:grid-cols-6 gap-2 md:gap-3 p-2 md:p-4">
-          {samples.map((m, i) => (
-            <div
-              key={`${m.id}-${i}`}
-              className={`relative aspect-square overflow-hidden rounded-sm bg-white shadow-xl ${i >= 12 ? 'hidden md:block' : ''}`}
-              style={{ transform: `rotate(${[-3, 2, -1, 4, -2, 3, -4, 1, -3, 2, -2, 4, -1, 3, -3, 2, -2, 4, -1, 3, -3, 2, -2, 4][i] || 0}deg)` }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={m.imageUrl} alt="" className="w-full h-full object-contain p-1" loading="lazy" />
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Layered tints for depth (premium magazine feel) */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#2D5043]/55 via-[#1E2A28]/35 to-[#2D5043]/55" />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#1E2A28]/30 via-transparent to-[#F3EFE6]/95" />
-
-      {/* Center text shield (radial darken-to-cream behind text) */}
-      <div className="absolute inset-0" style={{
-        background: 'radial-gradient(ellipse 50% 45% at 50% 55%, rgba(30,42,40,0.0) 0%, rgba(30,42,40,0.50) 35%, rgba(30,42,40,0.85) 100%)',
-      }} />
-
-      {/* Bottom fade to cream */}
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[#F3EFE6]" />
-    </div>
-  )
+  return pool[dayOfYear % pool.length]
 }
 
 export default function AdultHomePage() {
   const popular = getPopularMaterials(8, 'adult')
+  const feature = getTodaysAdultFeature()
 
   return (
     <>
@@ -97,42 +56,131 @@ export default function AdultHomePage() {
         <Link href="/" className="underline hover:text-accent ml-2">こども向けはこちら →</Link>
       </div>
 
-      {/* ===== HERO ===== */}
-      <section className="pt-20 md:pt-32 pb-20 md:pb-28 text-center relative overflow-hidden">
-        <AdultHeroDecor />
-        <div className="max-w-[1080px] mx-auto px-6 relative">
-          <div className="font-mincho text-[12px] text-[#E8B838] tracking-[0.3em] mb-5">
-            — A QUIET HOUR —
-          </div>
-          <h1 className="font-mincho text-[34px] md:text-[64px] font-black leading-[1.3] tracking-[0.03em] mb-6 text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)]">
-            一日の終わりに、<br />
-            <span className="text-[#E8B838]">一枚だけ。</span>
-          </h1>
-          <p className="text-[14px] md:text-[16px] text-white/85 max-w-xl mx-auto mb-10 leading-loose drop-shadow-[0_1px_6px_rgba(0,0,0,0.5)]">
-            曼荼羅・植物画・風景・幾何模様。<br />
-            心を整えるための本格的な線画を、{totalAdult > 0 ? `${totalAdult} 点` : 'これから順次'}無料配布します。
-          </p>
+      {/* ===== HERO — magazine-style with single featured image ===== */}
+      <section className="pt-12 md:pt-20 pb-10 md:pb-16 relative overflow-hidden">
+        {/* Subtle decorative background — light wash with botanical SVG hints */}
+        <div aria-hidden className="absolute inset-0 pointer-events-none">
+          <svg className="absolute -left-20 top-10 w-[280px] h-[280px] opacity-[0.06]" viewBox="-150 -150 300 300" aria-hidden>
+            <g stroke="#2D5043" strokeWidth="0.8" fill="none">
+              <circle r="140" />
+              <circle r="110" />
+              <circle r="80" />
+              <circle r="50" />
+              {Array.from({ length: 24 }, (_, i) => i * 15).map((deg) => (
+                <line key={deg} x1="0" y1="0" x2={140 * Math.cos((deg * Math.PI) / 180)} y2={140 * Math.sin((deg * Math.PI) / 180)} />
+              ))}
+            </g>
+          </svg>
+          <svg className="absolute -right-32 bottom-0 w-[360px] h-[360px] opacity-[0.05]" viewBox="-150 -150 300 300" aria-hidden>
+            <g stroke="#2D5043" strokeWidth="0.8" fill="none">
+              <circle r="140" />
+              <circle r="100" />
+              <circle r="60" />
+              {Array.from({ length: 16 }, (_, i) => i * 22.5).map((deg) => (
+                <line key={deg} x1="0" y1="0" x2={140 * Math.cos((deg * Math.PI) / 180)} y2={140 * Math.sin((deg * Math.PI) / 180)} />
+              ))}
+            </g>
+          </svg>
+        </div>
 
-          {/* Big search */}
-          <form action="/adult/materials" method="get" className="max-w-xl mx-auto mb-6 flex border-2 border-white/30 rounded overflow-hidden bg-white/95 backdrop-blur shadow-2xl">
-            <input
-              name="search"
-              type="text"
-              placeholder="テーマで検索（曼荼羅・薔薇・風景…）"
-              className="flex-1 px-5 py-4 text-[15px] outline-none bg-transparent"
-            />
-            <button type="submit" className="bg-[#1E2A28] text-white px-8 text-[14px] font-medium hover:bg-[#2D5043] transition-colors">
-              さがす
-            </button>
-          </form>
+        <div className="max-w-[1200px] mx-auto px-6 relative">
+          <div className="grid md:grid-cols-[1fr_1fr] gap-10 md:gap-16 items-center">
+            {/* Text column */}
+            <div className="md:pl-4">
+              <div className="font-mincho text-[12px] text-primary tracking-[0.3em] mb-5">
+                — A QUIET HOUR —
+              </div>
+              <h1 className="font-mincho text-[34px] md:text-[56px] font-black leading-[1.3] tracking-[0.03em] mb-5 text-foreground">
+                一日の終わりに、<br />
+                <span className="text-primary">一枚だけ。</span>
+              </h1>
+              <p className="text-[14px] md:text-[15px] text-muted-foreground mb-7 leading-loose">
+                曼荼羅・植物画・風景・幾何模様。<br />
+                心を整えるための本格的な線画を、{totalAdult > 0 ? `${totalAdult} 点` : 'これから順次'}無料配布します。
+              </p>
 
-          {totalAdult === 0 && (
-            <div className="mt-8 inline-block bg-white/95 backdrop-blur border border-white/30 rounded px-5 py-3 text-[12px] text-foreground">
-              新着教材は近日公開予定です。下のテーマから先行リクエストもいただけます。
+              {/* Search bar */}
+              <form action="/adult/materials" method="get" className="flex border-2 border-foreground rounded overflow-hidden bg-white shadow-md max-w-md">
+                <input
+                  name="search"
+                  type="text"
+                  placeholder="テーマで検索（曼荼羅・薔薇・風景…）"
+                  className="flex-1 px-5 py-3.5 text-[15px] outline-none bg-transparent"
+                />
+                <button type="submit" className="bg-foreground text-white px-7 text-[14px] font-medium hover:bg-primary transition-colors">
+                  さがす
+                </button>
+              </form>
             </div>
-          )}
+
+            {/* Featured image column — magazine-style card */}
+            {feature && (
+              <div className="relative">
+                <Link href={`/adult/materials/${feature.id}`} className="group block">
+                  <div className="font-mincho text-[11px] text-primary tracking-[0.2em] mb-3 text-right">
+                    — TODAY&apos;S PICK —
+                  </div>
+                  <div className="bg-white border border-foreground/10 shadow-2xl rounded-sm overflow-hidden relative">
+                    <div className="aspect-[1.414/1] bg-white overflow-hidden">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={feature.imageUrl}
+                        alt={feature.title}
+                        className="w-full h-full object-contain p-4 group-hover:scale-[1.02] transition-transform duration-500"
+                      />
+                    </div>
+                    <div className="px-5 py-4 border-t border-foreground/10 bg-gradient-to-b from-white to-[#F8F4EB] flex items-baseline justify-between">
+                      <div>
+                        <div className="font-mincho text-[12px] text-muted-foreground tracking-[0.15em] mb-0.5">
+                          No. {String(adultMaterials.indexOf(feature) + 1).padStart(3, '0')}
+                        </div>
+                        <h2 className="font-mincho text-[17px] md:text-[20px] font-bold text-foreground group-hover:text-primary transition-colors">
+                          {feature.title}
+                        </h2>
+                      </div>
+                      <span className="text-[12px] text-primary group-hover:underline shrink-0 ml-3 font-mincho">
+                        塗ってみる →
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </section>
+
+      {/* ===== IMMEDIATE GRID — actual coloring images right below hero ===== */}
+      {popular.length > 0 && (
+        <section className="pb-12">
+          <div className="max-w-[1280px] mx-auto px-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-5">
+              {popular.slice(0, 8).map(m => (
+                <Link
+                  key={m.id}
+                  href={`/adult/materials/${m.id}`}
+                  className="group bg-white border border-border rounded-sm overflow-hidden hover:border-primary transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                >
+                  <div className="aspect-[1.414/1] bg-background overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={m.imageUrl} alt={m.title} className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500" />
+                  </div>
+                  <div className="px-3 py-2.5 border-t border-border/60">
+                    <h3 className="font-mincho text-[13px] font-bold leading-snug line-clamp-1 group-hover:text-primary transition-colors">
+                      {m.title}
+                    </h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div className="text-center mt-7">
+              <Link href="/adult/materials" className="inline-flex items-center gap-1.5 text-[13px] font-mincho text-primary hover:underline">
+                全 {totalAdult} 点を見る →
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* ===== THEMES (showcase) ===== */}
       <section className="py-12 border-t border-border">
@@ -143,21 +191,34 @@ export default function AdultHomePage() {
             <p className="text-[12px] text-muted-foreground mt-2">心の状態や、その日の気分にあわせて選んでください。</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-3 md:gap-4">
-            {ADULT_THEME_SHOWCASE.map(({ theme, description }) => {
-              const count = adultMaterials.filter(m => m.theme === theme).length
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+            {ADULT_THEME_SHOWCASE.map(({ theme, description }, idx) => {
+              const samples = adultMaterials.filter(m => m.theme === theme && m.imageUrl)
+              const sample = samples[0]
+              const count = samples.length
               return (
                 <Link
                   key={theme}
                   href={`/adult/category/theme/${theme}`}
-                  className="group bg-card border border-border rounded-lg p-6 hover:border-primary transition-all flex gap-4"
+                  className="group bg-card border border-border rounded-sm overflow-hidden hover:border-primary transition-all hover:-translate-y-0.5 hover:shadow-md flex flex-col"
                 >
-                  <div className="font-mincho text-[28px] text-primary font-black leading-none pt-1">
-                    {String(ADULT_THEME_SHOWCASE.findIndex(s => s.theme === theme) + 1).padStart(2, '0')}
+                  {/* Thumbnail */}
+                  <div className="aspect-[1.414/1] bg-background overflow-hidden relative">
+                    {sample ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={sample.imageUrl} alt={`${THEME_LABELS[theme]}のぬりえ`} className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-muted-foreground/40 font-mincho text-[12px] tracking-[0.2em]">
+                        準備中
+                      </div>
+                    )}
+                    <span className="absolute top-2 left-2 font-mincho text-[18px] text-primary font-black leading-none bg-white/95 backdrop-blur px-2 py-1 rounded">
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-baseline justify-between gap-3 mb-1">
-                      <h3 className="font-mincho text-[18px] font-bold group-hover:text-primary transition-colors">
+                  <div className="p-4 flex-1 flex flex-col">
+                    <div className="flex items-baseline justify-between gap-3 mb-1.5">
+                      <h3 className="font-mincho text-[17px] font-bold group-hover:text-primary transition-colors">
                         {THEME_LABELS[theme]}
                       </h3>
                       <span className="text-[11px] text-muted-foreground whitespace-nowrap">
@@ -188,35 +249,6 @@ export default function AdultHomePage() {
           </div>
         </div>
       </section>
-
-      {/* ===== POPULAR ===== */}
-      {popular.length > 0 && (
-        <section className="py-12 border-t border-border">
-          <div className="max-w-[1280px] mx-auto px-6">
-            <div className="mb-8 pb-3 border-b border-foreground/15">
-              <div className="font-mincho italic text-[11px] text-primary mb-1 tracking-[0.1em]">— Featured —</div>
-              <h2 className="font-mincho text-[24px] md:text-[28px] font-bold">注目の塗り絵</h2>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {popular.map(m => (
-                <Link
-                  key={m.id}
-                  href={`/adult/materials/${m.id}`}
-                  className="group bg-card border border-border rounded-lg overflow-hidden hover:border-primary transition-all"
-                >
-                  <div className="aspect-[1.414/1] bg-background flex items-center justify-center overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={m.imageUrl} alt={m.title} className="w-full h-full object-contain p-1 group-hover:scale-105 transition-transform" />
-                  </div>
-                  <div className="p-3">
-                    <h3 className="font-mincho text-[13px] font-bold line-clamp-1">{m.title}</h3>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* ===== USE CASES ===== */}
       <section className="py-12 border-t border-border">
