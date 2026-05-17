@@ -243,8 +243,16 @@ export type Material = {
 }
 
 export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
-  1: 'やさしい',
-  2: 'ふつう',
-  3: 'むずかしい',
-  4: 'とてもむずかしい',
+  1: 'かんたん',
+  2: 'やさしい',
+  3: 'ふつう',
+  4: 'わくわく',
+}
+
+/** 年齢下限（年齢範囲の上限は表示しない） */
+export const DIFFICULTY_AGE: Record<Difficulty, string> = {
+  1: '2歳〜',
+  2: '3歳〜',
+  3: '4歳〜',
+  4: '5歳〜',
 }

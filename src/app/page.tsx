@@ -225,10 +225,10 @@ export default function HomePage() {
           />
           <div className="grid md:grid-cols-2 gap-3 md:gap-4">
             {([
-              { diff: 1, label: 'かんたん', age: '2〜3歳', desc: 'シンプルで大きな線画。はじめてのぬりえに。' },
+              { diff: 1, label: 'かんたん', age: '2歳〜', desc: 'シンプルで大きな線画。はじめてのぬりえに。' },
               { diff: 2, label: 'やさしい', age: '3歳〜', desc: '親しみやすいシーンつき。背景もシンプル。' },
-              { diff: 3, label: 'ふつう', age: '3〜5歳', desc: '親子や複数体の構成。発展的に取り組める。' },
-              { diff: 4, label: 'たのしい', age: '4〜6歳', desc: 'にぎやかな背景・細かな描写。集中して塗れる。' },
+              { diff: 3, label: 'ふつう',   age: '4歳〜', desc: '親子や複数体の構成。発展的に取り組める。' },
+              { diff: 4, label: 'わくわく', age: '5歳〜', desc: 'にぎやかな背景・細かな描写。集中して塗れる。' },
             ] as { diff: Difficulty; label: string; age: string; desc: string }[]).map(({ diff, label, age, desc }) => (
               <Link
                 key={diff}
