@@ -39,25 +39,29 @@ export function buildMazeSvg(maze: MazeRecord, showSolution = false): MazeSvgRes
   if (showSolution && solution.length > 0) {
     const pts: [number, number][] = []
     const [, sy] = solution[0]
-    pts.push([-CELL * 0.4, sy * CELL + CELL / 2])
+    // 開口部からほんの少しだけ外に伸ばす
+    pts.push([-WALL, sy * CELL + CELL / 2])
     for (const [cx, cy] of solution) {
       pts.push([cx * CELL + CELL / 2, cy * CELL + CELL / 2])
     }
     const [, gy] = solution[solution.length - 1]
-    pts.push([W + CELL * 0.4, gy * CELL + CELL / 2])
+    pts.push([W + WALL, gy * CELL + CELL / 2])
     const d = 'M ' + pts.map(([px, py]) => `${px.toFixed(1)} ${py.toFixed(1)}`).join(' L ')
     solLayer = `<path d="${d}" stroke="#FF4757" stroke-width="${WALL * 0.9}" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.85"/>`
   }
 
-  const vbH = H + WALL * 2
-  const svg = `<svg viewBox="-${CELL * 0.5} -${WALL} ${W + CELL} ${vbH}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+  // viewBox は壁線の太さぶんだけ余白。左右に余分なパディングを入れないことでキャラが開口部に隣接する
+  const pad = WALL
+  const vbW = W + pad * 2
+  const vbH = H + pad * 2
+  const svg = `<svg viewBox="-${pad} -${pad} ${vbW} ${vbH}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
     ${solLayer}
     <path d="${inner.join(' ')}" stroke="#2A1E22" stroke-width="${WALL}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
     <path d="${outer.join(' ')}" stroke="#2A1E22" stroke-width="${WALL}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
   </svg>`
 
-  const startYPct = ((WALL + 0.5 * CELL) / vbH) * 100
-  const goalYPct = ((WALL + (rows - 0.5) * CELL) / vbH) * 100
+  const startYPct = ((pad + 0.5 * CELL) / vbH) * 100
+  const goalYPct = ((pad + (rows - 0.5) * CELL) / vbH) * 100
   return { svg, startYPct, goalYPct }
 }
 
