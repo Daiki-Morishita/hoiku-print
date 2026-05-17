@@ -1,0 +1,296 @@
+/* === 迷路カテゴリ専用CSS（他カテゴリには影響しない） === */
+.page-bg {
+  min-height: 100vh;
+  background: #FDFAF3;
+  padding: 24px 16px;
+}
+
+/* === シート === */
+.sheet-frame {
+  max-width: 210mm;
+  margin: 0 auto;
+  background: #FDFAF3;
+  color: #2D2620;
+  border-radius: 8px;
+}
+
+.sheet {
+  width: 100%;
+  aspect-ratio: 210 / 297;
+  padding: 14mm 16mm;
+  position: relative;
+  background:
+    radial-gradient(circle at 6% 4%, rgba(255, 212, 59, 0.10) 0%, transparent 22%),
+    radial-gradient(circle at 96% 6%, rgba(255, 173, 200, 0.10) 0%, transparent 22%),
+    radial-gradient(circle at 4% 96%, rgba(107, 191, 124, 0.10) 0%, transparent 22%),
+    radial-gradient(circle at 98% 95%, rgba(91, 155, 213, 0.08) 0%, transparent 22%),
+    #FDFAF3;
+  font-feature-settings: 'palt' 1;
+  font-family: 'BIZ UDPGothic', 'Hiragino Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* === ヘッダー === */
+.header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1.5px solid #D4C8B8;
+  margin-bottom: 14px;
+}
+.brand { display: flex; align-items: center; gap: 8px; }
+.brand-mark {
+  width: 30px; height: 30px; border-radius: 9px;
+  background: linear-gradient(135deg, #5B9BD5, #3A7DB6);
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-family: 'Zen Maru Gothic'; font-weight: 900; font-size: 17px;
+  box-shadow: 0 2px 4px rgba(58, 125, 182, 0.25);
+}
+.brand-name {
+  font-family: 'Zen Maru Gothic'; font-weight: 700; font-size: 15px;
+  color: #2D2620; letter-spacing: 0.02em; white-space: nowrap;
+}
+.brand-sub {
+  font-family: 'BIZ UDPGothic'; font-size: 9px; color: #7E7066;
+  letter-spacing: 0.1em; margin-top: 1px; white-space: nowrap;
+}
+.brand-meta { display: flex; flex-direction: column; justify-content: center; }
+.fields { display: flex; gap: 14px; align-items: center; justify-content: center; min-width: 0; }
+.field { display: flex; align-items: baseline; gap: 8px; }
+.field-label {
+  font-family: 'BIZ UDPGothic'; font-weight: 700; font-size: 11px;
+  color: #7E7066; letter-spacing: 0.08em; white-space: nowrap;
+}
+.field-line { display: inline-block; height: 22px; border-bottom: 1.8px solid #5C4A4A; }
+.field-line-long { width: 140px; }
+.field-line-short { width: 36px; }
+.date-unit { font-family: 'BIZ UDPGothic'; font-weight: 700; font-size: 13px; color: #2D2620; margin: 0 4px; }
+.age-badge {
+  background: linear-gradient(135deg, #FF9E80, #FF8C69);
+  color: white; font-family: 'Zen Maru Gothic'; font-weight: 900; font-size: 14px;
+  padding: 0 16px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px;
+  box-shadow: 0 2px 0 #D8694A, 0 3px 8px rgba(255, 140, 105, 0.25);
+  letter-spacing: 0.05em; line-height: 1; white-space: nowrap;
+}
+
+/* === タイトル === */
+.title-block {
+  margin-bottom: 14px; padding: 18px 22px;
+  background: linear-gradient(135deg, #F0F8FF 0%, #FFF8E8 100%);
+  border-radius: 20px; border: 1.5px solid #fff;
+  box-shadow: 0 0 0 1.5px #E8DFD2, 0 4px 12px rgba(58, 125, 182, 0.06);
+  position: relative; overflow: hidden;
+}
+.title-block::before {
+  content: ''; position: absolute; top: -30px; right: -30px;
+  width: 100px; height: 100px;
+  background: radial-gradient(circle, #FFD43B 0%, transparent 65%);
+  opacity: 0.35;
+}
+.title-row {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+}
+.title-main {
+  font-family: 'Zen Maru Gothic'; font-weight: 900; font-size: 38px;
+  color: #2D2620; letter-spacing: 0.06em; line-height: 1;
+  display: flex; align-items: baseline; gap: 14px;
+}
+.title-difficulty {
+  display: inline-flex; align-items: center;
+  font-family: 'Zen Maru Gothic'; font-weight: 700; font-size: 22px;
+  color: #3A7DB6; background: #E8F2FB;
+  padding: 6px 14px 7px; border-radius: 10px;
+  line-height: 1; letter-spacing: 0.08em;
+}
+.title-id {
+  font-family: 'BIZ UDPGothic'; font-weight: 700; font-size: 13px;
+  color: #7E7066; letter-spacing: 0.1em;
+  border: 1.5px solid #D4C8B8; padding: 4px 10px 5px; border-radius: 6px;
+  background: rgba(255, 255, 255, 0.6);
+}
+.title-sub {
+  font-family: 'Klee One'; font-weight: 600; font-size: 15px;
+  color: #5C4A4A; margin-top: 10px; letter-spacing: 0.06em;
+  margin-left: -0.05em;
+}
+
+.answer-banner {
+  background: linear-gradient(135deg, #FFE8E0, #FFF4D9);
+  border: 2px dashed #FF8C69;
+  border-radius: 14px;
+  padding: 10px 18px; margin-bottom: 12px;
+  font-family: 'Zen Maru Gothic'; font-weight: 700; font-size: 14px;
+  color: #D8694A; text-align: center;
+}
+
+/* === 迷路ステージ === */
+.maze-stage {
+  background: #fff; border-radius: 20px; border: 1.5px solid #fff;
+  box-shadow: 0 0 0 2px #E8DFD2, 0 4px 0 #EFE5D2;
+  padding: 28px 60px; margin-bottom: 14px; position: relative;
+}
+.maze-frame {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  padding: 0;
+}
+.maze-frame :global(svg) { width: 100%; height: auto; max-height: 100mm; display: block; }
+.char-at-opening {
+  position: absolute;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+}
+.char-svg { width: 52px; height: auto; }
+.char-svg :global(svg) { width: 100%; height: auto; display: block; }
+.point-label {
+  font-family: 'Zen Maru Gothic'; font-weight: 700; font-size: 11px;
+  padding: 3px 10px 4px; border-radius: 999px; color: white;
+  letter-spacing: 0.1em; white-space: nowrap; line-height: 1;
+}
+.start-char { left: -58px; transform: translateY(-50%); }
+.start-char .point-label {
+  background: linear-gradient(135deg, #82CB91, #6BBF7C);
+  box-shadow: 0 2px 0 #4DA160;
+}
+.goal-char { right: -58px; transform: translateY(-50%); }
+.goal-char .point-label {
+  background: linear-gradient(135deg, #FF9E80, #FF8C69);
+  box-shadow: 0 2px 0 #D8694A;
+}
+
+/* === ご褒美 === */
+.reward {
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: center; gap: 14px;
+  background: linear-gradient(135deg, #FFF4E8 0%, #FFEBE0 100%);
+  border: 1.5px solid #fff; border-radius: 18px;
+  box-shadow: 0 0 0 2px #FFE0CC, 0 4px 0 #F5D5BB;
+  padding: 14px 18px; margin-bottom: 12px;
+}
+.reward-label {
+  font-family: 'Zen Maru Gothic'; font-weight: 700; font-size: 17px;
+  color: #D8694A; display: flex; align-items: center; gap: 10px;
+}
+.star-icon {
+  display: inline-block; width: 24px; height: 24px;
+  background: #FFD43B;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  filter: drop-shadow(0 1px 0 #D4A82F);
+}
+.stickers { display: flex; gap: 10px; }
+.sticker {
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 2px dashed #C9B49A; background: rgba(255, 255, 255, 0.55);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #C9B49A; font-family: 'Zen Maru Gothic'; font-weight: 700; font-size: 13px;
+}
+
+/* === Webボタン === */
+.web-actions {
+  display: flex; gap: 10px; justify-content: center; align-items: center;
+  margin: 14px 0;
+}
+.btn {
+  font-family: 'Zen Maru Gothic'; font-weight: 700; font-size: 14px;
+  padding: 10px 22px; border-radius: 999px;
+  border: none; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: transform 0.1s;
+  text-decoration: none;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-print {
+  background: linear-gradient(135deg, #5B9BD5, #3A7DB6);
+  color: white;
+  box-shadow: 0 3px 0 #3A7DB6, 0 4px 10px rgba(58, 125, 182, 0.25);
+}
+.btn-answer {
+  background: white; color: #3A7DB6;
+  border: 2px solid #5B9BD5;
+  box-shadow: 0 2px 0 #DBEDFB;
+}
+.btn-back {
+  background: white; color: #D8694A;
+  border: 2px solid #FF8C69;
+  box-shadow: 0 2px 0 #FFDFD0;
+}
+
+/* === フッター === */
+.footer {
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid #D4C8B8; padding-top: 8px;
+  font-family: 'BIZ UDPGothic'; font-size: 10px; color: #7E7066;
+  letter-spacing: 0.05em;
+}
+.footer-brand-url { color: #5B9BD5; font-weight: 700; }
+
+/* === 印刷 === */
+@media print {
+  .web-actions { display: none !important; }
+  .page-bg { background: white; padding: 0; }
+  .sheet-frame { background: white; }
+  .sheet { box-shadow: none; }
+  @page { size: A4 portrait; margin: 0; }
+}
+
+/* === 一覧ページ === */
+.list-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+.list-title {
+  font-family: 'Zen Maru Gothic'; font-weight: 900;
+  font-size: 32px; color: #2D2620;
+  margin-bottom: 8px;
+}
+.list-lead {
+  font-family: 'BIZ UDPGothic'; font-size: 14px; color: #7E7066;
+  margin-bottom: 24px;
+}
+.difficulty-section { margin-bottom: 32px; }
+.difficulty-heading {
+  font-family: 'Zen Maru Gothic'; font-weight: 700;
+  font-size: 20px; color: #2D2620;
+  margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.difficulty-chip {
+  font-family: 'Zen Maru Gothic'; font-weight: 700; font-size: 12px;
+  padding: 4px 10px 5px; border-radius: 999px;
+  background: #E8F2FB; color: #3A7DB6;
+  letter-spacing: 0.08em; line-height: 1;
+}
+.maze-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+.maze-card {
+  background: #fff; border-radius: 14px;
+  border: 1.5px solid #E8DFD2;
+  padding: 14px;
+  display: block; text-decoration: none; color: inherit;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.maze-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+}
+.maze-card-thumb {
+  width: 100%; aspect-ratio: 4 / 3;
+  background: #FDFAF3; border-radius: 8px;
+  margin-bottom: 10px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid #F0E6D6;
+}
+.maze-card-thumb :global(svg) { width: 90%; height: 90%; }
+.maze-card-title {
+  font-family: 'Zen Maru Gothic'; font-weight: 700; font-size: 14px;
+  color: #2D2620;
+}
+.maze-card-meta {
+  font-family: 'BIZ UDPGothic'; font-size: 11px; color: #7E7066;
+  margin-top: 4px;
+}
