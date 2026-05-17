@@ -29,7 +29,8 @@ export default function AboutPage() {
         <span className="text-foreground">このサイトについて</span>
       </nav>
 
-      <h1 className="text-2xl sm:text-3xl font-bold mb-6">ぬりえプリントについて</h1>
+      <div className="font-mincho italic text-[11px] text-primary mb-1 tracking-[0.1em]">— About —</div>
+      <h1 className="font-mincho text-[28px] sm:text-[36px] font-black mb-6">ぬりえプリントについて</h1>
 
       <section className="prose max-w-none text-foreground leading-relaxed space-y-4 mb-10">
         <p>
@@ -43,7 +44,7 @@ export default function AboutPage() {
         </p>
       </section>
 
-      <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+      <h2 className="font-mincho text-[20px] font-bold mb-4 flex items-center gap-2 pb-2 border-b border-border">
         <Sparkles className="w-5 h-5 text-primary" />
         サービスの特徴
       </h2>
@@ -60,7 +61,7 @@ export default function AboutPage() {
           <span><strong>活動アイデア付き</strong>：各教材に「保育・家庭での活用例」を添えています。</span></li>
       </ul>
 
-      <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+      <h2 className="font-mincho text-[20px] font-bold mb-4 flex items-center gap-2 pb-2 border-b border-border">
         <Heart className="w-5 h-5 text-primary" />
         運営理念
       </h2>
@@ -70,7 +71,7 @@ export default function AboutPage() {
         質の高い素材を、必要なときにすぐ取り出せる形で提供することを目指しています。
       </p>
 
-      <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+      <h2 className="font-mincho text-[20px] font-bold mb-4 flex items-center gap-2 pb-2 border-b border-border">
         <Users className="w-5 h-5 text-primary" />
         想定利用シーン
       </h2>
@@ -82,7 +83,7 @@ export default function AboutPage() {
         <li className="flex gap-2"><span className="text-primary">•</span>児童館・学童・子育て支援センター等での配布物として</li>
       </ul>
 
-      <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+      <h2 className="font-mincho text-[20px] font-bold mb-4 flex items-center gap-2 pb-2 border-b border-border">
         <BookOpen className="w-5 h-5 text-primary" />
         コンテンツの作成方針
       </h2>
@@ -97,7 +98,7 @@ export default function AboutPage() {
         </p>
       </div>
 
-      <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+      <h2 className="font-mincho text-[20px] font-bold mb-4 flex items-center gap-2 pb-2 border-b border-border">
         <Shield className="w-5 h-5 text-primary" />
         運営者情報
       </h2>
@@ -112,7 +113,7 @@ export default function AboutPage() {
         </p>
       </div>
 
-      <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+      <h2 className="font-mincho text-[20px] font-bold mb-4 flex items-center gap-2 pb-2 border-b border-border">
         <Printer className="w-5 h-5 text-primary" />
         利用について
       </h2>
@@ -123,16 +124,16 @@ export default function AboutPage() {
       </ul>
 
       <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <Link href="/materials" className="block bg-primary text-white text-center px-4 py-3 rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors">
+        <Link href="/materials" className="block bg-primary text-white text-center px-4 py-3 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors">
           教材一覧
         </Link>
-        <Link href="/editorial-policy" className="block bg-white border border-border text-center px-4 py-3 rounded-xl text-sm font-medium hover:bg-muted transition-colors">
+        <Link href="/editorial-policy" className="block bg-white border border-border text-center px-4 py-3 rounded-lg text-sm font-medium hover:bg-muted transition-colors">
           編集方針
         </Link>
-        <Link href="/terms" className="block bg-white border border-border text-center px-4 py-3 rounded-xl text-sm font-medium hover:bg-muted transition-colors">
+        <Link href="/terms" className="block bg-white border border-border text-center px-4 py-3 rounded-lg text-sm font-medium hover:bg-muted transition-colors">
           利用規約
         </Link>
-        <Link href="/contact" className="block bg-white border border-border text-center px-4 py-3 rounded-xl text-sm font-medium hover:bg-muted transition-colors">
+        <Link href="/contact" className="block bg-white border border-border text-center px-4 py-3 rounded-lg text-sm font-medium hover:bg-muted transition-colors">
           お問い合わせ
         </Link>
       </div>

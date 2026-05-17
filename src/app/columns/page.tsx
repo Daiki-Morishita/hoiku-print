@@ -48,13 +48,13 @@ export default function ColumnsPage() {
         <span className="text-foreground">コラム</span>
       </nav>
 
-      <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-2 flex items-center gap-2">
-          <BookOpen className="w-7 h-7 text-primary" />
-          保育・幼児教育コラム
+      <div className="mb-8 pb-4 border-b border-border">
+        <div className="font-mincho italic text-[11px] text-primary mb-1 tracking-[0.1em]">— Editorial —</div>
+        <h1 className="font-mincho text-[28px] sm:text-[36px] font-black mb-2">
+          読みもの
         </h1>
-        <p className="text-muted-foreground text-sm leading-relaxed">
-          ぬりえの効果・発達段階別の教材選び・運筆・工作など、現場で役立つ知識をわかりやすく解説します。
+        <p className="text-muted-foreground text-[13px] leading-relaxed">
+          ぬりえの効果・発達段階別の教材選び・運筆・工作など、保育・幼児教育の現場で役立つ知識を編集部が解説します。
         </p>
       </div>
 
@@ -63,10 +63,10 @@ export default function ColumnsPage() {
           <Link
             key={col.slug}
             href={`/columns/${col.slug}`}
-            className="group bg-white border border-border rounded-2xl overflow-hidden hover:border-primary/40 hover:shadow-md transition-all flex flex-col sm:flex-row"
+            className="group bg-white border border-border rounded-lg overflow-hidden hover:border-primary hover:-translate-y-0.5 transition-all flex flex-col sm:flex-row"
           >
             {/* サムネイル */}
-            <div className="sm:w-52 h-44 sm:h-auto bg-gradient-to-br from-primary/10 to-primary/5 shrink-0 flex items-center justify-center relative">
+            <div className="sm:w-52 h-44 sm:h-auto bg-background shrink-0 flex items-center justify-center relative">
               {col.heroSrc ? (
                 <Image src={col.heroSrc} alt={col.heroAlt} fill className="object-cover" />
               ) : (
@@ -84,7 +84,7 @@ export default function ColumnsPage() {
                     <Clock className="w-3 h-3" />約{col.readingTime}分
                   </span>
                 </div>
-                <h2 className="font-bold text-base leading-snug mb-2 group-hover:text-primary transition-colors">
+                <h2 className="font-mincho font-bold text-[16px] leading-snug mb-2 group-hover:text-primary transition-colors">
                   {col.title}
                 </h2>
                 <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">

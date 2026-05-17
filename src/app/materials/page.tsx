@@ -57,49 +57,46 @@ export default async function MaterialsPage({
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">教材を探す</h1>
+    <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-8">
+      <div className="mb-6 pb-4 border-b border-border">
+        <div className="font-mincho italic text-[12px] text-primary mb-1 tracking-[0.1em]">— Materials —</div>
+        <h1 className="font-mincho text-[24px] md:text-[30px] font-black">教材を探す</h1>
         {activeCount === 0 && (
-          <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
-            動物・恐竜・乗り物など{filtered.length}点以上のぬりえ教材を無料配布中。年齢・テーマ・難易度・季節で絞り込めます。
+          <p className="text-[13px] text-muted-foreground mt-2 leading-relaxed">
+            動物・恐竜・乗り物など{filtered.length}点以上のぬりえ教材を無料配布。年齢・テーマ・難易度・季節で絞り込めます。
           </p>
         )}
       </div>
 
-      {/* キーワード検索バー */}
       <div className="mb-6">
-        <Suspense fallback={<div className="h-10 bg-muted rounded-xl animate-pulse" />}>
+        <Suspense fallback={<div className="h-10 bg-muted rounded animate-pulse" />}>
           <SearchBar />
         </Suspense>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* フィルターサイドバー */}
-        <aside className="lg:w-56 shrink-0">
-          <div className="bg-white border border-border rounded-2xl p-4">
+      <div className="flex flex-col lg:flex-row gap-6">
+        <aside className="lg:w-60 shrink-0">
+          <div className="bg-white border border-border rounded-lg p-4 lg:sticky lg:top-32">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-semibold text-sm">絞り込み</h2>
+              <h2 className="font-mincho font-bold text-[14px]">絞り込み</h2>
               {activeCount > 0 && (
-                <Link href="/materials" className="text-xs text-primary hover:underline">
+                <Link href="/materials" className="text-[11px] text-primary hover:underline">
                   クリア
                 </Link>
               )}
             </div>
-            <Suspense fallback={<div className="animate-pulse h-48 bg-muted rounded-lg" />}>
+            <Suspense fallback={<div className="animate-pulse h-48 bg-muted rounded" />}>
               <SearchFilters />
             </Suspense>
           </div>
         </aside>
 
-        {/* 教材グリッド */}
         <div className="flex-1">
-          {/* ソートセレクター */}
           <div className="flex items-center justify-between mb-4">
-            <p className="text-sm text-muted-foreground">
-              {activeCount > 0 ? `${filtered.length}件` : `全${filtered.length}件`}
+            <p className="text-[12px] text-muted-foreground">
+              {activeCount > 0 ? `${filtered.length} 件が該当` : `全 ${filtered.length} 件`}
             </p>
-            <Suspense fallback={<div className="h-9 w-56 bg-muted rounded-xl animate-pulse" />}>
+            <Suspense fallback={<div className="h-9 w-56 bg-muted rounded animate-pulse" />}>
               <SortSelector />
             </Suspense>
           </div>
@@ -108,17 +105,16 @@ export default async function MaterialsPage({
             params.search ? (
               <NoResultsBanner query={params.search} />
             ) : (
-              <div className="text-center py-16 text-muted-foreground">
-                <div className="text-4xl mb-3">🔍</div>
-                <p className="font-medium">該当する教材が見つかりませんでした</p>
-                <p className="text-sm mt-1">条件を変えて探してみてください</p>
-                <Link href="/materials" className="inline-block mt-4 text-sm text-primary hover:underline">
-                  すべての教材を見る
+              <div className="text-center py-16 text-muted-foreground bg-white border border-border rounded-lg">
+                <p className="font-mincho text-[16px] font-bold text-foreground">該当する教材が見つかりませんでした</p>
+                <p className="text-[12px] mt-2">条件を変えて探してみてください</p>
+                <Link href="/materials" className="inline-block mt-4 text-[13px] text-primary hover:underline">
+                  すべての教材を見る →
                 </Link>
               </div>
             )
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
               {filtered.map(material => (
                 <MaterialCard key={material.id} material={material} />
               ))}
