@@ -29,6 +29,7 @@ export type Category =
   | 'scissors'      // ハサミ練習
 
 export type Theme =
+  // ── こども向けテーマ ──
   | 'animals'       // 動物
   | 'dinosaurs'     // 恐竜
   | 'vehicles'      // のりもの
@@ -42,6 +43,34 @@ export type Theme =
   | 'characters'    // キャラクター風
   | 'park'             // 公園・遊具
   | 'seasonal-events'  // 季節の行事
+  // ── おとな向けテーマ ──
+  | 'mandala'           // 曼荼羅
+  | 'botanical'         // 植物画
+  | 'landscape'         // 風景
+  | 'pattern'           // 幾何模様
+  | 'animals-detail'    // 動物（細密）
+  | 'flowers-detail'    // 花（細密）
+  | 'cityscape'         // 街並み
+  | 'japanese-tradition' // 和柄・伝統
+
+export type Audience = 'kids' | 'adult'
+
+export const AUDIENCE_LABELS: Record<Audience, string> = {
+  kids: 'こども向け',
+  adult: 'おとな向け',
+}
+
+/** どのテーマが大人向けか */
+export const ADULT_THEMES: Theme[] = [
+  'mandala',
+  'botanical',
+  'landscape',
+  'pattern',
+  'animals-detail',
+  'flowers-detail',
+  'cityscape',
+  'japanese-tradition',
+]
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   coloring: 'ぬりえ',
@@ -102,6 +131,14 @@ export const THEME_LABELS: Record<Theme, string> = {
   characters: 'キャラクター風',
   park: '公園・遊具',
   'seasonal-events': '季節の行事',
+  mandala: '曼荼羅',
+  botanical: '植物画',
+  landscape: '風景',
+  pattern: '幾何模様',
+  'animals-detail': '動物（細密）',
+  'flowers-detail': '花（細密）',
+  cityscape: '街並み',
+  'japanese-tradition': '和柄・伝統',
 }
 
 export const SEASON_LABELS: Record<Season, string> = {
@@ -171,6 +208,8 @@ export type Material = {
   id: string
   title: string
   description: string
+  /** ターゲット層 — 省略時は kids（後方互換） */
+  audience?: Audience
   ageMin: AgeGroup
   ageMax: AgeGroup
   difficulty: Difficulty

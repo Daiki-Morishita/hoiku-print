@@ -1,4 +1,5 @@
-import type { Material, Category, Season, Theme, AgeGroup } from './types'
+import type { Material, Category, Season, Theme, AgeGroup, Audience } from './types'
+import { ADULT_THEMES } from './types'
 import { normalizeQuery, normalizeText } from './utils'
 
 export const materials: Material[] = [
@@ -12446,7 +12447,7 @@ export const materials: Material[] = [
     title: 'おひなさま',
     description: 'シンプルなお内裏様とお雛様の線画。',
     ageMin: 3, ageMax: 5, difficulty: 1, duration: 10,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['hinamatsuri', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12463,7 +12464,7 @@ export const materials: Material[] = [
     title: 'ひな祭りのかざり',
     description: 'ひな壇とぼんぼりつきのひな祭りの線画。',
     ageMin: 3, ageMax: 6, difficulty: 2, duration: 15,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['hinamatsuri', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12480,7 +12481,7 @@ export const materials: Material[] = [
     title: 'ひなだんかざり',
     description: '三人官女が並ぶひな壇の線画。',
     ageMin: 4, ageMax: 6, difficulty: 3, duration: 20,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['hinamatsuri', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12497,7 +12498,7 @@ export const materials: Material[] = [
     title: 'にぎやかなひなだん',
     description: '五段飾りのにぎやかなひな壇の線画。桃の花つき。',
     ageMin: 4, ageMax: 6, difficulty: 4, duration: 30,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['hinamatsuri', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12514,7 +12515,7 @@ export const materials: Material[] = [
     title: 'つうえんバッグ',
     description: 'シンプルな通園バッグの線画。',
     ageMin: 3, ageMax: 5, difficulty: 1, duration: 10,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['enrollment', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12531,7 +12532,7 @@ export const materials: Material[] = [
     title: 'さくらとつうえんバッグ',
     description: '桜と通園バッグの線画。',
     ageMin: 3, ageMax: 6, difficulty: 2, duration: 15,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['enrollment', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12548,7 +12549,7 @@ export const materials: Material[] = [
     title: 'にゅうえんしきのあさ',
     description: '桜並木を歩く子どもの入園式の線画。',
     ageMin: 4, ageMax: 6, difficulty: 3, duration: 20,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['enrollment', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12565,7 +12566,7 @@ export const materials: Material[] = [
     title: 'にゅうえんおめでとう',
     description: '桜の下で入園式を祝う親子のにぎやかな線画。',
     ageMin: 4, ageMax: 6, difficulty: 4, duration: 30,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['enrollment', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12582,7 +12583,7 @@ export const materials: Material[] = [
     title: 'さくらのき',
     description: 'シンプルな満開の桜の木の線画。',
     ageMin: 3, ageMax: 5, difficulty: 1, duration: 10,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['hanami', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12599,7 +12600,7 @@ export const materials: Material[] = [
     title: 'おはなみのじゅんび',
     description: '桜の下のお弁当とレジャーシートの線画。',
     ageMin: 3, ageMax: 6, difficulty: 2, duration: 15,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['hanami', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12616,7 +12617,7 @@ export const materials: Material[] = [
     title: 'さくらのしたでおべんとう',
     description: '桜の下でお弁当を広げる子どもたちの線画。',
     ageMin: 4, ageMax: 6, difficulty: 3, duration: 20,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['hanami', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12633,7 +12634,7 @@ export const materials: Material[] = [
     title: 'にぎやかなおはなみ',
     description: 'お花見を楽しむ家族のにぎやかな線画。だんごつき。',
     ageMin: 4, ageMax: 6, difficulty: 4, duration: 30,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['hanami', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12650,7 +12651,7 @@ export const materials: Material[] = [
     title: 'えんそくリュック',
     description: 'シンプルなリュックサックの線画。',
     ageMin: 3, ageMax: 5, difficulty: 1, duration: 10,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['excursion', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12667,7 +12668,7 @@ export const materials: Material[] = [
     title: 'えんそくのじゅんび',
     description: '遠足の持ち物（リュック・お弁当・水筒）の線画。',
     ageMin: 3, ageMax: 6, difficulty: 2, duration: 15,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['excursion', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12684,7 +12685,7 @@ export const materials: Material[] = [
     title: 'えんそくしゅっぱつ',
     description: '列を作って歩く子どもたちの遠足の線画。',
     ageMin: 4, ageMax: 6, difficulty: 3, duration: 20,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['excursion', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12701,7 +12702,7 @@ export const materials: Material[] = [
     title: 'たのしいえんそく',
     description: 'バスと公園で楽しむ遠足のにぎやかな線画。',
     ageMin: 4, ageMax: 6, difficulty: 4, duration: 30,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['excursion', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12718,7 +12719,7 @@ export const materials: Material[] = [
     title: 'こいのぼり',
     description: 'シンプルなこいのぼりの線画。',
     ageMin: 3, ageMax: 5, difficulty: 1, duration: 10,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['childrensday', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12735,7 +12736,7 @@ export const materials: Material[] = [
     title: 'こいのぼりがおよぐ',
     description: 'ポールにこいのぼりが泳ぐ線画。風車つき。',
     ageMin: 3, ageMax: 6, difficulty: 2, duration: 15,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['childrensday', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12752,7 +12753,7 @@ export const materials: Material[] = [
     title: 'こどもの日のそら',
     description: 'こいのぼりとかぶとをかぶった子どもの線画。',
     ageMin: 4, ageMax: 6, difficulty: 3, duration: 20,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['childrensday', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12769,7 +12770,7 @@ export const materials: Material[] = [
     title: 'にぎやかなこどもの日',
     description: 'こいのぼり・かぶと・かしわもちのにぎやかな線画。',
     ageMin: 4, ageMax: 6, difficulty: 4, duration: 30,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['childrensday', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12786,7 +12787,7 @@ export const materials: Material[] = [
     title: 'カーネーション',
     description: 'シンプルなカーネーション1輪の線画。',
     ageMin: 3, ageMax: 5, difficulty: 1, duration: 10,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['mothersday', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12803,7 +12804,7 @@ export const materials: Material[] = [
     title: '母の日のプレゼント',
     description: 'カーネーションの花束とプレゼントボックスの線画。',
     ageMin: 3, ageMax: 6, difficulty: 2, duration: 15,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['mothersday', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12820,7 +12821,7 @@ export const materials: Material[] = [
     title: 'ははのひのかざり',
     description: '花束・カード・プレゼントが並ぶ母の日の線画。',
     ageMin: 4, ageMax: 6, difficulty: 3, duration: 20,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['mothersday', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12837,7 +12838,7 @@ export const materials: Material[] = [
     title: 'にぎやかなははのひ',
     description: 'カーネーション・プレゼント・ケーキのにぎやかな線画。',
     ageMin: 4, ageMax: 6, difficulty: 4, duration: 30,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['mothersday', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12854,7 +12855,7 @@ export const materials: Material[] = [
     title: 'かわいいたけのこ',
     description: 'シンプルなたけのこの線画。',
     ageMin: 3, ageMax: 5, difficulty: 1, duration: 10,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['bamboo-shoot', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12871,7 +12872,7 @@ export const materials: Material[] = [
     title: 'たけのこのかわ',
     description: '皮つきと皮なしのたけのこが並ぶ線画。',
     ageMin: 3, ageMax: 6, difficulty: 2, duration: 15,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['bamboo-shoot', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12888,7 +12889,7 @@ export const materials: Material[] = [
     title: 'たけやぶのたけのこ',
     description: '竹やぶからたけのこが顔を出す線画。',
     ageMin: 4, ageMax: 6, difficulty: 3, duration: 20,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['bamboo-shoot', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12905,7 +12906,7 @@ export const materials: Material[] = [
     title: 'たけのこほり',
     description: 'たけのこ掘りを楽しむ子どもたちのにぎやかな線画。',
     ageMin: 4, ageMax: 6, difficulty: 4, duration: 30,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['bamboo-shoot', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12922,7 +12923,7 @@ export const materials: Material[] = [
     title: 'さくらもち',
     description: 'シンプルな桜餅の線画。',
     ageMin: 3, ageMax: 5, difficulty: 1, duration: 10,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['sakuramochi', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12939,7 +12940,7 @@ export const materials: Material[] = [
     title: 'さくらもちとおちゃ',
     description: '桜餅とお茶が並ぶ線画。桜の花びらつき。',
     ageMin: 3, ageMax: 6, difficulty: 2, duration: 15,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['sakuramochi', 'spring', 'ぬりえ'],
     tools: ['クレヨン'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12956,7 +12957,7 @@ export const materials: Material[] = [
     title: 'はるのわがし',
     description: '春の和菓子が並ぶ線画。',
     ageMin: 4, ageMax: 6, difficulty: 3, duration: 20,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['sakuramochi', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12973,7 +12974,7 @@ export const materials: Material[] = [
     title: 'にぎやかなはるのわがし',
     description: '春の和菓子がにぎやかに並ぶ線画。桜の花びらつき。',
     ageMin: 4, ageMax: 6, difficulty: 4, duration: 30,
-    category: 'coloring', theme: 'spring',
+    category: 'coloring', theme: 'seasonal-events', season: 'spring',
     tags: ['sakuramochi', 'spring', 'ぬりえ'],
     tools: ['色えんぴつ'],
     activityIdeas: ['好きな色で塗ってみよう', '背景もカラフルに仕上げよう'],
@@ -12990,6 +12991,16 @@ export const materials: Material[] = [
 export type SortKey = 'newest' | 'popular' | 'favorites'
 
 // フィルタリング関数
+export function getAudience(m: Material): Audience {
+  if (m.audience) return m.audience
+  if (m.theme && ADULT_THEMES.includes(m.theme)) return 'adult'
+  return 'kids'
+}
+
+export function getMaterialsForAudience(audience: Audience): Material[] {
+  return materials.filter(m => getAudience(m) === audience)
+}
+
 export function filterMaterials(params: {
   age?: number
   category?: string
@@ -13000,8 +13011,11 @@ export function filterMaterials(params: {
   search?: string
   sort?: SortKey
   favoriteIds?: string[]
+  audience?: 'kids' | 'adult'
 }): Material[] {
+  const audience = params.audience ?? 'kids'
   const filtered = materials.filter(m => {
+    if (getAudience(m) !== audience) return false
     if (params.age && (m.ageMin > params.age || m.ageMax < params.age)) return false
     if (params.category && m.category !== params.category) return false
     if (params.season && m.season !== params.season) return false
@@ -13042,10 +13056,11 @@ export function filterMaterials(params: {
   return [...filtered].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 }
 
-export function getPopularMaterials(limit = 6): Material[] {
-  const popular = materials.filter(m => m.popular)
+export function getPopularMaterials(limit = 6, audience: Audience = 'kids'): Material[] {
+  const pool = materials.filter(m => getAudience(m) === audience)
+  const popular = pool.filter(m => m.popular)
   if (popular.length >= limit) return popular.slice(0, limit)
-  const extra = materials.filter(m => !m.popular).slice(0, limit - popular.length)
+  const extra = pool.filter(m => !m.popular).slice(0, limit - popular.length)
   return [...popular, ...extra]
 }
 

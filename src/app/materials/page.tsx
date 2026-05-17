@@ -50,6 +50,7 @@ export default async function MaterialsPage({
     search: params.search,
     difficulty: params.difficulty ? Number(params.difficulty) : undefined,
     sort,
+    audience: 'kids',
   })
 
   const activeCount = [params.age, params.category, params.season, params.event, params.theme, params.search, params.difficulty].filter(Boolean).length

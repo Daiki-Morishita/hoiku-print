@@ -1,14 +1,15 @@
 import Link from 'next/link'
 import { ArrowRight, ChevronRight, Clock } from 'lucide-react'
 import { MaterialCard } from '@/components/materials/MaterialCard'
-import { materials, getPopularMaterials, getMaterialById, filterMaterials } from '@/lib/data'
+import { materials, getPopularMaterials, getMaterialById, filterMaterials, getMaterialsForAudience } from '@/lib/data'
 import { columns } from '@/lib/columns'
 
 export const metadata = {
   alternates: { canonical: 'https://nurie-print.com' },
 }
 
-const totalMaterials = materials.length
+const kidsMaterials = getMaterialsForAudience('kids')
+const totalMaterials = kidsMaterials.length
 
 const websiteJsonLd = {
   '@context': 'https://schema.org',
@@ -38,8 +39,8 @@ function getTodaysPick() {
   const start = new Date(now.getFullYear(), 0, 0)
   const diff = now.getTime() - start.getTime()
   const dayOfYear = Math.floor(diff / 86400000)
-  const eligible = materials.filter(m => (m.difficulty ?? 0) >= 2 && m.imageUrl)
-  return eligible[dayOfYear % eligible.length] || materials.find(m => m.imageUrl)!
+  const eligible = kidsMaterials.filter(m => (m.difficulty ?? 0) >= 2 && m.imageUrl)
+  return eligible[dayOfYear % eligible.length] || kidsMaterials.find(m => m.imageUrl)!
 }
 
 // Theme summary with representative material
@@ -229,7 +230,7 @@ export default function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
             {THEMES.map(theme => {
               const sample = getThemeSample(theme.key, theme.sample)
-              const count = filterMaterials({ theme: theme.key as Parameters<typeof filterMaterials>[0]['theme'] }).length
+              const count = filterMaterials({ theme: theme.key as Parameters<typeof filterMaterials>[0]['theme'], audience: 'kids' }).length
               return (
                 <Link
                   key={theme.key}
@@ -263,7 +264,7 @@ export default function HomePage() {
           />
           <div className="grid grid-cols-5 gap-2 md:gap-3">
             {[2, 3, 4, 5, 6].map(age => {
-              const count = filterMaterials({ age }).length
+              const count = filterMaterials({ age, audience: 'kids' }).length
               return (
                 <Link
                   key={age}
