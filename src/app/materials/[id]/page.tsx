@@ -214,8 +214,8 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             </div>
 
             {/* タイトル */}
-            <div className="font-mincho italic text-[11px] text-primary mb-1 tracking-[0.1em]">— Material —</div>
-            <h1 className="font-mincho text-[26px] sm:text-[32px] font-black leading-[1.3] mb-3">{material.title}</h1>
+            <div className="font-rounded font-bold text-[11px] text-primary mb-1 tracking-[0.1em]">— Material —</div>
+            <h1 className="font-rounded text-[26px] sm:text-[32px] font-black leading-[1.3] mb-3">{material.title}</h1>
             <p className="text-[14px] text-foreground/85 mb-5 leading-relaxed pl-4 border-l-[3px] border-primary">{material.description}</p>
 
             {/* タグ */}
@@ -229,7 +229,7 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
 
             {/* 必要道具 */}
             <div className="bg-white border border-border rounded-lg p-4 mb-4">
-              <h2 className="font-mincho text-[14px] font-bold flex items-center gap-2 mb-3 pb-2 border-b border-border">
+              <h2 className="font-rounded text-[14px] font-bold flex items-center gap-2 mb-3 pb-2 border-b border-border">
                 <Wrench className="w-4 h-4 text-primary" />
                 必要な道具
               </h2>
@@ -242,7 +242,7 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
 
             {/* 解説テキスト */}
             <div className="bg-white border border-border rounded-lg p-5 mb-4 leading-relaxed text-[13px] space-y-3">
-              <h2 className="font-mincho text-[18px] font-bold mb-1 pb-2 border-b border-border">この教材について</h2>
+              <h2 className="font-rounded text-[18px] font-bold mb-1 pb-2 border-b border-border">この教材について</h2>
               <p>
                 「{material.title}」は、{ageLabel}のお子様向けに作られた{CATEGORY_LABELS[material.category]}プリントです。
                 {DIFFICULTY_LABELS[material.difficulty]}難易度・所要時間の目安は約{material.duration}分で、
@@ -264,7 +264,7 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
 
             {/* 活動提案 */}
             <div className="bg-white border border-border rounded-lg p-4">
-              <h2 className="font-mincho text-[14px] font-bold flex items-center gap-2 mb-3 pb-2 border-b border-border">
+              <h2 className="font-rounded text-[14px] font-bold flex items-center gap-2 mb-3 pb-2 border-b border-border">
                 <Lightbulb className="w-4 h-4 text-primary" />
                 活動のアイデア
               </h2>
@@ -283,7 +283,7 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
           <div className="space-y-4">
             {/* 印刷ボタン */}
             <div className="bg-white border border-border rounded-lg p-5">
-              <h2 className="font-mincho text-[15px] font-bold mb-4 flex items-center gap-2 pb-2 border-b border-border">
+              <h2 className="font-rounded text-[15px] font-bold mb-4 flex items-center gap-2 pb-2 border-b border-border">
                 <Printer className="w-4 h-4 text-primary" />
                 印刷する
               </h2>
@@ -295,7 +295,7 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
 
             {/* 教材情報 */}
             <div className="bg-white border border-border rounded-lg p-5">
-              <h2 className="font-mincho text-[14px] font-bold mb-4 pb-2 border-b border-border">教材情報</h2>
+              <h2 className="font-rounded text-[14px] font-bold mb-4 pb-2 border-b border-border">教材情報</h2>
               <dl className="space-y-3">
                 <InfoRow icon={<Users className="w-4 h-4" />} label="対象年齢" value={ageLabel} />
                 <InfoRow icon={<Clock className="w-4 h-4" />} label="目安時間" value={`約${material.duration}分`} />
@@ -320,8 +320,8 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
         {/* 関連教材 */}
         {related.length > 0 && (
           <div className="mt-14 pt-8 border-t border-border">
-            <div className="font-mincho italic text-[11px] text-primary mb-1 tracking-[0.1em]">— Related —</div>
-            <h2 className="font-mincho text-[20px] font-bold mb-5">関連する教材</h2>
+            <div className="font-rounded font-bold text-[11px] text-primary mb-1 tracking-[0.1em]">— Related —</div>
+            <h2 className="font-rounded text-[20px] font-bold mb-5">関連する教材</h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
               {related.map(m => (
                 <MaterialCard key={m.id} material={m} />

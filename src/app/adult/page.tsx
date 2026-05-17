@@ -32,78 +32,69 @@ const websiteJsonLd = {
   description: '大人・シニア向けの本格塗り絵プリント無料配布。曼荼羅・植物・風景。',
 }
 
+// Daily-rotating adult background using actual coloring images
 function AdultHeroDecor() {
+  // Use rich-difficulty samples preferentially; rotate by day-of-year
+  const pool = adultMaterials.filter(m => m.imageUrl)
+  const now = new Date()
+  const start = new Date(now.getFullYear(), 0, 0)
+  const dayOfYear = Math.floor((now.getTime() - start.getTime()) / 86400000)
+
+  // Pick 12 distinct samples deterministically
+  const TILES = 12
+  const samples: typeof pool = []
+  if (pool.length > 0) {
+    for (let i = 0; i < TILES; i++) {
+      samples.push(pool[(dayOfYear + i * 3) % pool.length])
+    }
+  }
+
+  // Rotation angles for each tile (slight tilt for editorial feel)
+  const tilts = [-4, 3, -2, 5, -6, 2, -3, 4, -5, 3, -2, 4]
+
   return (
-    <div aria-hidden className="absolute inset-0 pointer-events-none">
-      {/* Subtle gradient base */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#E8E0CC]/30 via-transparent to-[#F3EFE6]" />
+    <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
+      {/* Base — warm off-white */}
+      <div className="absolute inset-0 bg-[#F3EFE6]" />
 
-      {/* Decorative SVG: mandala lines, botanical leaves, dotted patterns */}
+      {/* Material thumbnail collage — full grid */}
+      {samples.length > 0 && (
+        <div className="absolute inset-0 grid grid-cols-4 md:grid-cols-6 gap-3 md:gap-5 p-3 md:p-6 opacity-[0.22]">
+          {samples.map((m, i) => (
+            <div
+              key={`${m.id}-${i}`}
+              className={`relative ${i >= 8 ? 'hidden md:block' : ''}`}
+              style={{ transform: `rotate(${tilts[i]}deg)` }}
+            >
+              <div className="aspect-square bg-white rounded overflow-hidden shadow-lg ring-1 ring-black/5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={m.imageUrl} alt="" className="w-full h-full object-contain p-1" loading="lazy" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Soft cream wash to focus text */}
+      <div className="absolute inset-0 bg-gradient-radial from-[#F3EFE6]/95 via-[#F3EFE6]/85 to-[#F3EFE6]/65" style={{ background: 'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(243,239,230,0.96) 0%, rgba(243,239,230,0.85) 40%, rgba(243,239,230,0.55) 75%, rgba(243,239,230,0.85) 100%)' }} />
+
+      {/* Bottom fade to clean cream */}
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#F3EFE6]" />
+
+      {/* Editorial mandala — center subtle */}
       <svg
-        className="absolute inset-0 w-full h-full"
-        viewBox="0 0 1280 600"
-        preserveAspectRatio="xMidYMid slice"
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[640px] h-[640px] opacity-[0.05] md:opacity-[0.07] hidden md:block"
+        viewBox="-150 -150 300 300"
+        aria-hidden
       >
-        <defs>
-          <pattern id="adultDots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse">
-            <circle cx="2" cy="2" r="0.7" fill="#2D5043" opacity="0.20" />
-          </pattern>
-        </defs>
-
-        {/* Top dotted band */}
-        <rect x="0" y="0" width="1280" height="600" fill="url(#adultDots)" opacity="0.5" />
-
-        {/* Left mandala arc */}
-        <g transform="translate(120,300)" stroke="#2D5043" strokeWidth="0.7" fill="none" opacity="0.35">
-          <circle r="100" />
+        <g stroke="#2D5043" strokeWidth="0.8" fill="none">
+          <circle r="140" />
+          <circle r="110" />
           <circle r="80" />
-          <circle r="60" />
-          <circle r="40" />
-          {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
-            <line key={deg} x1="0" y1="0" x2={100 * Math.cos((deg * Math.PI) / 180)} y2={100 * Math.sin((deg * Math.PI) / 180)} />
+          <circle r="50" />
+          {Array.from({ length: 24 }, (_, i) => i * 15).map((deg) => (
+            <line key={deg} x1="0" y1="0" x2={140 * Math.cos((deg * Math.PI) / 180)} y2={140 * Math.sin((deg * Math.PI) / 180)} />
           ))}
-          {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => (
-            <circle key={`p-${deg}`} cx={100 * Math.cos((deg * Math.PI) / 180)} cy={100 * Math.sin((deg * Math.PI) / 180)} r="3" fill="#2D5043" stroke="none" />
-          ))}
-        </g>
-
-        {/* Right mandala arc */}
-        <g transform="translate(1160,300)" stroke="#2D5043" strokeWidth="0.7" fill="none" opacity="0.30">
-          <circle r="120" />
-          <circle r="95" />
-          <circle r="70" />
-          <circle r="45" />
-          <circle r="20" />
-          {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
-            <line key={deg} x1="0" y1="0" x2={120 * Math.cos((deg * Math.PI) / 180)} y2={120 * Math.sin((deg * Math.PI) / 180)} />
-          ))}
-        </g>
-
-        {/* Botanical leaves */}
-        <g transform="translate(240,80)" stroke="#2D5043" strokeWidth="1" fill="none" opacity="0.30">
-          <path d="M 0 0 Q 20 -10 30 -25 Q 25 -45 10 -55 Q -5 -45 -8 -25 Q 0 -10 0 0 Z" />
-          <line x1="0" y1="0" x2="10" y2="-55" />
-        </g>
-        <g transform="translate(960,80) rotate(180)" stroke="#2D5043" strokeWidth="1" fill="none" opacity="0.25">
-          <path d="M 0 0 Q 20 -10 30 -25 Q 25 -45 10 -55 Q -5 -45 -8 -25 Q 0 -10 0 0 Z" />
-          <line x1="0" y1="0" x2="10" y2="-55" />
-        </g>
-        <g transform="translate(180,520) rotate(45)" stroke="#2D5043" strokeWidth="1" fill="none" opacity="0.25">
-          <path d="M 0 0 Q 20 -10 30 -25 Q 25 -45 10 -55 Q -5 -45 -8 -25 Q 0 -10 0 0 Z" />
-          <line x1="0" y1="0" x2="10" y2="-55" />
-        </g>
-        <g transform="translate(1080,540) rotate(-30)" stroke="#2D5043" strokeWidth="1" fill="none" opacity="0.25">
-          <path d="M 0 0 Q 20 -10 30 -25 Q 25 -45 10 -55 Q -5 -45 -8 -25 Q 0 -10 0 0 Z" />
-          <line x1="0" y1="0" x2="10" y2="-55" />
-        </g>
-
-        {/* Seigaiha (青海波) corner — bottom right */}
-        <g transform="translate(900,460)" stroke="#2D5043" strokeWidth="0.8" fill="none" opacity="0.20">
-          {[0, 1, 2, 3, 4, 5].map((row) =>
-            [0, 1, 2, 3, 4, 5].map((col) => (
-              <path key={`${row}-${col}`} d={`M ${col * 30} ${row * 18} a 18 18 0 0 1 36 0`} />
-            ))
-          )}
         </g>
       </svg>
     </div>

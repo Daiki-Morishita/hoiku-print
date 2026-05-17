@@ -49,8 +49,8 @@ export default function ColumnsPage() {
       </nav>
 
       <div className="mb-8 pb-4 border-b border-border">
-        <div className="font-mincho italic text-[11px] text-primary mb-1 tracking-[0.1em]">— Editorial —</div>
-        <h1 className="font-mincho text-[28px] sm:text-[36px] font-black mb-2">
+        <div className="font-rounded font-bold text-[11px] text-primary mb-1 tracking-[0.1em]">— Editorial —</div>
+        <h1 className="font-rounded text-[28px] sm:text-[36px] font-black mb-2">
           読みもの
         </h1>
         <p className="text-muted-foreground text-[13px] leading-relaxed">
@@ -84,7 +84,7 @@ export default function ColumnsPage() {
                     <Clock className="w-3 h-3" />約{col.readingTime}分
                   </span>
                 </div>
-                <h2 className="font-mincho font-bold text-[16px] leading-snug mb-2 group-hover:text-primary transition-colors">
+                <h2 className="font-rounded font-bold text-[16px] leading-snug mb-2 group-hover:text-primary transition-colors">
                   {col.title}
                 </h2>
                 <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">

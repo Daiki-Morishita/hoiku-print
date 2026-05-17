@@ -124,16 +124,16 @@ export default function HomePage() {
             年齢・季節・テーマで見つかります。
           </p>
 
-          {/* Big search */}
-          <form action="/materials" method="get" className="max-w-2xl mx-auto mb-6 flex border-[1.5px] border-foreground rounded-lg overflow-hidden bg-white shadow-md">
+          {/* Big search — pop pill */}
+          <form action="/materials" method="get" className="max-w-2xl mx-auto mb-6 flex border-[2.5px] border-foreground rounded-full overflow-hidden bg-white shadow-lg">
             <input
               name="search"
               type="text"
               placeholder="ぬりえを検索（例: きりん、2歳、ひな祭り）"
-              className="flex-1 px-5 md:px-6 py-4 md:py-[18px] text-[15px] md:text-[16px] outline-none bg-transparent"
+              className="flex-1 pl-6 md:pl-8 pr-4 py-4 md:py-[18px] text-[15px] md:text-[16px] outline-none bg-transparent"
             />
-            <button type="submit" className="bg-foreground text-background px-6 md:px-9 text-[14px] md:text-[15px] font-medium hover:bg-primary transition-colors">
-              さがす
+            <button type="submit" className="bg-primary text-white px-6 md:px-9 text-[14px] md:text-[15px] font-rounded font-black hover:bg-[#d05a23] transition-colors flex items-center gap-1.5">
+              <span>🔍</span>さがす
             </button>
           </form>
 
@@ -171,7 +171,7 @@ export default function HomePage() {
               <span>🌟</span>きょうのいちおし
             </div>
             <div>
-              <div className="font-mincho text-[11px] text-muted-foreground tracking-[0.2em] mb-3 mt-2">
+              <div className="font-rounded text-[11px] text-muted-foreground tracking-[0.2em] mb-3 mt-2">
                 No. {String(materials.indexOf(todaysPick) + 1).padStart(3, '0')}
               </div>
               <h2 className="font-rounded text-[26px] md:text-[34px] font-black leading-[1.3] mb-4">
@@ -265,7 +265,7 @@ export default function HomePage() {
                   </div>
                   <div className="p-3 text-center">
                     <div className="font-rounded text-[16px] font-black mb-0.5" style={{ color: theme.color }}>{theme.label}</div>
-                    <div className="text-[10px] text-muted-foreground font-medium">{count}点</div>
+                    <div className="text-[12px] text-muted-foreground font-medium">{count}点</div>
                   </div>
                 </Link>
               )
@@ -297,8 +297,8 @@ export default function HomePage() {
                   <div className="font-rounded text-[28px] md:text-[42px] font-black leading-none" style={{ color: colors[i] }}>
                     {age}
                   </div>
-                  <div className="text-[10px] md:text-[11px] text-muted-foreground mt-1 font-medium">歳</div>
-                  <div className="text-[10px] md:text-[11px] text-muted-foreground mt-2 pt-2 border-t border-border/60">{count}点</div>
+                  <div className="text-[12px] text-muted-foreground mt-1 font-medium">歳</div>
+                  <div className="text-[12px] text-muted-foreground mt-2 pt-2 border-t border-border/60">{count}点</div>
                 </Link>
               )
             })}
@@ -354,7 +354,7 @@ export default function HomePage() {
                 <div className="flex-1">
                   <div className="flex items-baseline gap-2 mb-1">
                     <span className="font-rounded text-[17px] font-black">{label}</span>
-                    <span className="text-[10px] text-muted-foreground">{age}</span>
+                    <span className="text-[12px] text-muted-foreground">{age}</span>
                   </div>
                   <p className="text-[12px] text-muted-foreground leading-relaxed">{desc}</p>
                 </div>
@@ -397,7 +397,7 @@ export default function HomePage() {
               </span>
             </Link>
             <aside className="bg-white border border-border rounded-lg p-5">
-              <h3 className="font-mincho text-[13px] font-bold mb-3 pb-2 border-b-2 border-primary">
+              <h3 className="font-rounded text-[13px] font-bold mb-3 pb-2 border-b-2 border-primary">
                 関連ガイド
               </h3>
               <ul className="space-y-0">
@@ -476,10 +476,10 @@ export default function HomePage() {
       <section className="py-12 md:py-16 bg-[#1f1f1f] text-white">
         <div className="max-w-[860px] mx-auto px-6 grid md:grid-cols-[1fr_auto] gap-6 items-center">
           <div>
-            <div className="font-mincho text-[11px] text-white/60 tracking-[0.25em] mb-2">
+            <div className="font-rounded text-[11px] text-white/60 tracking-[0.25em] mb-2">
               — For Adults —
             </div>
-            <h3 className="font-mincho text-[20px] md:text-[26px] font-bold mb-2 tracking-[0.02em]">
+            <h3 className="font-rounded text-[20px] md:text-[26px] font-bold mb-2 tracking-[0.02em]">
               おとな・シニア向けの塗り絵もあります。
             </h3>
             <p className="text-[13px] text-white/70 leading-relaxed">
@@ -520,7 +520,7 @@ function SectionHead({
       <div className="flex items-end justify-between border-b-2 border-primary/15 pb-3">
         <div>
           {kicker && (
-            <div className="font-mincho italic text-[11px] text-primary mb-1 tracking-[0.1em]">
+            <div className="font-rounded font-bold text-[11px] text-primary mb-1 tracking-[0.1em]">
               {kicker}
             </div>
           )}
@@ -628,14 +628,14 @@ function CompactCard({ material }: { material: ReturnType<typeof getPopularMater
         <h3 className="font-rounded text-[13px] font-black mb-1 line-clamp-1">
           {material.title.split('（')[0]}
         </h3>
-        <div className="text-[10px] text-muted-foreground flex gap-1.5 items-center">
+        <div className="text-[12px] text-muted-foreground flex gap-1.5 items-center">
           {material.ageMin && <span>{material.ageMin}-{material.ageMax}歳</span>}
           {material.difficulty && <span className="text-primary/70">·</span>}
           {material.difficulty && <span>難{material.difficulty}</span>}
         </div>
         {material.description && (
-          <div className="text-[10px] text-primary mt-1.5 pt-1.5 border-t border-border/60 italic line-clamp-1">
-            &ldquo;{material.description.slice(0, 28).replace(/[。、]+$/, '')}&rdquo;
+          <div className="text-[12px] text-primary mt-1.5 pt-1.5 border-t border-border/60 line-clamp-1">
+            {material.description.slice(0, 28).replace(/[。、]+$/, '')}
           </div>
         )}
       </div>

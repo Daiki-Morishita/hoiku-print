@@ -124,16 +124,16 @@ export function Header({ materialCount = 555 }: { materialCount?: number }) {
             )}
 
             {/* Search bar (desktop) */}
-            <form action={searchAction} method="get" className="hidden md:flex border-[1.5px] border-foreground rounded overflow-hidden bg-card shadow-sm">
+            <form action={searchAction} method="get" className={`hidden md:flex border-[2px] border-foreground overflow-hidden bg-card shadow-sm ${isAdult ? 'rounded' : 'rounded-full'}`}>
               <input
                 name="search"
                 type="text"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 placeholder={isAdult ? 'テーマで検索（曼荼羅・薔薇・風景…）' : 'ぬりえを検索（例: きりん、2歳、ひな祭り）'}
-                className="flex-1 px-4 py-2.5 text-sm outline-none bg-transparent"
+                className={`flex-1 py-2.5 text-sm outline-none bg-transparent ${isAdult ? 'px-4' : 'pl-5 pr-3'}`}
               />
-              <button type="submit" className="bg-foreground text-background px-6 text-sm font-medium hover:bg-primary transition-colors flex items-center gap-1.5">
+              <button type="submit" className={`${isAdult ? 'bg-foreground text-background font-medium' : 'bg-primary text-white font-rounded font-black'} px-6 text-sm hover:opacity-90 transition-all flex items-center gap-1.5`}>
                 <Search className="w-3.5 h-3.5" />
                 さがす
               </button>

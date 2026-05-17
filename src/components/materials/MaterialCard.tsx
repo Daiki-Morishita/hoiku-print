@@ -36,14 +36,14 @@ export function MaterialCard({ material }: MaterialCardProps) {
         )}
         {material.popular && (
           <div className="absolute top-2 left-2">
-            <span className="inline-flex items-center gap-1 text-[10px] bg-[#E66A2C] text-white px-2.5 py-1 rounded-full font-black shadow-sm border-2 border-white">
+            <span className="inline-flex items-center gap-1 text-[12px] bg-[#E66A2C] text-white px-2.5 py-1 rounded-full font-black shadow-sm border-2 border-white">
               <Star className="w-3 h-3 fill-white" />
               にんき
             </span>
           </div>
         )}
         <div className="absolute top-2 right-2">
-          <span className="inline-flex items-center gap-1 text-[10px] bg-white px-2.5 py-1 rounded-full font-bold border-2 border-[#E8B838] text-[#A87716] shadow-sm">
+          <span className="inline-flex items-center gap-1 text-[12px] bg-white px-2.5 py-1 rounded-full font-bold border-2 border-[#E8B838] text-[#A87716] shadow-sm">
             {'★'.repeat(material.difficulty)}
           </span>
         </div>
@@ -56,12 +56,12 @@ export function MaterialCard({ material }: MaterialCardProps) {
         </h3>
 
         {material.description && (
-          <p className="text-[11px] text-primary/85 leading-relaxed line-clamp-2 italic border-l-2 border-primary/30 pl-2">
-            &ldquo;{material.description.replace(/[。、]+$/, '')}&rdquo;
+          <p className="text-[12px] text-primary/85 leading-relaxed line-clamp-2 border-l-2 border-primary/30 pl-2">
+            {material.description.replace(/[。、]+$/, '')}
           </p>
         )}
 
-        <div className="flex items-center justify-between text-[11px] text-muted-foreground mt-auto pt-2 border-t border-border">
+        <div className="flex items-center justify-between text-[12px] text-muted-foreground mt-auto pt-2 border-t border-border">
           <span className="flex items-center gap-1">
             <Users className="w-3 h-3" />
             {ageLabel}
