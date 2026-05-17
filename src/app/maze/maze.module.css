@@ -130,7 +130,7 @@
 .maze-stage {
   background: #fff; border-radius: 20px; border: 1.5px solid #fff;
   box-shadow: 0 0 0 2px #E8DFD2, 0 4px 0 #EFE5D2;
-  padding: 28px 60px; margin-bottom: 14px; position: relative;
+  padding: 28px 80px; margin-bottom: 14px; position: relative;
   display: flex; align-items: center; justify-content: center;
 }
 /* フレームは SVG の実寸幅に合わせる（inline-flex + width:fit-content）。
@@ -152,12 +152,12 @@
   padding: 3px 10px 4px; border-radius: 999px; color: white;
   letter-spacing: 0.1em; white-space: nowrap; line-height: 1;
 }
-.start-char { left: -58px; transform: translateY(-50%); }
+.start-char { left: -76px; transform: translateY(-50%); }
 .start-char .point-label {
   background: linear-gradient(135deg, #82CB91, #6BBF7C);
   box-shadow: 0 2px 0 #4DA160;
 }
-.goal-char { right: -58px; transform: translateY(-50%); }
+.goal-char { right: -76px; transform: translateY(-50%); }
 .goal-char .point-label {
   background: linear-gradient(135deg, #FF9E80, #FF8C69);
   box-shadow: 0 2px 0 #D8694A;
