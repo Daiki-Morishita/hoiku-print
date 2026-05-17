@@ -14528,7 +14528,6 @@ export const materials: Material[] = [
     popular: false,
   },
   {
-<<<<<<< HEAD
     id: 'botanical-wisteria-simple-1',
     title: '藤の植物画',
     description: '花房と葉の藤の植物画。',
@@ -15102,7 +15101,9 @@ export const materials: Material[] = [
     imageStatus: 'pending_review',
     pdfUrl: '',
     createdAt: '2026-05-17T20:52',
-=======
+    popular: false,
+  },
+  {
     id: 'sakura-simple-1',
     title: 'さくらのはな',
     description: 'シンプルな桜の花1輪の線画。',
@@ -16120,7 +16121,6 @@ export const materials: Material[] = [
     imageStatus: 'pending_review',
     pdfUrl: '',
     createdAt: '2026-05-17T18:24',
->>>>>>> origin/main
     popular: false,
   },
   {
