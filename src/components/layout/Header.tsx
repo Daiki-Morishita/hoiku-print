@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Search, User, LogOut, Heart } from 'lucide-react'
+import { Menu, X, Search, User, LogOut, Heart, Mail, LogIn } from 'lucide-react'
 import { useSession, signOut } from 'next-auth/react'
 import { useFavorites } from '@/components/favorites/FavoritesProvider'
 
@@ -81,16 +81,50 @@ export function Header({ materialCount = 555 }: { materialCount?: number }) {
             </div>
 
             {/* Utility links (desktop) */}
-            <div className="hidden md:flex items-center gap-4 text-[11px]">
-              <Link href="/about" className="text-white/70 hover:text-white transition-colors">運営について</Link>
-              <Link href="/editorial-policy" className="text-white/70 hover:text-white transition-colors">編集方針</Link>
-              <Link href="/contact" className="text-white/70 hover:text-white transition-colors">お問い合わせ</Link>
+            <div className="hidden md:flex items-center gap-1 text-[13px]">
+              {session && (
+                <Link
+                  href="/favorites"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-white/85 hover:text-white hover:bg-white/10 transition-colors"
+                >
+                  <Heart className={`w-3.5 h-3.5 ${favCount > 0 ? 'fill-[#E66A2C] text-[#E66A2C]' : ''}`} />
+                  <span className="font-medium">お気に入り</span>
+                  <span className="text-[11px] text-white/55 ml-0.5">{favCount}/{favLimit}</span>
+                </Link>
+              )}
+              <span className="w-px h-3 bg-white/15 mx-1" aria-hidden />
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-white/85 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <Mail className="w-3.5 h-3.5" />
+                <span className="font-medium">お問い合わせ</span>
+              </Link>
               {session ? (
-                <button onClick={() => signOut({ callbackUrl: '/' })} className="text-white/70 hover:text-white transition-colors flex items-center gap-1">
-                  <LogOut className="w-3 h-3" />ログアウト
-                </button>
+                <>
+                  <Link
+                    href="/account"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-white/85 hover:text-white hover:bg-white/10 transition-colors"
+                  >
+                    <User className="w-3.5 h-3.5" />
+                    <span className="font-medium">マイページ</span>
+                  </Link>
+                  <button
+                    onClick={() => signOut({ callbackUrl: '/' })}
+                    aria-label="ログアウト"
+                    className="inline-flex items-center justify-center w-8 h-8 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                  </button>
+                </>
               ) : (
-                <Link href="/login" className="text-white/70 hover:text-white transition-colors">ログイン</Link>
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors font-medium"
+                >
+                  <LogIn className="w-3.5 h-3.5" />
+                  ログイン
+                </Link>
               )}
             </div>
           </div>
