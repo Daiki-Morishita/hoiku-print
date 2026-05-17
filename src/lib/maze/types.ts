@@ -6,13 +6,16 @@ export type MazeShape = 'square' | 'circle' | 'triangle-up' | 'triangle-down'
 export type MazeDifficulty = 'easy' | 'normal' | 'hard' | 'expert'
 export type WallSide = 'N' | 'S' | 'E' | 'W'
 
-export type MazeRecord = {
-  slug: string                       // e.g. "square-normal-001"
-  shape: MazeShape
-  shape_label: string                // "しかくのめいろ" 等
+export type PolarSide = 'IN' | 'OUT' | 'CW' | 'CCW'
+
+/** grid系 (square / triangle系) */
+export type GridMazeRecord = {
+  slug: string
+  shape: 'square' | 'triangle-up' | 'triangle-down'
+  shape_label: string
   difficulty: MazeDifficulty
-  difficulty_label: string           // "ふつう" 等
-  age_label: string                  // "3・4さい" 等
+  difficulty_label: string
+  age_label: string
   age_min: number
   age_max: number
   no: number
@@ -21,13 +24,43 @@ export type MazeRecord = {
   seed: number
   turns: number
   path_length: number
-  walls: string[][][]                // walls[x][y] = ['N','S',...]
-  valid: boolean[][]                 // valid[x][y] = セルが形内か
+  walls: string[][][]
+  valid: boolean[][]
   solution: [number, number][]
   start_cell: [number, number]
   goal_cell: [number, number]
   start_side: WallSide
   goal_side: WallSide
+}
+
+/** Polar (真の円形) maze */
+export type CircleMazeRecord = {
+  slug: string
+  shape: 'circle'
+  shape_label: string
+  difficulty: MazeDifficulty
+  difficulty_label: string
+  age_label: string
+  age_min: number
+  age_max: number
+  no: number
+  rings: number
+  sectors: number
+  seed: number
+  turns: number
+  path_length: number
+  circle_walls: string[][][]         // [ring][sector] = ['IN','OUT','CW','CCW']
+  solution: [number, number][]      // [ring, sector] のペア
+  start_cell: [number, number]      // [ring, sector]
+  goal_cell: [number, number]
+  start_side: PolarSide
+  goal_side: PolarSide
+}
+
+export type MazeRecord = GridMazeRecord | CircleMazeRecord
+
+export function isCircleMaze(m: MazeRecord): m is CircleMazeRecord {
+  return m.shape === 'circle'
 }
 
 /** JSON 全体の構造: shape -> difficulty -> records */

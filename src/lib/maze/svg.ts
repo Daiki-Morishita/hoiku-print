@@ -1,30 +1,31 @@
-import type { MazeRecord, WallSide } from './types'
+import { isCircleMaze, type CircleMazeRecord, type GridMazeRecord, type MazeRecord, type WallSide } from './types'
 
 const CELL = 42
 const WALL = 6
 
+export type MazeEdge = 'left' | 'right' | 'top' | 'bottom' | 'circle'
+
 export type MazeSvgResult = {
   svg: string
-  /** スタートキャラの top%（maze-frame基準） */
-  startYPct: number
-  /** スタートキャラの left%（maze-frame基準）。左辺開口なら 0、上辺なら start_cell.x の中央% */
   startXPct: number
-  /** スタートキャラを「どの方向に隣接させるか」: 'left'|'right'|'top'|'bottom' */
-  startEdge: 'left' | 'right' | 'top' | 'bottom'
-  goalYPct: number
+  startYPct: number
+  startEdge: MazeEdge
   goalXPct: number
-  goalEdge: 'left' | 'right' | 'top' | 'bottom'
+  goalYPct: number
+  goalEdge: MazeEdge
 }
 
 function sideToEdge(side: WallSide): 'left' | 'right' | 'top' | 'bottom' {
   return ({ W: 'left', E: 'right', N: 'top', S: 'bottom' } as const)[side]
 }
 
-/**
- * 迷路をSVG文字列としてレンダリング。
- * solution=true で赤い解答パスをオーバーレイ。
- */
+/** トップエントリ: shape に応じて grid版 / polar版 を呼び分け */
 export function buildMazeSvg(maze: MazeRecord, showSolution = false): MazeSvgResult {
+  if (isCircleMaze(maze)) return buildPolarSvg(maze, showSolution)
+  return buildGridSvg(maze, showSolution)
+}
+
+function buildGridSvg(maze: GridMazeRecord, showSolution = false): MazeSvgResult {
   const { walls, valid, cols, rows, solution, start_cell, goal_cell, start_side, goal_side } = maze
   const W = cols * CELL
   const H = rows * CELL
@@ -131,6 +132,117 @@ export function buildMazeSvg(maze: MazeRecord, showSolution = false): MazeSvgRes
     if (side === 'N') return [px, py - off]
     return [px, py + off]
   }
+}
+
+// ========= Polar (真の円形) maze renderer =========
+function buildPolarSvg(maze: CircleMazeRecord, showSolution = false): MazeSvgResult {
+  const { rings, sectors, circle_walls, solution, start_cell, goal_cell, start_side, goal_side } = maze
+
+  const CENTER_R = 32   // 中心円（穴）の半径
+  const RING_W = 28     // 各リングの幅
+  const CHAR_SPACE = RING_W * 1.6  // 外側のキャラ配置スペース
+  const outerR = CENTER_R + rings * RING_W
+  const vb = outerR + CHAR_SPACE + 6   // viewBox 半径（キャラ込み）
+
+  const sectorAngle = (2 * Math.PI) / sectors
+
+  function pt(r: number, theta: number): [number, number] {
+    return [r * Math.cos(theta), r * Math.sin(theta)]
+  }
+
+  function arcPath(r: number, t1: number, t2: number): string {
+    const [x1, y1] = pt(r, t1)
+    const [x2, y2] = pt(r, t2)
+    const largeArc = Math.abs(t2 - t1) > Math.PI ? 1 : 0
+    return `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${largeArc} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`
+  }
+
+  function linePath(r1: number, r2: number, theta: number): string {
+    const [x1, y1] = pt(r1, theta)
+    const [x2, y2] = pt(r2, theta)
+    return `M ${x1.toFixed(2)} ${y1.toFixed(2)} L ${x2.toFixed(2)} ${y2.toFixed(2)}`
+  }
+
+  const paths: string[] = []
+  const [sr, ss] = start_cell
+  const [gr, gs] = goal_cell
+
+  for (let r = 0; r < rings; r++) {
+    for (let s = 0; s < sectors; s++) {
+      const cell = circle_walls[r][s]
+      const t1 = s * sectorAngle
+      const t2 = (s + 1) * sectorAngle
+      const rIn = CENTER_R + r * RING_W
+      const rOut = CENTER_R + (r + 1) * RING_W
+
+      // IN (内側の弧)
+      if (cell.includes('IN')) {
+        const isStart = r === sr && s === ss && start_side === 'IN'
+        const isGoal = r === gr && s === gs && goal_side === 'IN'
+        if (!isStart && !isGoal) paths.push(arcPath(rIn, t1, t2))
+      }
+      // OUT (外側の弧)
+      if (cell.includes('OUT')) {
+        const isStart = r === sr && s === ss && start_side === 'OUT'
+        const isGoal = r === gr && s === gs && goal_side === 'OUT'
+        if (!isStart && !isGoal) paths.push(arcPath(rOut, t1, t2))
+      }
+      // CW (sector境界 = theta2 の半径方向の線)。CCW側は隣セルが CW として描くので重複防止
+      if (cell.includes('CW')) {
+        paths.push(linePath(rIn, rOut, t2))
+      }
+    }
+  }
+
+  // 解答パス
+  let solLayer = ''
+  if (showSolution && solution.length > 0) {
+    const ext = RING_W * 0.6
+    const pathPts: [number, number][] = []
+    pathPts.push(extendPolar(start_cell, start_side, ext, CENTER_R, RING_W, sectorAngle))
+    for (const [r, s] of solution) {
+      const theta = (s + 0.5) * sectorAngle
+      const radius = CENTER_R + (r + 0.5) * RING_W
+      pathPts.push(pt(radius, theta))
+    }
+    pathPts.push(extendPolar(goal_cell, goal_side, ext, CENTER_R, RING_W, sectorAngle))
+    const d = 'M ' + pathPts.map(([x, y]) => `${x.toFixed(1)} ${y.toFixed(1)}`).join(' L ')
+    solLayer = `<path d="${d}" stroke="#FF4757" stroke-width="${WALL * 0.9}" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.85"/>`
+  }
+
+  const svg = `<svg viewBox="${-vb} ${-vb} ${vb * 2} ${vb * 2}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    ${solLayer}
+    <path d="${paths.join(' ')}" stroke="#2A1E22" stroke-width="${WALL}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </svg>`
+
+  // キャラ位置: 開口の方向の外側に配置。viewBox(-vb,-vb,2vb,2vb)→%変換
+  const charOffset = CHAR_SPACE - 4
+  const [sx, sy] = charPosPolar(start_cell, start_side, charOffset, CENTER_R, RING_W, sectorAngle)
+  const [gx, gy] = charPosPolar(goal_cell, goal_side, charOffset, CENTER_R, RING_W, sectorAngle)
+  const toPct = (v: number) => ((v + vb) / (vb * 2)) * 100
+  return {
+    svg,
+    startXPct: toPct(sx),
+    startYPct: toPct(sy),
+    startEdge: 'circle',
+    goalXPct: toPct(gx),
+    goalYPct: toPct(gy),
+    goalEdge: 'circle',
+  }
+}
+
+function extendPolar(cell: [number, number], side: string, ext: number, CENTER_R: number, RING_W: number, sectorAngle: number): [number, number] {
+  const [r, s] = cell
+  const theta = (s + 0.5) * sectorAngle
+  let radius = CENTER_R + (r + 0.5) * RING_W
+  if (side === 'OUT') radius = CENTER_R + (r + 1) * RING_W + ext
+  if (side === 'IN') radius = Math.max(0, CENTER_R + r * RING_W - ext)
+  // CW/CCW (角度方向) は実装不要（このプロジェクトでは外側開口のみ採用）
+  return [radius * Math.cos(theta), radius * Math.sin(theta)]
+}
+
+function charPosPolar(cell: [number, number], side: string, ext: number, CENTER_R: number, RING_W: number, sectorAngle: number): [number, number] {
+  return extendPolar(cell, side, ext, CENTER_R, RING_W, sectorAngle)
 }
 
 export const RABBIT_SVG = `<svg viewBox="0 0 100 115" xmlns="http://www.w3.org/2000/svg">

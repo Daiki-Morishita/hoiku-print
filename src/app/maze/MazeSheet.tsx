@@ -9,13 +9,17 @@ type Props = {
   isAnswer?: boolean
 }
 
-type Edge = 'left' | 'right' | 'top' | 'bottom'
+type Edge = 'left' | 'right' | 'top' | 'bottom' | 'circle'
 
 function charStyle(edge: Edge, xPct: number, yPct: number): React.CSSProperties {
-  if (edge === 'left') return { right: 'calc(100% + 14px)', top: `${yPct}%`, transform: 'translateY(-50%)' }
-  if (edge === 'right') return { left: 'calc(100% + 14px)', top: `${yPct}%`, transform: 'translateY(-50%)' }
-  if (edge === 'top') return { bottom: 'calc(100% + 14px)', left: `${xPct}%`, transform: 'translateX(-50%)' }
-  return { top: 'calc(100% + 14px)', left: `${xPct}%`, transform: 'translateX(-50%)' }
+  // 円形迷路: viewBox 内に既に外側にオフセット済みの位置で渡ってくる → そのまま %配置・中心揃え
+  if (edge === 'circle') {
+    return { left: `${xPct}%`, top: `${yPct}%`, transform: 'translate(-50%, -50%)' }
+  }
+  if (edge === 'left') return { right: 'calc(100% + 12px)', top: `${yPct}%`, transform: 'translateY(-50%)' }
+  if (edge === 'right') return { left: 'calc(100% + 12px)', top: `${yPct}%`, transform: 'translateY(-50%)' }
+  if (edge === 'top') return { bottom: 'calc(100% + 12px)', left: `${xPct}%`, transform: 'translateX(-50%)' }
+  return { top: 'calc(100% + 12px)', left: `${xPct}%`, transform: 'translateX(-50%)' }
 }
 
 export function MazeSheet({ maze, isAnswer = false }: Props) {

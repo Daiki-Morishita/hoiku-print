@@ -19,6 +19,19 @@ from pathlib import Path
 
 SHAPES = ['square', 'circle', 'triangle-up', 'triangle-down']
 
+# === Polar (真の円形) Maze の構造 ===
+# circle は他の shape と全く別データ構造: rings×sectors の極座標
+# 各セル(r, s)の壁: IN(内側の弧)・OUT(外側の弧)・CW(時計回り壁)・CCW(反時計回り壁)
+POLAR_DIRS = ['IN', 'OUT', 'CW', 'CCW']
+POLAR_OPP = {'IN': 'OUT', 'OUT': 'IN', 'CW': 'CCW', 'CCW': 'CW'}
+
+POLAR_BY_DIFF = {
+    'easy':   {'rings': 3, 'sectors': 8,  'turns': (3, 8),   'path': (5, 15)},
+    'normal': {'rings': 4, 'sectors': 12, 'turns': (6, 12),  'path': (10, 25)},
+    'hard':   {'rings': 5, 'sectors': 16, 'turns': (10, 18), 'path': (18, 40)},
+    'expert': {'rings': 6, 'sectors': 20, 'turns': (16, 28), 'path': (28, 60)},
+}
+
 SHAPE_LABELS = {
     'square': 'しかくのめいろ',
     'circle': 'まるのめいろ',
@@ -197,6 +210,140 @@ def serialize(walls, valid, cols: int, rows: int):
     }
 
 
+# ========= Polar Maze =========
+def generate_polar_maze(rings: int, sectors: int, seed: int):
+    rnd = random.Random(seed)
+    walls = [[set(POLAR_DIRS) for _ in range(sectors)] for _ in range(rings)]
+    visited = [[False] * sectors for _ in range(rings)]
+    sys.setrecursionlimit(rings * sectors + 100)
+
+    def neighbors(r: int, s: int):
+        out = []
+        if r > 0:
+            out.append(('IN', r - 1, s))
+        if r < rings - 1:
+            out.append(('OUT', r + 1, s))
+        out.append(('CW', r, (s + 1) % sectors))
+        out.append(('CCW', r, (s - 1) % sectors))
+        return out
+
+    def carve(r: int, s: int):
+        visited[r][s] = True
+        adj = neighbors(r, s)
+        rnd.shuffle(adj)
+        for d, nr, ns in adj:
+            if visited[nr][ns]:
+                continue
+            walls[r][s].discard(d)
+            walls[nr][ns].discard(POLAR_OPP[d])
+            carve(nr, ns)
+
+    carve(0, 0)
+    return walls
+
+
+def bfs_polar(walls, rings: int, sectors: int, start: tuple[int, int], goal: tuple[int, int]):
+    q = deque([start])
+    came = {start: None}
+    while q:
+        cur = q.popleft()
+        if cur == goal:
+            break
+        r, s = cur
+        cands = []
+        if 'IN' not in walls[r][s] and r > 0:
+            cands.append((r - 1, s))
+        if 'OUT' not in walls[r][s] and r < rings - 1:
+            cands.append((r + 1, s))
+        if 'CW' not in walls[r][s]:
+            cands.append((r, (s + 1) % sectors))
+        if 'CCW' not in walls[r][s]:
+            cands.append((r, (s - 1) % sectors))
+        for n in cands:
+            if n not in came:
+                came[n] = cur
+                q.append(n)
+    path = []
+    cur = goal if goal in came else None
+    while cur is not None:
+        path.append(cur)
+        cur = came[cur]
+    path.reverse()
+    return path
+
+
+def count_turns_polar(path):
+    if len(path) < 3:
+        return 0
+    turns = 0
+    def normalize(d):
+        # CW/CCW のラップアラウンドを補正
+        return (max(-1, min(1, d[0])), max(-1, min(1, d[1])))
+    for i in range(1, len(path) - 1):
+        d1 = normalize((path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1]))
+        d2 = normalize((path[i + 1][0] - path[i][0], path[i + 1][1] - path[i][1]))
+        if d1 != d2:
+            turns += 1
+    return turns
+
+
+def find_polar_maze(diff_key: str, used_seeds: set[int], max_attempts: int = 5000):
+    rule_d = DIFFICULTY[diff_key]
+    cfg = POLAR_BY_DIFF[diff_key]
+    rings, sectors = cfg['rings'], cfg['sectors']
+    tmin, tmax = cfg['turns']
+    pmin, pmax = cfg['path']
+    # スタート: 外周 sector 0 から外側(OUT)へ
+    # ゴール: 外周 反対側 (sectors//2) から外側(OUT)へ
+    start = (rings - 1, 0)
+    goal = (rings - 1, sectors // 2)
+    for seed in range(1, max_attempts + 1):
+        if seed in used_seeds:
+            continue
+        walls = generate_polar_maze(rings, sectors, seed)
+        path = bfs_polar(walls, rings, sectors, start, goal)
+        if len(path) < 2:
+            continue
+        turns = count_turns_polar(path)
+        if tmin <= turns <= tmax and pmin <= len(path) <= pmax:
+            # 開口部を開ける
+            walls[start[0]][start[1]].discard('OUT')
+            walls[goal[0]][goal[1]].discard('OUT')
+            return {
+                'walls': walls, 'path': path, 'turns': turns, 'seed': seed,
+                'start': start, 'goal': goal, 'rings': rings, 'sectors': sectors,
+            }
+    return None
+
+
+def build_polar_record(diff_key: str, no: int, found: dict) -> dict:
+    rule = DIFFICULTY[diff_key]
+    rings = found['rings']; sectors = found['sectors']
+    return {
+        'slug': f'circle-{diff_key}-{no:03d}',
+        'shape': 'circle',
+        'shape_label': SHAPE_LABELS['circle'],
+        'difficulty': diff_key,
+        'difficulty_label': rule['label'],
+        'age_label': rule['age'],
+        'age_min': rule['age_min'],
+        'age_max': rule['age_max'],
+        'no': no,
+        'rings': rings,
+        'sectors': sectors,
+        'seed': found['seed'],
+        'turns': found['turns'],
+        'path_length': len(found['path']),
+        'circle_walls': [[sorted(found['walls'][r][s]) for s in range(sectors)] for r in range(rings)],
+        'solution': [[r, s] for r, s in found['path']],
+        'start_cell': list(found['start']),
+        'goal_cell': list(found['goal']),
+        'start_side': 'OUT',
+        'goal_side': 'OUT',
+    }
+
+
+# ========= 既存の grid-based shapes =========
 def find_maze(shape: str, diff_key: str, used_seeds: set[int], max_attempts: int = 5000):
     rule = DIFFICULTY[diff_key]
     cols, rows = GRID_BY_SHAPE_DIFF[shape][diff_key]
@@ -294,12 +441,20 @@ def main():
             print(f'[{sh}/{dk}] 生成開始：目標{need}件 / 現{len(bucket)}件')
             for i in range(need):
                 no = start_no + i
-                found = find_maze(sh, dk, used_seeds)
-                if not found:
-                    print(f'  [WARN] {sh}/{dk} No.{no:03d} 条件未達')
-                    break
-                used_seeds.add(found['seed'])
-                rec = build_record(sh, dk, no, found)
+                if sh == 'circle':
+                    found = find_polar_maze(dk, used_seeds)
+                    if not found:
+                        print(f'  [WARN] {sh}/{dk} No.{no:03d} 条件未達')
+                        break
+                    used_seeds.add(found['seed'])
+                    rec = build_polar_record(dk, no, found)
+                else:
+                    found = find_maze(sh, dk, used_seeds)
+                    if not found:
+                        print(f'  [WARN] {sh}/{dk} No.{no:03d} 条件未達')
+                        break
+                    used_seeds.add(found['seed'])
+                    rec = build_record(sh, dk, no, found)
                 bucket.append(rec)
                 print(f'  ✓ {rec["slug"]} (turns={found["turns"]}, path={len(found["path"])}, seed={found["seed"]})')
 
