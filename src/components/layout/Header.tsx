@@ -42,7 +42,7 @@ export function Header({ materialCount = 555 }: { materialCount?: number }) {
   const searchAction = isAdult ? '/adult/materials' : '/materials'
 
   return (
-    <div className={isAdult ? 'adult-section' : ''}>
+    <div className={`print:hidden ${isAdult ? 'adult-section' : ''}`}>
       {/* Audience switcher — prominent tab bar */}
       <div className={`${isAdult ? 'bg-[#1E2A28]' : 'bg-[#2A2620]'} text-white`}>
         <div className="max-w-[1280px] mx-auto px-3 sm:px-6">

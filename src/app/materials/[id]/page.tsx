@@ -167,8 +167,8 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
         <div className="grid lg:grid-cols-[1fr_300px] gap-8">
           {/* メインコンテンツ */}
           <div>
-            {/* 教材プレビュー（画面表示用・next/imageで最適化） */}
-            <div className="bg-white border border-border rounded-lg overflow-hidden mb-6 relative flex items-center justify-center min-h-64">
+            {/* 教材プレビュー — A4横長比率（1.414:1）で印刷イメージを伝える */}
+            <div className="bg-white border border-border rounded-lg overflow-hidden mb-6 relative flex items-center justify-center aspect-[1.414/1] max-w-3xl mx-auto">
               {prevMaterial && (
                 <Link
                   href={`/materials/${prevMaterial.id}`}
@@ -193,9 +193,9 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
                 <Image
                   src={material.imageUrl}
                   alt={material.title}
-                  width={480}
-                  height={360}
-                  className="w-full max-w-md mx-auto object-contain p-6"
+                  width={840}
+                  height={594}
+                  className="w-full h-full object-contain p-4 sm:p-8"
                   unoptimized
                 />
               ) : (
@@ -203,13 +203,17 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
                   {material.theme ? (themeEmoji[material.theme] ?? categoryEmoji[material.category] ?? '🖨') : (categoryEmoji[material.category] ?? '🖨')}
                 </div>
               )}
-              <div className="absolute top-3 left-3 flex gap-2">
+              <div className="absolute top-3 left-3 flex gap-2 flex-wrap">
                 <span className={`text-xs px-2.5 py-1 rounded-full border font-medium ${difficultyColor[material.difficulty]}`}>
                   {DIFFICULTY_LABELS[material.difficulty]}
                 </span>
                 <span className="text-xs px-2.5 py-1 rounded-full bg-white border border-border font-medium">
                   {CATEGORY_LABELS[material.category]}
                 </span>
+              </div>
+              {/* A4横長 印刷サイズ表示 */}
+              <div className="absolute bottom-3 right-3 text-[10px] text-muted-foreground bg-white/90 backdrop-blur px-2 py-0.5 rounded border border-border">
+                A4 横長
               </div>
             </div>
 
@@ -222,7 +226,7 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             <div className="lg:hidden mb-6 bg-white border border-border rounded-lg p-4">
               <PrintButton materialTitle={material.title} />
               <p className="text-[11px] text-muted-foreground mt-2.5 text-center">
-                A4・白黒印刷に最適化済み
+                A4横長・白黒印刷に最適化（モノクロ自動適用）
               </p>
             </div>
 
@@ -297,7 +301,7 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
               </h2>
               <PrintButton materialTitle={material.title} />
               <p className="text-xs text-muted-foreground mt-2.5 text-center">
-                A4・白黒印刷に最適化済み
+                A4横長・白黒印刷に最適化（モノクロ自動適用）
               </p>
             </div>
 
