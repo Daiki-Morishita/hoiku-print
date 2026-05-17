@@ -1,16 +1,21 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, Clock, Users, Wrench, Lightbulb, Printer, ChevronRight, ChevronLeft } from 'lucide-react'
+import { ArrowLeft, Clock, Users, Lightbulb, Printer, ChevronRight, ChevronLeft } from 'lucide-react'
 import { getMaterialById, getRelatedMaterials, materials } from '@/lib/data'
+import { loadOverrides } from '@/lib/data-overrides'
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
-import { MaterialCard } from '@/components/materials/MaterialCard'
-import { Badge } from '@/components/ui/badge'
+import { MaterialCard, DifficultyBadge } from '@/components/materials/MaterialCard'
 import { PrintButton } from '@/components/materials/PrintButton'
+import { SaveButton } from '@/components/materials/SaveButton'
+import { FavoriteButton } from '@/components/favorites/FavoriteButton'
 
 export async function generateStaticParams() {
   return materials.map(m => ({ id: m.id }))
 }
+
+// ISR: ステータス変更を 30 秒以内に反映
+export const revalidate = 30
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -33,13 +38,6 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 }
 
-const difficultyColor: Record<number, string> = {
-  1: 'bg-green-100 text-green-800 border-green-200',
-  2: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  3: 'bg-red-100 text-red-800 border-red-200',
-  4: 'bg-purple-100 text-purple-800 border-purple-200',
-}
-
 const categoryEmoji: Record<string, string> = {
   coloring: '🖍️', hiragana: 'あ', numbers: '1', drawing: '✏️',
   maze: '🗺', dotconnect: '⚫', craft: '🎨', scissors: '✂️',
@@ -51,14 +49,15 @@ const themeEmoji: Record<string, string> = {
 
 export default async function MaterialDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const material = getMaterialById(id)
+  const overrides = await loadOverrides()
+  const material = getMaterialById(id, overrides)
   if (!material) notFound()
 
   const idx = materials.findIndex(m => m.id === id)
   const prevMaterial = idx > 0 ? materials[idx - 1] : null
   const nextMaterial = idx >= 0 && idx < materials.length - 1 ? materials[idx + 1] : null
 
-  const related = getRelatedMaterials(material, 4)
+  const related = getRelatedMaterials(material, 4, overrides)
   const ageLabel = material.ageMin === material.ageMax
     ? `${material.ageMin}歳`
     : `${material.ageMin}〜${material.ageMax}歳`
@@ -113,53 +112,60 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             margin: 0 !important;
             padding: 0 !important;
             background: white !important;
-            -webkit-print-color-adjust: economy;
-            print-color-adjust: economy;
+            -webkit-print-color-adjust: economy !important;
+            print-color-adjust: economy !important;
+            color-adjust: economy !important;
+            color-scheme: light only;
+            forced-color-adjust: economy;
           }
-          .print-area {
-            filter: grayscale(100%) contrast(1) !important;
+          html, body, .print-area, .print-area * {
+            filter: grayscale(100%) !important;
+            -webkit-filter: grayscale(100%) !important;
+          }
+          .print-area,
+          .print-area * {
+            border: 0 !important;
+            outline: 0 !important;
+            box-shadow: none !important;
           }
         }
       `}</style>
-      <div className="hidden print:block print-area" style={{ position: 'relative', width: '297mm', height: '210mm', boxSizing: 'border-box', overflow: 'hidden' }}>
+      <div className="hidden print:block print-area" style={{ position: 'relative', width: '297mm', height: '210mm', boxSizing: 'border-box', overflow: 'hidden', background: 'white' }}>
         {printImageUrl && (
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '5mm' }}>
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={printImageUrl}
               alt={material.title}
-              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }}
             />
           </div>
         )}
-        {/* 右下ブランディング */}
+        {/* 右下ブランディング — 背景なし・小さく */}
         <div style={{
           position: 'absolute',
-          right: '8mm',
-          bottom: '5mm',
-          backgroundColor: '#eeeeee',
-          padding: '0.5mm 1.5mm',
-          borderRadius: '1mm',
-          fontSize: '9pt',
-          color: '#333',
+          right: '6mm',
+          bottom: '4mm',
+          fontSize: '8pt',
+          color: '#999',
           letterSpacing: '0.05em',
           display: 'flex',
           alignItems: 'center',
           gap: '0.4em',
         }}>
           <span>{material.title}</span>
-          <span style={{ color: '#aaa' }}>｜</span>
+          <span style={{ color: '#ccc' }}>｜</span>
           <span>ぬりえプリント</span>
         </div>
       </div>
 
       {/* ===== 通常表示エリア ===== */}
-      <div className="print:hidden max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <div className="print:hidden max-w-[1280px] mx-auto px-4 sm:px-6 py-8">
         {/* パンくず */}
-        <nav className="flex items-center gap-1.5 text-xs text-muted-foreground mb-6">
-          <Link href="/" className="hover:text-foreground transition-colors">ホーム</Link>
+        <nav className="flex items-center gap-1.5 text-[11px] text-muted-foreground mb-6">
+          <Link href="/" className="hover:text-primary transition-colors">ホーム</Link>
           <ChevronRight className="w-3 h-3" />
-          <Link href="/materials" className="hover:text-foreground transition-colors">教材一覧</Link>
+          <Link href="/materials" className="hover:text-primary transition-colors">教材一覧</Link>
           <ChevronRight className="w-3 h-3" />
           <span className="text-foreground line-clamp-1">{material.title}</span>
         </nav>
@@ -167,8 +173,8 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
         <div className="grid lg:grid-cols-[1fr_300px] gap-8">
           {/* メインコンテンツ */}
           <div>
-            {/* 教材プレビュー（画面表示用・next/imageで最適化） */}
-            <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl overflow-hidden mb-6 relative flex items-center justify-center min-h-64">
+            {/* 教材プレビュー — A4横長比率（1.414:1）で印刷イメージを伝える */}
+            <div className="bg-white border border-border rounded-lg overflow-hidden mb-6 relative flex items-center justify-center aspect-[1.414/1] max-w-3xl mx-auto">
               {prevMaterial && (
                 <Link
                   href={`/materials/${prevMaterial.id}`}
@@ -193,9 +199,9 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
                 <Image
                   src={material.imageUrl}
                   alt={material.title}
-                  width={480}
-                  height={360}
-                  className="w-full max-w-md mx-auto object-contain p-6"
+                  width={840}
+                  height={594}
+                  className="w-full h-full object-contain p-4 sm:p-8"
                   unoptimized
                 />
               ) : (
@@ -203,45 +209,67 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
                   {material.theme ? (themeEmoji[material.theme] ?? categoryEmoji[material.category] ?? '🖨') : (categoryEmoji[material.category] ?? '🖨')}
                 </div>
               )}
-              <div className="absolute top-3 left-3 flex gap-2">
-                <span className={`text-xs px-2.5 py-1 rounded-full border font-medium ${difficultyColor[material.difficulty]}`}>
-                  {DIFFICULTY_LABELS[material.difficulty]}
-                </span>
+              <div className="absolute top-3 left-3 flex gap-2 flex-wrap items-center">
+                <DifficultyBadge level={material.difficulty} />
                 <span className="text-xs px-2.5 py-1 rounded-full bg-white border border-border font-medium">
                   {CATEGORY_LABELS[material.category]}
                 </span>
               </div>
-            </div>
-
-            {/* タイトル */}
-            <h1 className="text-2xl sm:text-3xl font-bold mb-2">{material.title}</h1>
-            <p className="text-muted-foreground mb-4 leading-relaxed">{material.description}</p>
-
-            {/* タグ */}
-            <div className="flex flex-wrap gap-2 mb-6">
-              {material.tags.map(tag => (
-                <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
-              ))}
-              {material.season && <Badge variant="outline" className="text-xs">{SEASON_LABELS[material.season]}</Badge>}
-              {material.event && <Badge variant="outline" className="text-xs">{EVENT_LABELS[material.event]}</Badge>}
-            </div>
-
-            {/* 必要道具 */}
-            <div className="bg-white border border-border rounded-xl p-4 mb-4">
-              <h2 className="font-semibold flex items-center gap-2 mb-3 text-sm">
-                <Wrench className="w-4 h-4 text-primary" />
-                必要な道具
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {material.tools.map(tool => (
-                  <span key={tool} className="text-sm bg-muted px-3 py-1 rounded-full">{tool}</span>
-                ))}
+              {/* A4横長 印刷サイズ表示 */}
+              <div className="absolute bottom-3 right-3 text-[10px] text-muted-foreground bg-white/90 backdrop-blur px-2 py-0.5 rounded border border-border">
+                A4 横長
               </div>
             </div>
 
+            {/* タイトル */}
+            <div className="font-rounded font-bold text-[12px] text-primary mb-1 tracking-[0.1em]">— Material —</div>
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <h1 className="font-rounded text-[26px] sm:text-[32px] font-black leading-[1.3]">{material.title}</h1>
+              <FavoriteButton materialId={material.id} size="lg" variant="inline" className="shrink-0 mt-1" />
+            </div>
+            <p className="text-[14px] text-foreground/85 mb-4 leading-relaxed pl-4 border-l-[3px] border-primary">{material.description}</p>
+
+            {/* モバイル専用: 画像直下に印刷・保存ボタン */}
+            <div className="lg:hidden mb-6 bg-white border border-border rounded-lg p-4 space-y-2.5">
+              <PrintButton materialTitle={material.title} />
+              <SaveButton materialTitle={material.title} imageUrl={material.imageUrl} />
+              <p className="text-[11px] text-muted-foreground text-center pt-1">
+                A4横長・白黒印刷に最適化されています
+              </p>
+            </div>
+
+            {/* タグ — クリックで検索 */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {material.tags.map(tag => (
+                <Link
+                  key={tag}
+                  href={`/materials?search=${encodeURIComponent(tag)}`}
+                  className="inline-flex items-center text-[12px] bg-muted hover:bg-primary hover:text-white px-3 py-1.5 rounded-full transition-colors"
+                >
+                  #{tag}
+                </Link>
+              ))}
+              {material.season && (
+                <Link
+                  href={`/category/season/${material.season}`}
+                  className="inline-flex items-center text-[12px] bg-white border border-border hover:border-primary hover:text-primary px-3 py-1.5 rounded-full transition-colors"
+                >
+                  {SEASON_LABELS[material.season]}
+                </Link>
+              )}
+              {material.event && (
+                <Link
+                  href={`/materials?event=${material.event}`}
+                  className="inline-flex items-center text-[12px] bg-white border border-border hover:border-primary hover:text-primary px-3 py-1.5 rounded-full transition-colors"
+                >
+                  {EVENT_LABELS[material.event]}
+                </Link>
+              )}
+            </div>
+
             {/* 解説テキスト */}
-            <div className="bg-white border border-border rounded-xl p-5 mb-4 leading-relaxed text-sm space-y-3">
-              <h2 className="font-semibold text-base mb-1">この教材について</h2>
+            <div className="bg-white border border-border rounded-lg p-5 mb-4 leading-relaxed text-[14px] space-y-3">
+              <h2 className="font-rounded text-[18px] font-bold mb-1 pb-2 border-b border-border">この教材について</h2>
               <p>
                 「{material.title}」は、{ageLabel}のお子様向けに作られた{CATEGORY_LABELS[material.category]}プリントです。
                 {DIFFICULTY_LABELS[material.difficulty]}難易度・所要時間の目安は約{material.duration}分で、
@@ -262,9 +290,9 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             </div>
 
             {/* 活動提案 */}
-            <div className="bg-white border border-border rounded-xl p-4">
-              <h2 className="font-semibold flex items-center gap-2 mb-3 text-sm">
-                <Lightbulb className="w-4 h-4 text-accent" />
+            <div className="bg-white border border-border rounded-lg p-4">
+              <h2 className="font-rounded text-[14px] font-bold flex items-center gap-2 mb-3 pb-2 border-b border-border">
+                <Lightbulb className="w-4 h-4 text-primary" />
                 活動のアイデア
               </h2>
               <ul className="space-y-2">
@@ -280,21 +308,24 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
 
           {/* サイドバー */}
           <div className="space-y-4">
-            {/* 印刷ボタン */}
-            <div className="bg-white border border-border rounded-2xl p-5">
-              <h2 className="font-semibold mb-4 flex items-center gap-2">
+            {/* 印刷・保存ボタン */}
+            <div className="bg-white border border-border rounded-lg p-5">
+              <h2 className="font-rounded text-[15px] font-bold mb-4 flex items-center gap-2 pb-2 border-b border-border">
                 <Printer className="w-4 h-4 text-primary" />
-                印刷する
+                印刷・保存
               </h2>
-              <PrintButton materialTitle={material.title} />
-              <p className="text-xs text-muted-foreground mt-2.5 text-center">
-                A4・白黒印刷に最適化済み
+              <div className="space-y-2.5">
+                <PrintButton materialTitle={material.title} />
+                <SaveButton materialTitle={material.title} imageUrl={material.imageUrl} />
+              </div>
+              <p className="text-xs text-muted-foreground mt-3 text-center">
+                A4横長・白黒印刷に最適化されています
               </p>
             </div>
 
             {/* 教材情報 */}
-            <div className="bg-white border border-border rounded-2xl p-5">
-              <h2 className="font-semibold mb-4 text-sm">教材情報</h2>
+            <div className="bg-white border border-border rounded-lg p-5">
+              <h2 className="font-rounded text-[14px] font-bold mb-4 pb-2 border-b border-border">教材情報</h2>
               <dl className="space-y-3">
                 <InfoRow icon={<Users className="w-4 h-4" />} label="対象年齢" value={ageLabel} />
                 <InfoRow icon={<Clock className="w-4 h-4" />} label="目安時間" value={`約${material.duration}分`} />
@@ -318,9 +349,10 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
 
         {/* 関連教材 */}
         {related.length > 0 && (
-          <div className="mt-12">
-            <h2 className="text-lg font-bold mb-4">関連する教材</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="mt-14 pt-8 border-t border-border">
+            <div className="font-rounded font-bold text-[11px] text-primary mb-1 tracking-[0.1em]">— Related —</div>
+            <h2 className="font-rounded text-[20px] font-bold mb-5">関連する教材</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
               {related.map(m => (
                 <MaterialCard key={m.id} material={m} />
               ))}

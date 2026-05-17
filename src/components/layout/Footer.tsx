@@ -1,74 +1,111 @@
+'use client'
+
 import Link from 'next/link'
-import { Printer } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 
-export function Footer() {
+export function Footer({ materialCount = 555 }: { materialCount?: number }) {
+  const currentYear = new Date().getFullYear()
+  const pathname = usePathname() ?? ''
+  const isAdult = pathname.startsWith('/adult')
+  const brandFont = isAdult ? 'font-mincho' : 'font-rounded'
+
   return (
-    <footer className="border-t border-border bg-white mt-16">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-7 h-7 bg-primary rounded-lg flex items-center justify-center">
-                <Printer className="w-3.5 h-3.5 text-white" />
+    <footer className={`border-t border-border mt-20 ${isAdult ? 'adult-section bg-[#F3EFE6]' : 'bg-white'}`}>
+      {/* Editorial mark */}
+      <div className="max-w-[1280px] mx-auto px-6 pt-16 pb-12">
+        <div className="text-center mb-12">
+          <div className="font-mincho text-[12px] text-muted-foreground tracking-[0.2em] mb-2">
+            {isAdult ? '— A QUIET HOUR —' : '— EDITORIAL —'}
+          </div>
+          <p className={`${isAdult ? 'font-mincho' : 'font-rounded'} text-[18px] text-foreground leading-loose max-w-xl mx-auto`}>
+            {isAdult ? (
+              <>一筆ずつ、色を選ぶ。<br />それは、自分の機嫌をとる時間。</>
+            ) : (
+              <>塗り絵は、ただの暇つぶしじゃない。<br />子どもが、はじめて自分で「色」を選ぶ時間。</>
+            )}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 pt-8 border-t border-border">
+          {/* Brand */}
+          <div className="col-span-2 md:col-span-2">
+            {isAdult ? (
+              <div className="font-mincho text-[22px] font-black tracking-[0.04em] mb-4">
+                おとなの<span className="text-primary">ぬりえ</span>
               </div>
-              <span className="font-bold text-foreground">ぬりえプリント</span>
-            </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              保育士・幼稚園教諭のための<br />無料教材プリントサービス。<br />
-              現場で本当に使いやすいUIを目指しています。
+            ) : (
+              <div className="flex items-center gap-2 mb-4">
+                <span className="flex items-center gap-0.5" aria-hidden>
+                  <span className="w-2 h-2 rounded-full bg-[#E66A2C]" />
+                  <span className="w-2 h-2 rounded-full bg-[#4FA7B8]" />
+                  <span className="w-2 h-2 rounded-full bg-[#E8B838]" />
+                </span>
+                <span className={`${brandFont} text-[22px] font-black tracking-[0.03em]`}>
+                  ぬりえ<span className="text-primary">プリント</span>
+                </span>
+              </div>
+            )}
+            <p className="text-[13px] text-muted-foreground leading-relaxed mb-4">
+              保育士・幼稚園教諭の先生方、そして子どもたちの<br className="hidden md:inline" />
+              ためのぬりえプリント配布サービス。{materialCount} 点の<br className="hidden md:inline" />
+              教材を、すべて無料・会員登録なしで提供しています。
             </p>
+            <div className="text-[11px] text-muted-foreground space-y-1">
+              <p>運営：ぬりえプリント編集部</p>
+              <p>更新頻度：毎日</p>
+            </div>
           </div>
 
+          {/* Themes */}
           <div>
-            <h3 className="font-semibold text-sm mb-3">コラム</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/columns/benefits-of-coloring-for-kids" className="hover:text-foreground transition-colors">ぬりえの発達効果</Link></li>
-              <li><Link href="/columns/coloring-for-2-year-olds" className="hover:text-foreground transition-colors">2歳からのぬりえ入門</Link></li>
-              <li><Link href="/columns/dot-connect-benefits-for-kids" className="hover:text-foreground transition-colors">点つなぎの教育効果</Link></li>
-              <li><Link href="/columns/sensory-play-benefits" className="hover:text-foreground transition-colors">感覚遊びの発達効果</Link></li>
-              <li><Link href="/columns/outdoor-play-benefits" className="hover:text-foreground transition-colors">外遊びの発達効果</Link></li>
-              <li><Link href="/columns" className="hover:text-foreground transition-colors">コラム一覧 →</Link></li>
+            <h3 className="font-rounded text-[13px] font-black mb-3 pb-2 border-b border-border">テーマ</h3>
+            <ul className="space-y-2 text-[12px] text-muted-foreground">
+              <li><Link href="/category/theme/animals" className="hover:text-primary transition-colors">動物のぬりえ</Link></li>
+              <li><Link href="/category/theme/dinosaurs" className="hover:text-primary transition-colors">恐竜のぬりえ</Link></li>
+              <li><Link href="/category/theme/vehicles" className="hover:text-primary transition-colors">乗り物のぬりえ</Link></li>
+              <li><Link href="/category/theme/sea" className="hover:text-primary transition-colors">海の生き物</Link></li>
+              <li><Link href="/category/theme/insects" className="hover:text-primary transition-colors">虫のぬりえ</Link></li>
+              <li><Link href="/category/theme/fruits" className="hover:text-primary transition-colors">食べ物のぬりえ</Link></li>
             </ul>
           </div>
 
+          {/* Age */}
           <div>
-            <h3 className="font-semibold text-sm mb-3">年齢で探す</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/category/age/2" className="hover:text-foreground transition-colors">2歳向け</Link></li>
-              <li><Link href="/category/age/3" className="hover:text-foreground transition-colors">3歳向け</Link></li>
-              <li><Link href="/category/age/4" className="hover:text-foreground transition-colors">4歳向け</Link></li>
-              <li><Link href="/category/age/5" className="hover:text-foreground transition-colors">5歳向け</Link></li>
-              <li><Link href="/category/age/6" className="hover:text-foreground transition-colors">6歳向け</Link></li>
+            <h3 className="font-rounded text-[13px] font-black mb-3 pb-2 border-b border-border">年齢</h3>
+            <ul className="space-y-2 text-[12px] text-muted-foreground">
+              <li><Link href="/category/age/2" className="hover:text-primary transition-colors">2歳のぬりえ</Link></li>
+              <li><Link href="/category/age/3" className="hover:text-primary transition-colors">3歳のぬりえ</Link></li>
+              <li><Link href="/category/age/4" className="hover:text-primary transition-colors">4歳のぬりえ</Link></li>
+              <li><Link href="/category/age/5" className="hover:text-primary transition-colors">5歳のぬりえ</Link></li>
+              <li><Link href="/category/age/6" className="hover:text-primary transition-colors">6歳のぬりえ</Link></li>
             </ul>
           </div>
 
+          {/* Editorial */}
           <div>
-            <h3 className="font-semibold text-sm mb-3">テーマ・季節</h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/category/theme/animals" className="hover:text-foreground transition-colors">動物ぬりえ</Link></li>
-              <li><Link href="/category/theme/dinosaurs" className="hover:text-foreground transition-colors">恐竜ぬりえ</Link></li>
-              <li><Link href="/category/theme/vehicles" className="hover:text-foreground transition-colors">のりものぬりえ</Link></li>
-              <li><Link href="/category/theme/sea" className="hover:text-foreground transition-colors">海の生き物</Link></li>
-              <li><Link href="/category/season/spring" className="hover:text-foreground transition-colors">春の教材</Link></li>
-              <li><Link href="/category/season/summer" className="hover:text-foreground transition-colors">夏の教材</Link></li>
-              <li><Link href="/category/season/autumn" className="hover:text-foreground transition-colors">秋の教材</Link></li>
-              <li><Link href="/category/season/winter" className="hover:text-foreground transition-colors">冬の教材</Link></li>
+            <h3 className="font-rounded text-[13px] font-black mb-3 pb-2 border-b border-border">読みもの</h3>
+            <ul className="space-y-2 text-[12px] text-muted-foreground">
+              <li><Link href="/columns/benefits-of-coloring-for-kids" className="hover:text-primary transition-colors">ぬりえの発達効果</Link></li>
+              <li><Link href="/columns/coloring-for-2-year-olds" className="hover:text-primary transition-colors">2歳からのぬりえ</Link></li>
+              <li><Link href="/columns" className="hover:text-primary transition-colors">すべての記事</Link></li>
+              <li className="pt-2"><Link href="/faq" className="hover:text-primary transition-colors">よくある質問</Link></li>
+              <li><Link href="/contact" className="hover:text-primary transition-colors">お問い合わせ</Link></li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-border space-y-4">
-          <div className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
-            <Link href="/about" className="hover:text-foreground transition-colors">このサイトについて</Link>
-            <Link href="/editorial-policy" className="hover:text-foreground transition-colors">編集方針</Link>
-            <Link href="/terms" className="hover:text-foreground transition-colors">利用規約</Link>
-            <Link href="/privacy" className="hover:text-foreground transition-colors">プライバシーポリシー</Link>
-            <Link href="/faq" className="hover:text-foreground transition-colors">よくある質問</Link>
-            <Link href="/contact" className="hover:text-foreground transition-colors">お問い合わせ</Link>
+        {/* Bottom */}
+        <div className="mt-12 pt-6 border-t border-border">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-[11px] text-muted-foreground mb-4">
+            <Link href="/about" className="hover:text-primary transition-colors">このサイトについて</Link>
+            <Link href="/editorial-policy" className="hover:text-primary transition-colors">編集方針</Link>
+            <Link href="/terms" className="hover:text-primary transition-colors">利用規約</Link>
+            <Link href="/privacy" className="hover:text-primary transition-colors">プライバシーポリシー</Link>
+            <Link href="/contact" className="hover:text-primary transition-colors">お問い合わせ</Link>
           </div>
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
-            <p className="text-xs text-muted-foreground">© 2026 ぬりえプリント. All rights reserved.</p>
-            <p className="text-xs text-muted-foreground">教材は保育・教育目的での使用に限り無料です</p>
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-2 text-[11px] text-muted-foreground">
+            <p>© {currentYear} ぬりえプリント編集部</p>
+            <p>教材は保育・教育目的での使用に限り無料です</p>
           </div>
         </div>
       </div>

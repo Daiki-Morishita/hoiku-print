@@ -1,0 +1,27 @@
+/* Adult section palette: warm off-white / deep slate / forest green */
+.adult-section {
+  --background: oklch(0.95 0.012 75);          /* #F3EFE6 warm off-white */
+  --foreground: oklch(0.23 0.015 195);          /* #1E2A28 deep slate */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.23 0.015 195);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.23 0.015 195);
+  --primary: oklch(0.38 0.05 165);              /* #2D5043 deep forest */
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.93 0.012 75);
+  --secondary-foreground: oklch(0.23 0.015 195);
+  --muted: oklch(0.93 0.012 75);
+  --muted-foreground: oklch(0.45 0.005 195);
+  --accent: oklch(0.50 0.08 55);                /* #8B5E34 warm bronze */
+  --accent-foreground: oklch(0.99 0 0);
+  --border: oklch(0.87 0.020 75);
+  --input: oklch(0.87 0.020 75);
+  --ring: oklch(0.38 0.05 165);
+  background-color: oklch(0.95 0.012 75);
+  color: oklch(0.23 0.015 195);
+}
+
+/* Adult section uses a serif heading style (Noto Serif JP feel via Zen Mincho fallback) */
+.adult-section .font-mincho {
+  letter-spacing: 0.04em;
+}

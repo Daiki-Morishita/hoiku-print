@@ -1,30 +1,31 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Clock, Users, Star } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import type { Material } from '@/lib/types'
-import { CATEGORY_LABELS, DIFFICULTY_LABELS } from '@/lib/types'
+import type { Material, Difficulty } from '@/lib/types'
+import { FavoriteButton } from '@/components/favorites/FavoriteButton'
+
+// 難易度ごとの色・ラベル（再利用可）
+const DIFFICULTY_COLOR: Record<Difficulty, { border: string; text: string; bg: string }> = {
+  1: { border: '#7AA875', text: '#3F6334', bg: '#EEF6E9' }, // green: やさしい
+  2: { border: '#E8B838', text: '#A87716', bg: '#FBF3DE' }, // yellow: ふつう
+  3: { border: '#E66A2C', text: '#9F4516', bg: '#FBE7D8' }, // orange: むずかしい
+  4: { border: '#C25A6E', text: '#83384D', bg: '#F7DEE4' }, // rose: とてもむずかしい
+}
+
+export function DifficultyBadge({ level }: { level: Difficulty }) {
+  const c = DIFFICULTY_COLOR[level]
+  return (
+    <span
+      className="inline-flex items-center gap-0.5 text-[12px] px-2.5 py-1 rounded-full font-bold border-2 shadow-sm"
+      style={{ borderColor: c.border, color: c.text, background: c.bg }}
+    >
+      {'★'.repeat(level)}
+    </span>
+  )
+}
 
 interface MaterialCardProps {
   material: Material
-}
-
-const difficultyColor: Record<number, string> = {
-  1: 'bg-green-100 text-green-800',
-  2: 'bg-yellow-100 text-yellow-800',
-  3: 'bg-orange-100 text-orange-800',
-  4: 'bg-red-100 text-red-800',
-}
-
-const categoryEmoji: Record<string, string> = {
-  coloring: '🖍️', hiragana: 'あ', numbers: '1', drawing: '✏️',
-  maze: '🗺', dotconnect: '⚫', craft: '🎨', scissors: '✂️',
-}
-
-const themeEmoji: Record<string, string> = {
-  animals: '🐾', dinosaurs: '🦕', vehicles: '🚒', trains: '🚃',
-  food: '🍎', sea: '🐟', flowers: '🌸', insects: '🐛', characters: '⭐',
-  park: '🌳',
 }
 
 export function MaterialCard({ material }: MaterialCardProps) {
@@ -32,66 +33,54 @@ export function MaterialCard({ material }: MaterialCardProps) {
     ? `${material.ageMin}歳`
     : `${material.ageMin}〜${material.ageMax}歳`
 
-  // SVG・JPG・PNG・WebP 問わず imageUrl があれば画像表示
   const hasImage = !!material.imageUrl
 
   return (
     <Link
       href={`/materials/${material.id}`}
-      className="group bg-white rounded-2xl border border-border overflow-hidden hover:shadow-md hover:border-primary/30 transition-all duration-200 flex flex-col"
+      className="group bg-white border border-border rounded-lg overflow-hidden hover:border-primary hover:-translate-y-0.5 transition-all duration-200 flex flex-col"
     >
-      {/* プレビューエリア */}
-      <div className="relative bg-gradient-to-br from-primary/5 to-primary/10 aspect-[4/3] flex items-center justify-center overflow-hidden">
+      {/* Preview area */}
+      <div className="relative bg-background aspect-[1.414/1] flex items-center justify-center overflow-hidden">
         {hasImage ? (
           <Image
             src={material.imageUrl}
             alt={material.title}
-            width={320}
-            height={240}
-            className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-200"
+            width={420}
+            height={297}
+            className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-200"
             unoptimized
           />
         ) : (
-          <div className="text-6xl select-none group-hover:scale-110 transition-transform duration-200">
-            {material.theme ? (themeEmoji[material.theme] ?? categoryEmoji[material.category] ?? '🖨') : (categoryEmoji[material.category] ?? '🖨')}
-          </div>
+          <div className="text-5xl select-none opacity-30">🎨</div>
         )}
         {material.popular && (
           <div className="absolute top-2 left-2">
-            <span className="inline-flex items-center gap-1 text-xs bg-accent text-white px-2 py-0.5 rounded-full font-medium">
-              <Star className="w-3 h-3" />
-              人気
+            <span className="inline-flex items-center gap-1 text-[12px] bg-[#E66A2C] text-white px-2.5 py-1 rounded-full font-black shadow-sm border-2 border-white">
+              <Star className="w-3 h-3 fill-white" />
+              にんき
             </span>
           </div>
         )}
-        <div className="absolute top-2 right-2">
-          <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${difficultyColor[material.difficulty]}`}>
-            {DIFFICULTY_LABELS[material.difficulty]}
-          </span>
+        <div className="absolute bottom-2 left-2">
+          <DifficultyBadge level={material.difficulty} />
         </div>
+        <FavoriteButton materialId={material.id} size="sm" variant="overlay" />
       </div>
 
-      {/* カード情報 */}
-      <div className="p-4 flex flex-col gap-2.5 flex-1">
-        <div>
-          <h3 className="font-semibold text-sm leading-snug group-hover:text-primary transition-colors line-clamp-2">
-            {material.title}
-          </h3>
-          <p className="text-xs text-muted-foreground mt-1 line-clamp-2 leading-relaxed">
-            {material.description}
+      {/* Card content */}
+      <div className="p-3.5 flex flex-col gap-2 flex-1">
+        <h3 className="font-rounded font-black text-[14px] leading-snug group-hover:text-primary transition-colors line-clamp-2">
+          {material.title}
+        </h3>
+
+        {material.description && (
+          <p className="text-[12px] text-primary/85 leading-relaxed line-clamp-2 border-l-2 border-primary/30 pl-2">
+            {material.description.replace(/[。、]+$/, '')}
           </p>
-        </div>
+        )}
 
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <Badge variant="secondary" className="text-xs">
-            {CATEGORY_LABELS[material.category]}
-          </Badge>
-          {material.tags.slice(0, 1).map(tag => (
-            <Badge key={tag} variant="outline" className="text-xs">{tag}</Badge>
-          ))}
-        </div>
-
-        <div className="flex items-center justify-between text-xs text-muted-foreground mt-auto pt-2 border-t border-border">
+        <div className="flex items-center justify-between text-[12px] text-muted-foreground mt-auto pt-2 border-t border-border">
           <span className="flex items-center gap-1">
             <Users className="w-3 h-3" />
             {ageLabel}

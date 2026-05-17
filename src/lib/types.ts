@@ -19,16 +19,18 @@ export type Duration = 5 | 10 | 15 | 20 | 30
 export type Season = 'spring' | 'summer' | 'autumn' | 'winter'
 
 export type Category =
-  | 'coloring'      // ぬりえ
-  | 'hiragana'      // ひらがな
-  | 'numbers'       // 数字
-  | 'drawing'       // 運筆
-  | 'maze'          // 迷路
-  | 'dotconnect'    // 点つなぎ
-  | 'craft'         // 工作
-  | 'scissors'      // ハサミ練習
+  | 'coloring'        // ぬりえ（こども向け）
+  | 'adult-coloring'  // 大人ぬりえ
+  | 'hiragana'        // ひらがな
+  | 'numbers'         // 数字
+  | 'drawing'         // 運筆
+  | 'maze'            // 迷路
+  | 'dotconnect'      // 点つなぎ
+  | 'craft'           // 工作
+  | 'scissors'        // ハサミ練習
 
 export type Theme =
+  // ── こども向けテーマ ──
   | 'animals'       // 動物
   | 'dinosaurs'     // 恐竜
   | 'vehicles'      // のりもの
@@ -42,9 +44,36 @@ export type Theme =
   | 'characters'    // キャラクター風
   | 'park'             // 公園・遊具
   | 'seasonal-events'  // 季節の行事
+  // ── おとな向けテーマ ──
+  | 'mandala'           // 曼荼羅
+  | 'botanical'         // 植物画
+  | 'landscape'         // 風景
+  | 'pattern'           // 幾何模様
+  | 'animals-detail'    // 動物（細密）
+  | 'flowers-detail'    // 花（細密）
+  | 'cityscape'         // 街並み
+
+export type Audience = 'kids' | 'adult'
+
+export const AUDIENCE_LABELS: Record<Audience, string> = {
+  kids: 'こども向け',
+  adult: 'おとな向け',
+}
+
+/** どのテーマが大人向けか */
+export const ADULT_THEMES: Theme[] = [
+  'mandala',
+  'botanical',
+  'landscape',
+  'pattern',
+  'animals-detail',
+  'flowers-detail',
+  'cityscape',
+]
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   coloring: 'ぬりえ',
+  'adult-coloring': '大人ぬりえ',
   hiragana: 'ひらがな',
   numbers: '数字・数え方',
   drawing: '運筆',
@@ -102,6 +131,13 @@ export const THEME_LABELS: Record<Theme, string> = {
   characters: 'キャラクター風',
   park: '公園・遊具',
   'seasonal-events': '季節の行事',
+  mandala: '曼荼羅',
+  botanical: '植物画',
+  landscape: '風景',
+  pattern: '幾何模様',
+  'animals-detail': '動物（細密）',
+  'flowers-detail': '花（細密）',
+  cityscape: '街並み',
 }
 
 export const SEASON_LABELS: Record<Season, string> = {
@@ -171,6 +207,8 @@ export type Material = {
   id: string
   title: string
   description: string
+  /** ターゲット層 — 省略時は kids（後方互換） */
+  audience?: Audience
   ageMin: AgeGroup
   ageMax: AgeGroup
   difficulty: Difficulty
@@ -202,8 +240,16 @@ export type Material = {
 }
 
 export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
-  1: 'やさしい',
-  2: 'ふつう',
-  3: 'むずかしい',
-  4: 'とてもむずかしい',
+  1: 'かんたん',
+  2: 'やさしい',
+  3: 'ふつう',
+  4: 'わくわく',
+}
+
+/** 年齢下限（年齢範囲の上限は表示しない） */
+export const DIFFICULTY_AGE: Record<Difficulty, string> = {
+  1: '2歳〜',
+  2: '3歳〜',
+  3: '4歳〜',
+  4: '5歳〜',
 }
