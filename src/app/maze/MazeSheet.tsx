@@ -16,10 +16,10 @@ function charStyle(edge: Edge, xPct: number, yPct: number): React.CSSProperties 
   if (edge === 'circle') {
     return { left: `${xPct}%`, top: `${yPct}%`, transform: 'translate(-50%, -50%)' }
   }
-  if (edge === 'left') return { right: 'calc(100% + 12px)', top: `${yPct}%`, transform: 'translateY(-50%)' }
-  if (edge === 'right') return { left: 'calc(100% + 12px)', top: `${yPct}%`, transform: 'translateY(-50%)' }
-  if (edge === 'top') return { bottom: 'calc(100% + 12px)', left: `${xPct}%`, transform: 'translateX(-50%)' }
-  return { top: 'calc(100% + 12px)', left: `${xPct}%`, transform: 'translateX(-50%)' }
+  if (edge === 'left') return { right: 'calc(100% + 10px)', top: `${yPct}%`, transform: 'translateY(-50%)' }
+  if (edge === 'right') return { left: 'calc(100% + 10px)', top: `${yPct}%`, transform: 'translateY(-50%)' }
+  if (edge === 'top') return { bottom: 'calc(100% + 10px)', left: `${xPct}%`, transform: 'translateX(-50%)' }
+  return { top: 'calc(100% + 10px)', left: `${xPct}%`, transform: 'translateX(-50%)' }
 }
 
 export function MazeSheet({ maze, isAnswer = false }: Props) {

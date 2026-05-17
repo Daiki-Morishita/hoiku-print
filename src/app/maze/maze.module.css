@@ -130,8 +130,12 @@
 .maze-stage {
   background: #fff; border-radius: 20px; border: 1.5px solid #fff;
   box-shadow: 0 0 0 2px #E8DFD2, 0 4px 0 #EFE5D2;
-  /* 上下は triangle 系のキャラ余白として 64px 確保、左右は square/triangle 用 56px */
-  padding: 64px 56px; margin-bottom: 14px; position: relative;
+  /* CHARACTER FRAME計算:
+       char-svg width: 42px + label: ~22px tall + gap: 4px ≒ char ブロック 66x42 (W×H)
+       上下 N/S 開口: char height 66 + gap 10 = 76 → padding 上下 ≧ 80px
+       左右 W/E 開口: char width 42 + gap 10 = 52 → padding 左右 ≧ 56px
+     ↓ 余裕を持って 上下 84px / 左右 64px */
+  padding: 84px 64px; margin-bottom: 14px; position: relative;
   display: flex; align-items: center; justify-content: center;
 }
 /* フレームは SVG の実寸幅に合わせる（inline-block + width:fit-content）。
@@ -148,12 +152,12 @@
   pointer-events: none;
   width: max-content;
 }
-.char-svg { width: 46px; height: auto; }
+.char-svg { width: 42px; height: auto; }
 .char-svg :global(svg) { width: 100%; height: auto; display: block; }
 .point-label {
-  font-family: 'Zen Maru Gothic'; font-weight: 700; font-size: 11px;
-  padding: 3px 10px 4px; border-radius: 999px; color: white;
-  letter-spacing: 0.1em; white-space: nowrap; line-height: 1;
+  font-family: 'Zen Maru Gothic'; font-weight: 700; font-size: 10px;
+  padding: 3px 8px 4px; border-radius: 999px; color: white;
+  letter-spacing: 0.08em; white-space: nowrap; line-height: 1;
 }
 .start-label {
   background: linear-gradient(135deg, #82CB91, #6BBF7C);
