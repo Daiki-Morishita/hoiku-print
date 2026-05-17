@@ -13,7 +13,7 @@ const SERVICES = [
   {
     key: '7eleven',
     label: 'セブン-イレブン',
-    serviceName: 'ネットプリント（富士フイルム）',
+    serviceName: 'ネットプリント',
     stores: 'セブン-イレブン全国',
     color: '#EF4135',
     bg: '#FFE5E5',
@@ -27,7 +27,7 @@ const SERVICES = [
   {
     key: 'lawson',
     label: 'ローソン・ファミマ等',
-    serviceName: 'ネットワークプリント（シャープ）',
+    serviceName: 'ネットワークプリント',
     stores: 'ローソン / ファミリーマート / ミニストップ / デイリー / セイコーマート / イオン / マックスバリュ',
     color: '#0B5DA8',
     bg: '#E1ECF7',
@@ -178,7 +178,7 @@ export function ConveniencePrintButton({ materialTitle, imageUrl }: Props) {
                 </div>
 
                 <ol className="text-[12px] text-foreground/80 space-y-1.5 leading-relaxed pl-4 list-decimal">
-                  <li>上のリンクから {selectedService.serviceName} を開く</li>
+                  <li>上のリンクから予約ページを開く</li>
                   <li>「ファイル登録（ゲスト・無料）」を選び、保存した画像をアップロード</li>
                   <li>用紙サイズに <strong>A4</strong> ・向きに <strong>横</strong> を選択</li>
                   <li>発行された<strong>予約番号</strong>（8桁）をメモ</li>
@@ -193,7 +193,7 @@ export function ConveniencePrintButton({ materialTitle, imageUrl }: Props) {
                 </div>
                 <ol className="text-[12px] text-foreground/80 space-y-1.5 leading-relaxed pl-4 list-decimal">
                   <li>お近くの {selectedService.label} へ</li>
-                  <li>マルチコピー機で「{selectedService.serviceName.split('（')[0]}」を選ぶ</li>
+                  <li>マルチコピー機で「{selectedService.serviceName}」を選ぶ</li>
                   <li>予約番号を入力して印刷スタート</li>
                 </ol>
                 <p className="text-[11px] text-muted-foreground mt-3">
