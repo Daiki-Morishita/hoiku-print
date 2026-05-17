@@ -440,6 +440,31 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+
+      {/* ===== ADULT SECTION CROSS-LINK ===== */}
+      <section className="py-12 md:py-16 bg-[#1f1f1f] text-white">
+        <div className="max-w-[860px] mx-auto px-6 grid md:grid-cols-[1fr_auto] gap-6 items-center">
+          <div>
+            <div className="font-mincho text-[11px] text-white/60 tracking-[0.25em] mb-2">
+              — For Adults —
+            </div>
+            <h3 className="font-mincho text-[20px] md:text-[24px] font-bold mb-2">
+              おとな・シニア向けの塗り絵もあります。
+            </h3>
+            <p className="text-[13px] text-white/70 leading-relaxed">
+              曼荼羅・植物画・風景・幾何模様。<br className="md:hidden" />
+              心を整える、もう一つのぬりえプリント。
+            </p>
+          </div>
+          <Link
+            href="/adult"
+            className="inline-flex items-center gap-2 bg-white text-[#1f1f1f] px-7 py-3 rounded text-[13px] font-medium hover:bg-white/90 transition-colors whitespace-nowrap"
+          >
+            おとなのぬりえへ
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
     </>
   )
 }

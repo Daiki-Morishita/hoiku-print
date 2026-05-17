@@ -145,6 +145,18 @@ VEGETABLE_COND_ITEMS = FOOD_COND_ITEMS + [
     "野菜の大きさは実物の大きさに忠実に描く（ブロッコリーは子どもの手に収まる程度・にんじんは腕の長さ程度）。木のように大きくなるのはNG",
 ]
 
+# 大人向け: 写実・細密線画用の共通条件（子ども向けとは正反対）
+ADULT_COND_ITEMS = [
+    "背景は必ず純白 #FFFFFF",
+    "線画スタイル（塗りつぶしなし）",
+    "細部まで丁寧に描き込む。線の太さは均一（中細）、輪郭線と内部線で太さを変えない",
+    "A4横長・高画質",
+    "文字・テキスト・ラベル・枠線・フレームは一切入れない",
+    "子ども向けの抽象化や戯画化はせず、写実的・芸術的に描く",
+    "塗ったあとに美しく仕上がるよう、線の交差や重なりを意図的に配置し、塗り分けエリアを豊富に作る",
+    "対象の質感（葉脈・花弁・毛並み・繊細な模様）が線画から読み取れるように描く",
+]
+
 ERROR_PHRASES = [
     "画像生成に失敗",
     "画像を作成できません",
@@ -1252,6 +1264,174 @@ THEMES = {
     "vegetables": VEGETABLES,
 }
 
+# =============================================
+# 大人・シニア向けテーマ定義
+# 構造は kid items と同じ（jp / note / variants）。
+# scenes は写実・細密に振った文言。難易度は線の細さ・要素数で差をつける。
+# =============================================
+def _adult_variants(item_jp: str, scenes: dict, titles: dict, descs: dict) -> dict:
+    return {1: {"scenes": scenes, "titles": titles, "descs": descs}}
+
+MANDALA = {
+    "mandala-lotus": {
+        "jp": "蓮の曼荼羅",
+        "note": "中央から放射状に開く蓮の花を主軸にした曼荼羅。8回または12回対称で、花弁・葉・蕾を均一な細い線で繊細に描く。瞑想的で塗り絵向け。",
+        "variants": _adult_variants("蓮の曼荼羅",
+            {"simple": "中央に蓮を1輪配置した8回対称の曼荼羅。線は中細で要素は控えめ。",
+             "easy":   "中央に蓮、外周に花弁を一段加えた8回対称の曼荼羅。塗り分けエリアを多めに。",
+             "normal": "中央に蓮、外周に2段の花弁・葉・蕾を加えた12回対称の繊細な曼荼羅。",
+             "rich":   "中央に蓮、外周に3段の花弁・葉・蕾・装飾文様を加えた12回対称の瞑想用曼荼羅。塗り分けエリアを最大限に。"},
+            {"simple": "蓮の曼荼羅（やさしい）", "easy": "蓮の曼荼羅（ふつう）",
+             "normal": "蓮の曼荼羅（こまかい）", "rich": "蓮の曼荼羅（瞑想用）"},
+            {"simple": "8回対称の控えめな蓮の曼荼羅。塗り絵入門に。",
+             "easy":   "外周に花弁を加えた蓮の曼荼羅。バランスのよい細密度。",
+             "normal": "12回対称・葉と蕾を配した繊細な蓮の曼荼羅。",
+             "rich":   "塗り分けエリア豊富な瞑想用の蓮の曼荼羅。"}),
+    },
+}
+
+BOTANICAL = {
+    "botanical-rose": {
+        "jp": "薔薇の植物画",
+        "note": "薔薇の花・葉・茎・トゲを植物学画の様式で写実的に描く。花弁の重なり、葉脈、茎の細かな質感まで線で表現。",
+        "variants": _adult_variants("薔薇の植物画",
+            {"simple": "薔薇の花1輪と葉2枚の写実的な植物画。茎まで含めて、線の太さ均一。",
+             "easy":   "薔薇の花1輪・蕾1つ・葉3枚と茎の写実的な植物画。葉脈まで丁寧に。",
+             "normal": "薔薇の花2輪・蕾2つ・葉5枚と分岐した茎の写実的な植物画。葉脈・トゲ・花弁の重なりを細密に。",
+             "rich":   "薔薇の花3輪・蕾複数・葉多数・茎の分岐の写実的な植物画一式。塗り分けエリアを豊富に。"},
+            {"simple": "薔薇の植物画（やさしい）", "easy": "薔薇の植物画（ふつう）",
+             "normal": "薔薇の植物画（こまかい）", "rich": "薔薇の植物画（瞑想用）"},
+            {"simple": "花1輪と葉の写実的な薔薇の植物画。",
+             "easy":   "蕾と葉脈を加えた薔薇の植物画。",
+             "normal": "花2輪と細密な葉脈の薔薇の植物画。",
+             "rich":   "花3輪と多数の葉を細密に描いた薔薇の植物画。"}),
+    },
+}
+
+LANDSCAPE = {
+    "landscape-european-town": {
+        "jp": "ヨーロッパの街並み",
+        "note": "石畳の細い路地と切妻屋根が並ぶ古いヨーロッパの街並みを写実的に描く。窓・扉・看板・敷石の目地まで細密に。",
+        "variants": _adult_variants("ヨーロッパの街並み",
+            {"simple": "切妻屋根の家が2軒並ぶ路地の写実的な線画。窓・扉まで丁寧に。",
+             "easy":   "石畳の路地と切妻屋根の家3軒が並ぶ景色の写実的な線画。",
+             "normal": "石畳の路地・並ぶ家・小さな噴水・街灯まで含めた写実的な街角の線画。",
+             "rich":   "石畳の路地・並ぶ家・噴水・街灯・カフェのテーブル・並ぶ自転車まで含めた細密な街角の線画。"},
+            {"simple": "ヨーロッパの街並み（やさしい）", "easy": "ヨーロッパの街並み（ふつう）",
+             "normal": "ヨーロッパの街並み（こまかい）", "rich": "ヨーロッパの街並み（瞑想用）"},
+            {"simple": "切妻屋根の家2軒の写実的な街角。",
+             "easy":   "石畳と家3軒のヨーロッパの街並み。",
+             "normal": "噴水と街灯を含む写実的な街角。",
+             "rich":   "細密に描かれたヨーロッパの街角。"}),
+    },
+}
+
+PATTERN = {
+    "pattern-geometric": {
+        "jp": "幾何模様",
+        "note": "正方形のキャンバスに、円・三角・六角・星などの幾何形を規則的に配置した模様。シンメトリーかつリズム感のある構成。",
+        "variants": _adult_variants("幾何模様",
+            {"simple": "8分割の幾何模様。円と三角の組み合わせを均一な線でシンプルに。",
+             "easy":   "16分割の幾何模様。円・三角・六角の組み合わせ。",
+             "normal": "32分割の幾何模様。多角形と曲線を細密に組み合わせた構成。",
+             "rich":   "64分割の細密な幾何模様。複雑な対称構造で瞑想用。"},
+            {"simple": "幾何模様（やさしい）", "easy": "幾何模様（ふつう）",
+             "normal": "幾何模様（こまかい）", "rich": "幾何模様（瞑想用）"},
+            {"simple": "8分割のシンプルな幾何模様。",
+             "easy":   "16分割の幾何模様。",
+             "normal": "32分割の細密な幾何模様。",
+             "rich":   "64分割の瞑想用幾何模様。"}),
+    },
+}
+
+ANIMALS_DETAIL = {
+    "animals-detail-lion": {
+        "jp": "ライオン（細密）",
+        "note": "成獣のオスライオンを写実的に描く。豊かなたてがみの流れ、顔の毛並み、目の輝き、ひげ、爪までを線画で表現。",
+        "variants": _adult_variants("ライオン（細密）",
+            {"simple": "正面を向くライオンの顔の写実的な線画。たてがみは均一な細線で。",
+             "easy":   "横向きに立つライオンの写実的な線画。たてがみと体の毛並みを表現。",
+             "normal": "草原で休むライオンの写実的な線画。たてがみ・体の毛・前足の細部まで。",
+             "rich":   "草原で家族と過ごすライオンの群れの写実的な線画。毛並みと表情を細密に。"},
+            {"simple": "ライオンの細密画（やさしい）", "easy": "ライオンの細密画（ふつう）",
+             "normal": "ライオンの細密画（こまかい）", "rich": "ライオンの細密画（瞑想用）"},
+            {"simple": "正面のライオンの顔の細密画。",
+             "easy":   "立ち姿のライオンの細密画。",
+             "normal": "草原で休むライオンの細密画。",
+             "rich":   "ライオンの群れの細密画。"}),
+    },
+}
+
+FLOWERS_DETAIL = {
+    "flowers-detail-camellia": {
+        "jp": "椿（細密）",
+        "note": "椿の花を写実的に描く。花弁の重なり、葉の縁の鋸歯、葉脈、雄しべの集合まで均一な細線で表現。",
+        "variants": _adult_variants("椿（細密）",
+            {"simple": "椿の花1輪と葉2枚の写実的な線画。",
+             "easy":   "椿の花1輪・蕾1つ・葉3枚の写実的な線画。葉脈まで。",
+             "normal": "椿の花2輪・蕾2つ・葉5枚と分岐した茎の写実的な線画。",
+             "rich":   "椿の花3輪・蕾多数・葉が密に重なる枝の写実的な線画。"},
+            {"simple": "椿の細密画（やさしい）", "easy": "椿の細密画（ふつう）",
+             "normal": "椿の細密画（こまかい）", "rich": "椿の細密画（瞑想用）"},
+            {"simple": "椿の花と葉の細密画。",
+             "easy":   "蕾を加えた椿の細密画。",
+             "normal": "花2輪の椿の細密画。",
+             "rich":   "枝に咲く椿の細密画。"}),
+    },
+}
+
+CITYSCAPE = {
+    "cityscape-kyoto": {
+        "jp": "京都の町並み",
+        "note": "祇園・先斗町のような京都の路地と町家の並ぶ風景。瓦屋根・格子戸・暖簾・石畳まで写実的に描く。",
+        "variants": _adult_variants("京都の町並み",
+            {"simple": "格子戸の町家2軒と石畳の路地の写実的な線画。",
+             "easy":   "町家3軒と石畳・暖簾の写実的な線画。",
+             "normal": "町家が並ぶ路地と石灯篭・暖簾の写実的な線画。",
+             "rich":   "町家・石畳・石灯篭・暖簾・通行人・小さな庭の写実的な線画。"},
+            {"simple": "京都の町並み（やさしい）", "easy": "京都の町並み（ふつう）",
+             "normal": "京都の町並み（こまかい）", "rich": "京都の町並み（瞑想用）"},
+            {"simple": "町家2軒の京都の路地。",
+             "easy":   "暖簾のある京都の町並み。",
+             "normal": "石灯篭がある京都の路地。",
+             "rich":   "細密に描かれた京都の町並み。"}),
+    },
+}
+
+JAPANESE_TRADITION = {
+    "japanese-tradition-seigaiha": {
+        "jp": "青海波",
+        "note": "日本の伝統文様「青海波」。同心円の半円を波状に重ねた連続文様を、均一な細線で正確に描く。",
+        "variants": _adult_variants("青海波",
+            {"simple": "青海波の連続文様。3段x4列。シンプルな構成。",
+             "easy":   "青海波の連続文様。5段x6列。",
+             "normal": "青海波の連続文様。7段x8列。中央に意匠を1つ。",
+             "rich":   "青海波の連続文様。全面に細密に。中央に大きな意匠を1つ配置。"},
+            {"simple": "青海波（やさしい）", "easy": "青海波（ふつう）",
+             "normal": "青海波（こまかい）", "rich": "青海波（瞑想用）"},
+            {"simple": "シンプルな青海波文様。",
+             "easy":   "標準的な青海波文様。",
+             "normal": "中央に意匠を配した青海波。",
+             "rich":   "全面細密な瞑想用の青海波。"}),
+    },
+}
+
+# 大人向けテーマを THEMES に追加
+THEMES.update({
+    "mandala":             MANDALA,
+    "botanical":           BOTANICAL,
+    "landscape":           LANDSCAPE,
+    "pattern":             PATTERN,
+    "animals-detail":      ANIMALS_DETAIL,
+    "flowers-detail":      FLOWERS_DETAIL,
+    "cityscape":           CITYSCAPE,
+    "japanese-tradition":  JAPANESE_TRADITION,
+})
+
+# 大人向けテーマの判定セット
+ADULT_THEME_KEYS = {"mandala", "botanical", "landscape", "pattern",
+                    "animals-detail", "flowers-detail", "cityscape", "japanese-tradition"}
+
 LEVEL_PARAMS = {
     "simple": (3, 5, 1, 10, "クレヨン"),
     "easy":   (3, 6, 2, 15, "クレヨン"),
@@ -1295,14 +1475,24 @@ def add_to_data_ts(item_id, theme_type, variant, vdata, supabase_urls):
         log(f"  data.ts に全level既存: {item_id}-{variant} — スキップ")
         return False
 
-    tag_map = {"park": "こうえん", "dinosaurs": "きょうりゅう", "fruits": "くだもの", "vegetables": "やさい"}
-    tag_label = tag_map.get(theme_type, theme_type)
-    idea_map = {
-        "park": "['好きな色で塗ってみよう', '公園で遊んだことを思い出しながら塗ろう']",
-        "fruits": "['好きな色で塗ってみよう', 'どんな味か考えながら塗ろう']",
-        "vegetables": "['好きな色で塗ってみよう', 'どんな料理になるか考えながら塗ろう']",
+    is_adult = theme_type in ADULT_THEME_KEYS
+    tag_map = {
+        "park": "こうえん", "dinosaurs": "きょうりゅう",
+        "fruits": "くだもの", "vegetables": "やさい",
+        "mandala": "曼荼羅", "botanical": "植物画", "landscape": "風景",
+        "pattern": "幾何模様", "animals-detail": "動物・細密",
+        "flowers-detail": "花・細密", "cityscape": "街並み", "japanese-tradition": "和柄",
     }
-    activity_ideas = idea_map.get(theme_type, "['好きな色で塗ってみよう', '背景もカラフルに仕上げよう']")
+    tag_label = tag_map.get(theme_type, theme_type)
+    if is_adult:
+        activity_ideas = "['色鉛筆・水彩でゆっくり仕上げる', '心を整える時間として']"
+    else:
+        idea_map = {
+            "park": "['好きな色で塗ってみよう', '公園で遊んだことを思い出しながら塗ろう']",
+            "fruits": "['好きな色で塗ってみよう', 'どんな味か考えながら塗ろう']",
+            "vegetables": "['好きな色で塗ってみよう', 'どんな料理になるか考えながら塗ろう']",
+        }
+        activity_ideas = idea_map.get(theme_type, "['好きな色で塗ってみよう', '背景もカラフルに仕上げよう']")
 
     block = ""
     for lv in levels:
@@ -1317,11 +1507,18 @@ def add_to_data_ts(item_id, theme_type, variant, vdata, supabase_urls):
         title = vdata["titles"][lv]
         desc  = vdata["descs"][lv]
         age_min, age_max, diff, dur, tools = LEVEL_PARAMS[lv]
+        # 大人向けは年齢を6固定（型制約のため）、難易度と所要時間を引き上げ、tools を変更
+        if is_adult:
+            age_min, age_max = 6, 6
+            adult_diff = {"simple": 2, "easy": 3, "normal": 4, "rich": 4}[lv]
+            adult_dur  = {"simple": 20, "easy": 30, "normal": 30, "rich": 30}[lv]
+            diff, dur, tools = adult_diff, adult_dur, "色えんぴつ"
+        audience_field = "    audience: 'adult',\n" if is_adult else ""
         block += f"""  {{
     id: '{file_id}',
     title: '{title}',
     description: '{desc}',
-    ageMin: {age_min}, ageMax: {age_max}, difficulty: {diff}, duration: {dur},
+{audience_field}    ageMin: {age_min}, ageMax: {age_max}, difficulty: {diff}, duration: {dur},
     category: 'coloring', theme: '{theme_type}',
     tags: ['{item_id}', '{tag_label}', 'ぬりえ'],
     tools: ['{tools}'],
@@ -2051,6 +2248,8 @@ def run_item(pw, state, item_id, theme_type, variant, client):
             cond_items = VEGETABLE_COND_ITEMS
         elif theme_type == "fruits":
             cond_items = FOOD_COND_ITEMS
+        elif theme_type in ADULT_THEME_KEYS:
+            cond_items = ADULT_COND_ITEMS
         else:
             cond_items = COMMON_COND_ITEMS
 
@@ -2117,7 +2316,11 @@ def make_daily_schedule(n_items: int, total_hours: float = 24.0) -> list:
 # =============================================
 def main():
     parser = argparse.ArgumentParser(description="ChatGPT画像生成スクリプト（公園・恐竜共通）")
-    parser.add_argument("--type",    required=True, choices=["park", "dinosaurs", "fruits", "vegetables"], help="テーマ種別")
+    parser.add_argument("--type",    required=True,
+        choices=["park", "dinosaurs", "fruits", "vegetables",
+                 "mandala", "botanical", "landscape", "pattern",
+                 "animals-detail", "flowers-detail", "cityscape", "japanese-tradition"],
+        help="テーマ種別（kid: park/dinosaurs/fruits/vegetables, adult: mandala/botanical/...）")
     parser.add_argument("--item",    default=None,  help="アイテムID（例: swing, tyrannosaurus）")
     parser.add_argument("--variant", type=int, default=1, help="バリエーション番号（デフォルト: 1）")
     parser.add_argument("--all",     action="store_true", help="全アイテムを生成")
