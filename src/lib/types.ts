@@ -40,10 +40,12 @@ export type Theme =
   | 'vegetables'    // やさい
   | 'sea'           // 海の生き物
   | 'insects'       // 虫
-  | 'flowers'       // 花・植物
-  | 'characters'    // キャラクター風
+  | 'flowers'          // 花
+  | 'characters'       // キャラクター風
   | 'park'             // 公園・遊具
   | 'seasonal-events'  // 季節の行事
+  | 'spring'           // 春
+  | 'summer'           // 夏
   // ── おとな向けテーマ ──
   | 'mandala'           // 曼荼羅
   | 'botanical'         // 植物画
@@ -127,10 +129,12 @@ export const THEME_LABELS: Record<Theme, string> = {
   vegetables: 'やさい',
   sea: '海の生き物',
   insects: '虫',
-  flowers: '花・植物',
+  flowers: '花',
   characters: 'キャラクター風',
   park: '公園・遊具',
   'seasonal-events': '季節の行事',
+  spring: '春',
+  summer: '夏',
   mandala: '曼荼羅',
   botanical: '植物画',
   landscape: '風景',
