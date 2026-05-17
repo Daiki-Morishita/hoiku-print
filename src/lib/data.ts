@@ -13501,13 +13501,17 @@ export function getAudience(m: Material): Audience {
   return 'kids'
 }
 
-/** needs_revision の素材は公開しない */
-export function isPublic(m: Material): boolean {
-  return m.imageStatus !== 'needs_revision'
+/**
+ * needs_revision の素材は公開しない。
+ * overrides (DBから取得) があれば、静的な imageStatus に優先して適用する。
+ */
+export function isPublic(m: Material, overrides?: Map<string, { imageStatus: string | null }>): boolean {
+  const status = overrides?.get(m.id)?.imageStatus ?? m.imageStatus
+  return status !== 'needs_revision'
 }
 
-export function getMaterialsForAudience(audience: Audience): Material[] {
-  return materials.filter(m => isPublic(m) && getAudience(m) === audience)
+export function getMaterialsForAudience(audience: Audience, overrides?: Map<string, { imageStatus: string | null }>): Material[] {
+  return materials.filter(m => isPublic(m, overrides) && getAudience(m) === audience)
 }
 
 export function filterMaterials(params: {
@@ -13521,10 +13525,11 @@ export function filterMaterials(params: {
   sort?: SortKey
   favoriteIds?: string[]
   audience?: 'kids' | 'adult'
+  overrides?: Map<string, { imageStatus: string | null }>
 }): Material[] {
   const audience = params.audience ?? 'kids'
   const filtered = materials.filter(m => {
-    if (!isPublic(m)) return false
+    if (!isPublic(m, params.overrides)) return false
     if (getAudience(m) !== audience) return false
     if (params.age && (m.ageMin > params.age || m.ageMax < params.age)) return false
     if (params.category && m.category !== params.category) return false
@@ -13566,23 +13571,23 @@ export function filterMaterials(params: {
   return [...filtered].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 }
 
-export function getPopularMaterials(limit = 6, audience: Audience = 'kids'): Material[] {
-  const pool = materials.filter(m => isPublic(m) && getAudience(m) === audience)
+export function getPopularMaterials(limit = 6, audience: Audience = 'kids', overrides?: Map<string, { imageStatus: string | null }>): Material[] {
+  const pool = materials.filter(m => isPublic(m, overrides) && getAudience(m) === audience)
   const popular = pool.filter(m => m.popular)
   if (popular.length >= limit) return popular.slice(0, limit)
   const extra = pool.filter(m => !m.popular).slice(0, limit - popular.length)
   return [...popular, ...extra]
 }
 
-export function getMaterialById(id: string): Material | undefined {
+export function getMaterialById(id: string, overrides?: Map<string, { imageStatus: string | null }>): Material | undefined {
   const m = materials.find(m => m.id === id)
-  if (!m || !isPublic(m)) return undefined
+  if (!m || !isPublic(m, overrides)) return undefined
   return m
 }
 
-export function getRelatedMaterials(material: Material, limit = 4): Material[] {
+export function getRelatedMaterials(material: Material, limit = 4, overrides?: Map<string, { imageStatus: string | null }>): Material[] {
   return materials
-    .filter(m => isPublic(m) && m.id !== material.id && (
+    .filter(m => isPublic(m, overrides) && m.id !== material.id && (
       m.category === material.category ||
       m.theme === material.theme ||
       m.event === material.event

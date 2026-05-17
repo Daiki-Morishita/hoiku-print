@@ -1,12 +1,15 @@
 'use client'
 
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { loginWithCredentials, registerWithCredentials, loginWithGoogle, loginWithLINE } from './actions'
 
 type Tab = 'login' | 'register'
 
 export function LoginForm() {
-  const [tab, setTab]         = useState<Tab>('login')
+  const searchParams = useSearchParams()
+  const initialTab: Tab = searchParams.get('tab') === 'register' ? 'register' : 'login'
+  const [tab, setTab]         = useState<Tab>(initialTab)
   const [email, setEmail]     = useState('')
   const [password, setPw]     = useState('')
   const [confirm, setConfirm] = useState('')

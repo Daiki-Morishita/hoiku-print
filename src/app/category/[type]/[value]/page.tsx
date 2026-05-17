@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { MaterialCard } from '@/components/materials/MaterialCard'
 import { filterMaterials } from '@/lib/data'
+import { loadOverrides } from '@/lib/data-overrides'
 import { CATEGORY_LABELS, SEASON_LABELS, EVENT_LABELS, THEME_LABELS } from '@/lib/types'
 import type { Category, Season, Theme } from '@/lib/types'
 
@@ -85,7 +86,8 @@ export default async function CategoryPage({
   else if (type === 'theme') filterParams.theme = value
   else notFound()
 
-  const filtered = filterMaterials(filterParams as Parameters<typeof filterMaterials>[0])
+  const overrides = await loadOverrides()
+  const filtered = filterMaterials({ ...filterParams, overrides } as Parameters<typeof filterMaterials>[0])
   const { title, description } = getPageInfo(type, value)
   const pageUrl = `${BASE_URL}/category/${type}/${value}`
 

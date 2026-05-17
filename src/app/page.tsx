@@ -3,6 +3,7 @@ import { ArrowRight, ChevronRight, Clock } from 'lucide-react'
 import { MaterialCard, DifficultyBadge } from '@/components/materials/MaterialCard'
 import type { Difficulty } from '@/lib/types'
 import { materials, getPopularMaterials, getMaterialById, filterMaterials, getMaterialsForAudience } from '@/lib/data'
+import { loadOverrides } from '@/lib/data-overrides'
 import { columns } from '@/lib/columns'
 
 export const metadata = {
@@ -94,8 +95,9 @@ const faqJsonLd = {
   })),
 }
 
-export default function HomePage() {
-  const popular = getPopularMaterials(12)
+export default async function HomePage() {
+  const overrides = await loadOverrides()
+  const popular = getPopularMaterials(12, 'kids', overrides)
   const todaysPick = getTodaysPick()
   const featuredColumn = columns[0]
 

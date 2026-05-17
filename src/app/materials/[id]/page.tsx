@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowLeft, Clock, Users, Lightbulb, Printer, ChevronRight, ChevronLeft } from 'lucide-react'
 import { getMaterialById, getRelatedMaterials, materials } from '@/lib/data'
+import { loadOverrides } from '@/lib/data-overrides'
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
 import { MaterialCard, DifficultyBadge } from '@/components/materials/MaterialCard'
 import { PrintButton } from '@/components/materials/PrintButton'
@@ -45,14 +46,15 @@ const themeEmoji: Record<string, string> = {
 
 export default async function MaterialDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const material = getMaterialById(id)
+  const overrides = await loadOverrides()
+  const material = getMaterialById(id, overrides)
   if (!material) notFound()
 
   const idx = materials.findIndex(m => m.id === id)
   const prevMaterial = idx > 0 ? materials[idx - 1] : null
   const nextMaterial = idx >= 0 && idx < materials.length - 1 ? materials[idx + 1] : null
 
-  const related = getRelatedMaterials(material, 4)
+  const related = getRelatedMaterials(material, 4, overrides)
   const ageLabel = material.ageMin === material.ageMax
     ? `${material.ageMin}歳`
     : `${material.ageMin}〜${material.ageMax}歳`

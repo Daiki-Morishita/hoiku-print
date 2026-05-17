@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Search, User, LogOut, Heart, LogIn } from 'lucide-react'
+import { Menu, X, Search, User, LogOut, Heart, LogIn, UserPlus } from 'lucide-react'
 import { useSession, signOut } from 'next-auth/react'
 import { useFavorites } from '@/components/favorites/FavoritesProvider'
 
@@ -108,13 +108,22 @@ export function Header({ materialCount = 555 }: { materialCount?: number }) {
                   </button>
                 </>
               ) : (
-                <Link
-                  href="/login"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors font-medium"
-                >
-                  <LogIn className="w-3.5 h-3.5" />
-                  ログイン
-                </Link>
+                <>
+                  <Link
+                    href="/login"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-white/85 hover:text-white hover:bg-white/10 transition-colors"
+                  >
+                    <LogIn className="w-3.5 h-3.5" />
+                    <span className="font-medium">ログイン</span>
+                  </Link>
+                  <Link
+                    href="/login?tab=register"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-white hover:bg-primary/90 transition-colors font-medium"
+                  >
+                    <UserPlus className="w-3.5 h-3.5" />
+                    新規登録
+                  </Link>
+                </>
               )}
             </div>
           </div>

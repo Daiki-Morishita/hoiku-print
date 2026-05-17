@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { filterMaterials, type SortKey } from '@/lib/data'
+import { loadOverrides } from '@/lib/data-overrides'
 import type { Theme } from '@/lib/types'
 
 export const metadata = {
@@ -15,12 +16,14 @@ export default async function AdultMaterialsPage({
   searchParams: Promise<{ search?: string; theme?: string; sort?: string }>
 }) {
   const params = await searchParams
+  const overrides = await loadOverrides()
   const sort = (params.sort as SortKey) ?? 'newest'
   const filtered = filterMaterials({
     search: params.search,
     theme: params.theme as Theme | undefined,
     sort,
     audience: 'adult',
+    overrides,
   })
 
   return (

@@ -92,6 +92,18 @@ model Favorite {
   @@index([userId, groupName])
 }
 
+/**
+ * 本番(Vercel)で data.ts を直接書き換えられないため、
+ * 管理画面からの imageStatus / illustNotes の変更を DB に保存して
+ * 読み出し時にマージ適用する。
+ */
+model MaterialOverride {
+  materialId  String   @id
+  imageStatus String?
+  illustNotes String?
+  updatedAt   DateTime @updatedAt
+}
+
 model PrintLog {
   id         String   @id @default(cuid())
   userId     String?

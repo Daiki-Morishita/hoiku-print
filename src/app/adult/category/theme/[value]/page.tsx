@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { filterMaterials } from '@/lib/data'
+import { loadOverrides } from '@/lib/data-overrides'
 import { THEME_LABELS, ADULT_THEMES } from '@/lib/types'
 import type { Theme } from '@/lib/types'
 
@@ -34,7 +35,8 @@ export default async function AdultThemePage({ params }: { params: Promise<{ val
   const theme = value as Theme
   if (!ADULT_THEMES.includes(theme)) notFound()
 
-  const filtered = filterMaterials({ theme, audience: 'adult' })
+  const overrides = await loadOverrides()
+  const filtered = filterMaterials({ theme, audience: 'adult', overrides })
   const label = THEME_LABELS[theme]
   const description = ADULT_THEME_DESCRIPTIONS[value] ?? ''
 

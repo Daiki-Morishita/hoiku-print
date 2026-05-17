@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { getMaterialsForAudience, getPopularMaterials } from '@/lib/data'
+import { loadOverrides } from '@/lib/data-overrides'
 import { THEME_LABELS, ADULT_THEMES } from '@/lib/types'
 
 export const metadata = {
@@ -41,8 +42,9 @@ function getTodaysAdultFeature() {
   return pool[dayOfYear % pool.length]
 }
 
-export default function AdultHomePage() {
-  const popular = getPopularMaterials(8, 'adult')
+export default async function AdultHomePage() {
+  const overrides = await loadOverrides()
+  const popular = getPopularMaterials(8, 'adult', overrides)
   const feature = getTodaysAdultFeature()
 
   return (
