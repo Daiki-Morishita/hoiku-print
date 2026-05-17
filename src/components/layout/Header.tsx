@@ -29,7 +29,6 @@ const ADULT_NAV: NavItem[] = [
   { href: '/adult/category/theme/pattern', label: '幾何模様' },
   { href: '/adult/category/theme/animals-detail', label: '動物（細密）' },
   { href: '/adult/category/theme/flowers-detail', label: '花（細密）' },
-  { href: '/adult/category/theme/japanese-tradition', label: '和柄' },
   { href: '/adult/materials', label: 'すべて見る' },
 ]
 

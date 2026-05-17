@@ -159,6 +159,17 @@ export default function HomePage() {
                 </Link>
               ))}
             </div>
+
+            {/* All materials button */}
+            <div className="mt-7">
+              <Link
+                href="/materials"
+                className="inline-flex items-center gap-2 bg-primary text-white px-7 py-3 rounded-full text-[14px] font-rounded font-black hover:opacity-90 transition-all shadow-md"
+              >
+                <span>🎨</span>すべてのぬりえを見る（{totalMaterials}点）
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>

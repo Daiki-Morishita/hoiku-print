@@ -13,7 +13,6 @@ const ADULT_THEME_DESCRIPTIONS: Record<string, string> = {
   'animals-detail':    '動物の毛並みや表情まで描き込んだ細密画。',
   'flowers-detail':    '花弁一枚一枚の質感を活かす細密構図。',
   cityscape:           'パリ・京都など、都市の街並みを線画で。',
-  'japanese-tradition': '和柄・伝統文様。日本の美意識を塗ります。',
 }
 
 export function generateStaticParams() {

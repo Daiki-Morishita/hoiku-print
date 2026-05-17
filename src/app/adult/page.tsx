@@ -21,7 +21,6 @@ const ADULT_THEME_SHOWCASE: { theme: typeof ADULT_THEMES[number]; description: s
   { theme: 'animals-detail', description: '動物の毛並みや表情まで描き込んだ細密画。' },
   { theme: 'flowers-detail', description: '花弁一枚一枚の質感を活かす細密構図。' },
   { theme: 'cityscape', description: 'パリ・京都など都市の街並みを線画で。' },
-  { theme: 'japanese-tradition', description: '和柄・伝統文様。日本の美意識を塗る。' },
 ]
 
 const websiteJsonLd = {
@@ -173,9 +172,12 @@ export default function AdultHomePage() {
                 </Link>
               ))}
             </div>
-            <div className="text-center mt-7">
-              <Link href="/adult/materials" className="inline-flex items-center gap-1.5 text-[13px] font-mincho text-primary hover:underline">
-                全 {totalAdult} 点を見る →
+            <div className="text-center mt-8">
+              <Link
+                href="/adult/materials"
+                className="inline-flex items-center gap-2 bg-foreground text-white px-7 py-3 rounded text-[14px] font-mincho font-bold hover:bg-primary transition-colors"
+              >
+                すべての塗り絵を見る（{totalAdult}点）<ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -278,26 +280,12 @@ export default function AdultHomePage() {
         </div>
       </section>
 
-      {/* ===== CTA ===== */}
-      <section className="py-16 md:py-20 border-t border-border">
-        <div className="max-w-[760px] mx-auto px-6 text-center">
-          <div className="font-mincho text-[11px] text-primary tracking-[0.3em] mb-4">
-            — INVITATION —
-          </div>
-          <h2 className="font-mincho text-[26px] md:text-[34px] font-black leading-[1.6] mb-6">
-            今夜の、<br />
-            一枚を選ぶ。
-          </h2>
-          <Link
-            href="/adult/materials"
-            className="inline-flex items-center gap-2 bg-foreground text-background px-9 py-4 rounded text-[14px] font-medium hover:bg-primary transition-colors"
-          >
-            すべての塗り絵を見る
-            <ArrowRight className="w-4 h-4" />
+      {/* Bottom cross-link to kids */}
+      <section className="py-12 border-t border-border text-center">
+        <div className="max-w-[760px] mx-auto px-6">
+          <Link href="/" className="text-[13px] text-muted-foreground underline hover:text-primary">
+            こども向けのぬりえはこちら →
           </Link>
-          <div className="mt-12 text-[12px] text-muted-foreground">
-            <Link href="/" className="underline hover:text-primary">こども向けのぬりえはこちら</Link>
-          </div>
         </div>
       </section>
     </>

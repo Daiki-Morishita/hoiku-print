@@ -6,6 +6,7 @@ import { getMaterialById, getRelatedMaterials, materials } from '@/lib/data'
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
 import { MaterialCard, DifficultyBadge } from '@/components/materials/MaterialCard'
 import { PrintButton } from '@/components/materials/PrintButton'
+import { SaveButton } from '@/components/materials/SaveButton'
 import { FavoriteButton } from '@/components/favorites/FavoriteButton'
 
 export async function generateStaticParams() {
@@ -106,17 +107,21 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             margin: 0 !important;
             padding: 0 !important;
             background: white !important;
-            -webkit-print-color-adjust: economy;
-            print-color-adjust: economy;
+            -webkit-print-color-adjust: economy !important;
+            print-color-adjust: economy !important;
+            color-adjust: economy !important;
+            color-scheme: light only;
+            forced-color-adjust: economy;
+          }
+          html, body, .print-area, .print-area * {
+            filter: grayscale(100%) !important;
+            -webkit-filter: grayscale(100%) !important;
           }
           .print-area,
           .print-area * {
             border: 0 !important;
             outline: 0 !important;
             box-shadow: none !important;
-          }
-          .print-area {
-            filter: grayscale(100%) contrast(1) !important;
           }
         }
       `}</style>
@@ -219,10 +224,11 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             </div>
             <p className="text-[14px] text-foreground/85 mb-4 leading-relaxed pl-4 border-l-[3px] border-primary">{material.description}</p>
 
-            {/* モバイル専用: 画像直下に印刷ボタン */}
-            <div className="lg:hidden mb-6 bg-white border border-border rounded-lg p-4">
+            {/* モバイル専用: 画像直下に印刷・保存ボタン */}
+            <div className="lg:hidden mb-6 bg-white border border-border rounded-lg p-4 space-y-2.5">
               <PrintButton materialTitle={material.title} />
-              <p className="text-[11px] text-muted-foreground mt-2.5 text-center">
+              <SaveButton materialTitle={material.title} imageUrl={material.imageUrl} />
+              <p className="text-[11px] text-muted-foreground text-center pt-1">
                 A4横長・白黒印刷に最適化（モノクロ自動適用）
               </p>
             </div>
@@ -297,14 +303,17 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
 
           {/* サイドバー */}
           <div className="space-y-4">
-            {/* 印刷ボタン */}
+            {/* 印刷・保存ボタン */}
             <div className="bg-white border border-border rounded-lg p-5">
               <h2 className="font-rounded text-[15px] font-bold mb-4 flex items-center gap-2 pb-2 border-b border-border">
                 <Printer className="w-4 h-4 text-primary" />
-                印刷する
+                印刷・保存
               </h2>
-              <PrintButton materialTitle={material.title} />
-              <p className="text-xs text-muted-foreground mt-2.5 text-center">
+              <div className="space-y-2.5">
+                <PrintButton materialTitle={material.title} />
+                <SaveButton materialTitle={material.title} imageUrl={material.imageUrl} />
+              </div>
+              <p className="text-xs text-muted-foreground mt-3 text-center">
                 A4横長・白黒印刷に最適化（モノクロ自動適用）
               </p>
             </div>
