@@ -1,9 +1,28 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Clock, Users, Star } from 'lucide-react'
-import type { Material } from '@/lib/types'
-import { DIFFICULTY_LABELS } from '@/lib/types'
+import type { Material, Difficulty } from '@/lib/types'
 import { FavoriteButton } from '@/components/favorites/FavoriteButton'
+
+// 難易度ごとの色・ラベル（再利用可）
+const DIFFICULTY_COLOR: Record<Difficulty, { border: string; text: string; bg: string }> = {
+  1: { border: '#7AA875', text: '#3F6334', bg: '#EEF6E9' }, // green: やさしい
+  2: { border: '#E8B838', text: '#A87716', bg: '#FBF3DE' }, // yellow: ふつう
+  3: { border: '#E66A2C', text: '#9F4516', bg: '#FBE7D8' }, // orange: むずかしい
+  4: { border: '#C25A6E', text: '#83384D', bg: '#F7DEE4' }, // rose: とてもむずかしい
+}
+
+export function DifficultyBadge({ level }: { level: Difficulty }) {
+  const c = DIFFICULTY_COLOR[level]
+  return (
+    <span
+      className="inline-flex items-center gap-0.5 text-[12px] px-2.5 py-1 rounded-full font-bold border-2 shadow-sm"
+      style={{ borderColor: c.border, color: c.text, background: c.bg }}
+    >
+      {'★'.repeat(level)}
+    </span>
+  )
+}
 
 interface MaterialCardProps {
   material: Material
@@ -44,9 +63,7 @@ export function MaterialCard({ material }: MaterialCardProps) {
           </div>
         )}
         <div className="absolute bottom-2 left-2">
-          <span className="inline-flex items-center gap-1 text-[12px] bg-white px-2.5 py-1 rounded-full font-bold border-2 border-[#E8B838] text-[#A87716] shadow-sm">
-            {'★'.repeat(material.difficulty)}
-          </span>
+          <DifficultyBadge level={material.difficulty} />
         </div>
         <FavoriteButton materialId={material.id} size="sm" variant="overlay" />
       </div>

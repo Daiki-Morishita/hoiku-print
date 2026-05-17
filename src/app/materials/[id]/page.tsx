@@ -1,11 +1,10 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, Clock, Users, Wrench, Lightbulb, Printer, ChevronRight, ChevronLeft } from 'lucide-react'
+import { ArrowLeft, Clock, Users, Lightbulb, Printer, ChevronRight, ChevronLeft } from 'lucide-react'
 import { getMaterialById, getRelatedMaterials, materials } from '@/lib/data'
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
-import { MaterialCard } from '@/components/materials/MaterialCard'
-import { Badge } from '@/components/ui/badge'
+import { MaterialCard, DifficultyBadge } from '@/components/materials/MaterialCard'
 import { PrintButton } from '@/components/materials/PrintButton'
 import { ConveniencePrintButton } from '@/components/materials/ConveniencePrintButton'
 import { FavoriteButton } from '@/components/favorites/FavoriteButton'
@@ -33,13 +32,6 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       ...(material.imageUrl ? { images: [{ url: material.imageUrl, alt: material.title }] } : {}),
     },
   }
-}
-
-const difficultyColor: Record<number, string> = {
-  1: 'bg-green-100 text-green-800 border-green-200',
-  2: 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  3: 'bg-red-100 text-red-800 border-red-200',
-  4: 'bg-purple-100 text-purple-800 border-purple-200',
 }
 
 const categoryEmoji: Record<string, string> = {
@@ -118,39 +110,42 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             -webkit-print-color-adjust: economy;
             print-color-adjust: economy;
           }
+          .print-area,
+          .print-area * {
+            border: 0 !important;
+            outline: 0 !important;
+            box-shadow: none !important;
+          }
           .print-area {
             filter: grayscale(100%) contrast(1) !important;
           }
         }
       `}</style>
-      <div className="hidden print:block print-area" style={{ position: 'relative', width: '297mm', height: '210mm', boxSizing: 'border-box', overflow: 'hidden' }}>
+      <div className="hidden print:block print-area" style={{ position: 'relative', width: '297mm', height: '210mm', boxSizing: 'border-box', overflow: 'hidden', background: 'white' }}>
         {printImageUrl && (
-          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '5mm' }}>
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={printImageUrl}
               alt={material.title}
-              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+              style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', display: 'block' }}
             />
           </div>
         )}
-        {/* 右下ブランディング */}
+        {/* 右下ブランディング — 背景なし・小さく */}
         <div style={{
           position: 'absolute',
-          right: '8mm',
-          bottom: '5mm',
-          backgroundColor: '#eeeeee',
-          padding: '0.5mm 1.5mm',
-          borderRadius: '1mm',
-          fontSize: '9pt',
-          color: '#333',
+          right: '6mm',
+          bottom: '4mm',
+          fontSize: '8pt',
+          color: '#999',
           letterSpacing: '0.05em',
           display: 'flex',
           alignItems: 'center',
           gap: '0.4em',
         }}>
           <span>{material.title}</span>
-          <span style={{ color: '#aaa' }}>｜</span>
+          <span style={{ color: '#ccc' }}>｜</span>
           <span>ぬりえプリント</span>
         </div>
       </div>
@@ -205,10 +200,8 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
                   {material.theme ? (themeEmoji[material.theme] ?? categoryEmoji[material.category] ?? '🖨') : (categoryEmoji[material.category] ?? '🖨')}
                 </div>
               )}
-              <div className="absolute top-3 left-3 flex gap-2 flex-wrap">
-                <span className={`text-xs px-2.5 py-1 rounded-full border font-medium ${difficultyColor[material.difficulty]}`}>
-                  {DIFFICULTY_LABELS[material.difficulty]}
-                </span>
+              <div className="absolute top-3 left-3 flex gap-2 flex-wrap items-center">
+                <DifficultyBadge level={material.difficulty} />
                 <span className="text-xs px-2.5 py-1 rounded-full bg-white border border-border font-medium">
                   {CATEGORY_LABELS[material.category]}
                 </span>
@@ -240,26 +233,33 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
               </p>
             </div>
 
-            {/* タグ */}
+            {/* タグ — クリックで検索 */}
             <div className="flex flex-wrap gap-2 mb-6">
               {material.tags.map(tag => (
-                <Badge key={tag} variant="secondary" className="text-xs">{tag}</Badge>
+                <Link
+                  key={tag}
+                  href={`/materials?search=${encodeURIComponent(tag)}`}
+                  className="inline-flex items-center text-[12px] bg-muted hover:bg-primary hover:text-white px-3 py-1.5 rounded-full transition-colors"
+                >
+                  #{tag}
+                </Link>
               ))}
-              {material.season && <Badge variant="outline" className="text-xs">{SEASON_LABELS[material.season]}</Badge>}
-              {material.event && <Badge variant="outline" className="text-xs">{EVENT_LABELS[material.event]}</Badge>}
-            </div>
-
-            {/* 必要道具 */}
-            <div className="bg-white border border-border rounded-lg p-4 mb-4">
-              <h2 className="font-rounded text-[14px] font-bold flex items-center gap-2 mb-3 pb-2 border-b border-border">
-                <Wrench className="w-4 h-4 text-primary" />
-                必要な道具
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {material.tools.map(tool => (
-                  <span key={tool} className="text-sm bg-muted px-3 py-1 rounded-full">{tool}</span>
-                ))}
-              </div>
+              {material.season && (
+                <Link
+                  href={`/category/season/${material.season}`}
+                  className="inline-flex items-center text-[12px] bg-white border border-border hover:border-primary hover:text-primary px-3 py-1.5 rounded-full transition-colors"
+                >
+                  {SEASON_LABELS[material.season]}
+                </Link>
+              )}
+              {material.event && (
+                <Link
+                  href={`/materials?event=${material.event}`}
+                  className="inline-flex items-center text-[12px] bg-white border border-border hover:border-primary hover:text-primary px-3 py-1.5 rounded-full transition-colors"
+                >
+                  {EVENT_LABELS[material.event]}
+                </Link>
+              )}
             </div>
 
             {/* 解説テキスト */}
