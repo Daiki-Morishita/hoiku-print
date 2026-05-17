@@ -314,38 +314,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== AGE ===== */}
-      <section className="py-12 border-t border-border">
-        <div className="max-w-[1280px] mx-auto px-6">
-          <SectionHead
-            kicker="No. 04"
-            title="年齢で探す"
-            subtitle="2歳のはじめてから、6歳の力作まで"
-            emoji="🎈"
-          />
-          <div className="grid grid-cols-5 gap-2 md:gap-3">
-            {[2, 3, 4, 5, 6].map((age, i) => {
-              const count = filterMaterials({ age, audience: 'kids' }).length
-              const colors = ['#E66A2C', '#4FA7B8', '#E8B838', '#C25A6E', '#7AA875']
-              return (
-                <Link
-                  key={age}
-                  href={`/category/age/${age}`}
-                  className="bg-white border-2 rounded-lg p-4 md:p-6 text-center hover:-translate-y-1 transition-all"
-                  style={{ borderColor: colors[i] }}
-                >
-                  <div className="font-rounded text-[28px] md:text-[42px] font-black leading-none" style={{ color: colors[i] }}>
-                    {age}
-                  </div>
-                  <div className="text-[12px] text-muted-foreground mt-1 font-medium">歳</div>
-                  <div className="text-[12px] text-muted-foreground mt-2 pt-2 border-t border-border/60">{count}点</div>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* ===== EDITORIAL QUOTE ===== */}
       <section className="py-16 md:py-20 bg-gradient-to-b from-white to-[#FFF3E0]/40 border-y border-border">
         <div className="max-w-[860px] mx-auto px-6 text-center">
@@ -371,7 +339,7 @@ export default function HomePage() {
       <section className="py-12 border-t border-border">
         <div className="max-w-[1280px] mx-auto px-6">
           <SectionHead
-            kicker="No. 05"
+            kicker="No. 04"
             title="読みもの"
             count="ぬりえ完全ガイド"
             href="/columns"
@@ -423,7 +391,7 @@ export default function HomePage() {
       <section className="py-12 border-t border-border bg-background">
         <div className="max-w-[860px] mx-auto px-6">
           <SectionHead
-            kicker="No. 06"
+            kicker="No. 05"
             title="よくある質問"
             subtitle="お問い合わせの多い質問にお答えします"
             emoji="💬"
