@@ -3,13 +3,23 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 
+export interface FavoriteEntry {
+  materialId: string
+  groupName: string | null
+  createdAt: string
+}
+
 interface FavoritesState {
-  ids: Set<string>
+  entries: Map<string, FavoriteEntry>
   count: number
   limit: number
   loading: boolean
   isFavorite: (id: string) => boolean
+  getGroup: (id: string) => string | null
   toggle: (id: string) => Promise<ToggleResult>
+  move: (materialIds: string[], groupName: string | null) => Promise<boolean>
+  bulkDelete: (materialIds: string[]) => Promise<boolean>
+  refresh: () => Promise<void>
 }
 
 type ToggleResult =
@@ -17,53 +27,57 @@ type ToggleResult =
   | { ok: false; reason: 'unauthorized' | 'limit_reached' | 'error' }
 
 const FavoritesContext = createContext<FavoritesState | null>(null)
-
 const FREE_LIMIT = 10
 
 export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   const { status } = useSession()
-  const [ids, setIds] = useState<Set<string>>(new Set())
+  const [entries, setEntries] = useState<Map<string, FavoriteEntry>>(new Map())
   const [loading, setLoading] = useState(false)
 
-  // Fetch favorites on login
-  useEffect(() => {
+  const refresh = useCallback(async () => {
     if (status !== 'authenticated') {
-      setIds(new Set())
+      setEntries(new Map())
       return
     }
     setLoading(true)
-    fetch('/api/favorites')
-      .then(r => r.ok ? r.json() : Promise.reject())
-      .then((data: { ids: string[] }) => setIds(new Set(data.ids)))
-      .catch(() => {})
-      .finally(() => setLoading(false))
+    try {
+      const res = await fetch('/api/favorites')
+      if (res.ok) {
+        const data = await res.json()
+        const next = new Map<string, FavoriteEntry>()
+        for (const f of data.favorites ?? []) {
+          next.set(f.materialId, f)
+        }
+        setEntries(next)
+      }
+    } catch {}
+    setLoading(false)
   }, [status])
 
-  const isFavorite = useCallback((id: string) => ids.has(id), [ids])
+  useEffect(() => {
+    refresh()
+  }, [refresh])
+
+  const isFavorite = useCallback((id: string) => entries.has(id), [entries])
+  const getGroup = useCallback((id: string) => entries.get(id)?.groupName ?? null, [entries])
 
   const toggle = useCallback(async (id: string): Promise<ToggleResult> => {
-    if (status !== 'authenticated') {
-      return { ok: false, reason: 'unauthorized' }
-    }
-    const wasFavorited = ids.has(id)
+    if (status !== 'authenticated') return { ok: false, reason: 'unauthorized' }
+    const wasFavorited = entries.has(id)
 
-    // Optimistic update
-    setIds(prev => {
-      const next = new Set(prev)
+    setEntries(prev => {
+      const next = new Map(prev)
       if (wasFavorited) next.delete(id)
-      else next.add(id)
+      else next.set(id, { materialId: id, groupName: null, createdAt: new Date().toISOString() })
       return next
     })
 
     try {
-      const res = await fetch(`/api/favorites/${id}`, {
-        method: wasFavorited ? 'DELETE' : 'POST',
-      })
+      const res = await fetch(`/api/favorites/${id}`, { method: wasFavorited ? 'DELETE' : 'POST' })
       if (!res.ok) {
-        // Rollback
-        setIds(prev => {
-          const next = new Set(prev)
-          if (wasFavorited) next.add(id)
+        setEntries(prev => {
+          const next = new Map(prev)
+          if (wasFavorited) next.set(id, { materialId: id, groupName: null, createdAt: new Date().toISOString() })
           else next.delete(id)
           return next
         })
@@ -73,18 +87,69 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
       }
       return { ok: true, added: !wasFavorited }
     } catch {
-      setIds(prev => {
-        const next = new Set(prev)
-        if (wasFavorited) next.add(id)
-        else next.delete(id)
-        return next
-      })
       return { ok: false, reason: 'error' }
     }
-  }, [ids, status])
+  }, [entries, status])
+
+  const move = useCallback(async (materialIds: string[], groupName: string | null): Promise<boolean> => {
+    if (materialIds.length === 0) return true
+    // Optimistic
+    setEntries(prev => {
+      const next = new Map(prev)
+      for (const id of materialIds) {
+        const cur = next.get(id)
+        if (cur) next.set(id, { ...cur, groupName })
+      }
+      return next
+    })
+    try {
+      const res = await fetch('/api/favorites/bulk', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'move', materialIds, groupName }),
+      })
+      if (!res.ok) await refresh()
+      return res.ok
+    } catch {
+      await refresh()
+      return false
+    }
+  }, [refresh])
+
+  const bulkDelete = useCallback(async (materialIds: string[]): Promise<boolean> => {
+    if (materialIds.length === 0) return true
+    setEntries(prev => {
+      const next = new Map(prev)
+      for (const id of materialIds) next.delete(id)
+      return next
+    })
+    try {
+      const res = await fetch('/api/favorites/bulk', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'delete', materialIds }),
+      })
+      if (!res.ok) await refresh()
+      return res.ok
+    } catch {
+      await refresh()
+      return false
+    }
+  }, [refresh])
 
   return (
-    <FavoritesContext.Provider value={{ ids, count: ids.size, limit: FREE_LIMIT, loading, isFavorite, toggle }}>
+    <FavoritesContext.Provider value={{
+      entries,
+      count: entries.size,
+      limit: FREE_LIMIT,
+      loading,
+      isFavorite,
+      getGroup,
+      toggle,
+      move,
+      bulkDelete,
+      refresh,
+    }}>
       {children}
     </FavoritesContext.Provider>
   )

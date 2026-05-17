@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { auth } from '@/auth'
 import { prisma } from '@/lib/db'
 import { getMaterialById } from '@/lib/data'
-import { FavoritesView } from './FavoritesView'
+import { FavoritesView, type FavoriteItem } from './FavoritesView'
 
 export const metadata = {
   title: 'お気に入りのぬりえ',
@@ -19,9 +19,13 @@ export default async function FavoritesPage() {
     where: { userId: session.user.id },
     orderBy: { createdAt: 'desc' },
   })
-  const materials = favRows
-    .map(f => getMaterialById(f.materialId))
-    .filter((m): m is NonNullable<typeof m> => !!m)
+  const items: FavoriteItem[] = favRows
+    .map(f => {
+      const m = getMaterialById(f.materialId)
+      if (!m) return null
+      return { material: m, groupName: f.groupName }
+    })
+    .filter((v): v is FavoriteItem => !!v)
 
-  return <FavoritesView materials={materials} limit={10} />
+  return <FavoritesView initialItems={items} limit={10} />
 }

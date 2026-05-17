@@ -56,3 +56,25 @@ export async function DELETE(
   })
   return NextResponse.json({ ok: true })
 }
+
+// PATCH: update groupName (move to group / un-group)
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ materialId: string }> }
+) {
+  const { materialId } = await params
+  const session = await auth()
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
+  }
+  const body = await request.json().catch(() => ({}))
+  const groupName: string | null = body.groupName === '' ? null : (body.groupName ?? null)
+  if (groupName !== null && groupName.length > 40) {
+    return NextResponse.json({ error: 'group_name_too_long' }, { status: 400 })
+  }
+  await prisma.favorite.updateMany({
+    where: { userId: session.user.id, materialId },
+    data: { groupName },
+  })
+  return NextResponse.json({ ok: true })
+}

@@ -83,10 +83,13 @@ model Favorite {
   id         String   @id @default(cuid())
   userId     String
   materialId String
+  /** ユーザー定義のグループ名（null = 未分類） */
+  groupName  String?
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
 
   @@unique([userId, materialId])
+  @@index([userId, groupName])
 }
 
 model PrintLog {
