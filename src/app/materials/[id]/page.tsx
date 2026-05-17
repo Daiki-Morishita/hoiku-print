@@ -6,7 +6,6 @@ import { getMaterialById, getRelatedMaterials, materials } from '@/lib/data'
 import { CATEGORY_LABELS, DIFFICULTY_LABELS, SEASON_LABELS, EVENT_LABELS } from '@/lib/types'
 import { MaterialCard, DifficultyBadge } from '@/components/materials/MaterialCard'
 import { PrintButton } from '@/components/materials/PrintButton'
-import { ConveniencePrintButton } from '@/components/materials/ConveniencePrintButton'
 import { FavoriteButton } from '@/components/favorites/FavoriteButton'
 
 export async function generateStaticParams() {
@@ -221,14 +220,9 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             <p className="text-[14px] text-foreground/85 mb-4 leading-relaxed pl-4 border-l-[3px] border-primary">{material.description}</p>
 
             {/* モバイル専用: 画像直下に印刷ボタン */}
-            <div className="lg:hidden mb-6 bg-white border border-border rounded-lg p-4 space-y-2.5">
+            <div className="lg:hidden mb-6 bg-white border border-border rounded-lg p-4">
               <PrintButton materialTitle={material.title} />
-              <ConveniencePrintButton
-                materialId={material.id}
-                materialTitle={material.title}
-                imageUrl={material.imageUrl}
-              />
-              <p className="text-[11px] text-muted-foreground text-center pt-1">
+              <p className="text-[11px] text-muted-foreground mt-2.5 text-center">
                 A4横長・白黒印刷に最適化（モノクロ自動適用）
               </p>
             </div>
@@ -309,15 +303,8 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
                 <Printer className="w-4 h-4 text-primary" />
                 印刷する
               </h2>
-              <div className="space-y-2.5">
-                <PrintButton materialTitle={material.title} />
-                <ConveniencePrintButton
-                  materialId={material.id}
-                  materialTitle={material.title}
-                  imageUrl={material.imageUrl}
-                />
-              </div>
-              <p className="text-xs text-muted-foreground mt-3 text-center">
+              <PrintButton materialTitle={material.title} />
+              <p className="text-xs text-muted-foreground mt-2.5 text-center">
                 A4横長・白黒印刷に最適化（モノクロ自動適用）
               </p>
             </div>
