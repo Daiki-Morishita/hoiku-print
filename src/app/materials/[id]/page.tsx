@@ -8,6 +8,7 @@ import { MaterialCard } from '@/components/materials/MaterialCard'
 import { Badge } from '@/components/ui/badge'
 import { PrintButton } from '@/components/materials/PrintButton'
 import { ConveniencePrintButton } from '@/components/materials/ConveniencePrintButton'
+import { FavoriteButton } from '@/components/favorites/FavoriteButton'
 
 export async function generateStaticParams() {
   return materials.map(m => ({ id: m.id }))
@@ -220,7 +221,10 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
 
             {/* タイトル */}
             <div className="font-rounded font-bold text-[12px] text-primary mb-1 tracking-[0.1em]">— Material —</div>
-            <h1 className="font-rounded text-[26px] sm:text-[32px] font-black leading-[1.3] mb-3">{material.title}</h1>
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <h1 className="font-rounded text-[26px] sm:text-[32px] font-black leading-[1.3]">{material.title}</h1>
+              <FavoriteButton materialId={material.id} size="lg" variant="inline" className="shrink-0 mt-1" />
+            </div>
             <p className="text-[14px] text-foreground/85 mb-4 leading-relaxed pl-4 border-l-[3px] border-primary">{material.description}</p>
 
             {/* モバイル専用: 画像直下に印刷ボタン */}

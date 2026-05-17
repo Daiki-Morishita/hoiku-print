@@ -3,8 +3,9 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Search, User, LogOut } from 'lucide-react'
+import { Menu, X, Search, User, LogOut, Heart } from 'lucide-react'
 import { useSession, signOut } from 'next-auth/react'
+import { useFavorites } from '@/components/favorites/FavoritesProvider'
 
 type NavItem = { href: string; label: string; isNew?: boolean }
 
@@ -36,6 +37,7 @@ export function Header({ materialCount = 555 }: { materialCount?: number }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [searchValue, setSearchValue] = useState('')
   const { data: session } = useSession()
+  const { count: favCount, limit: favLimit } = useFavorites()
   const pathname = usePathname() ?? ''
   const isAdult = pathname.startsWith('/adult')
   const nav = isAdult ? ADULT_NAV : KIDS_NAV
@@ -139,16 +141,38 @@ export function Header({ materialCount = 555 }: { materialCount?: number }) {
               </button>
             </form>
 
-            {/* Meta count (desktop) */}
-            <div className="hidden md:block text-right">
-              <div className={`${isAdult ? 'font-mincho' : 'font-rounded'} text-[26px] font-black text-primary leading-none`}>
-                {isAdult ? '近日' : materialCount}
+            {/* Meta count (desktop): favorites for logged-in, material count otherwise */}
+            <div className="hidden md:flex items-center justify-end gap-4">
+              {session && !isAdult && (
+                <Link
+                  href="/favorites"
+                  className="inline-flex items-center gap-1.5 bg-white border-2 border-primary text-primary px-3.5 py-1.5 rounded-full text-[13px] font-rounded font-black hover:bg-primary hover:text-white transition-colors"
+                  aria-label="お気に入り"
+                >
+                  <Heart className={`w-3.5 h-3.5 ${favCount > 0 ? 'fill-current' : ''}`} />
+                  {favCount}/{favLimit}
+                </Link>
+              )}
+              <div className="text-right">
+                <div className={`${isAdult ? 'font-mincho' : 'font-rounded'} text-[24px] font-black text-primary leading-none`}>
+                  {isAdult ? '近日' : materialCount}
+                </div>
+                <div className="text-[11px] text-muted-foreground mt-1">{isAdult ? '公開予定' : '点の教材'}</div>
               </div>
-              <div className="text-[11px] text-muted-foreground mt-1">{isAdult ? '公開予定' : '点の無料教材'}</div>
             </div>
 
             {/* Mobile actions */}
-            <div className="md:hidden flex items-center gap-2 justify-self-end">
+            <div className="md:hidden flex items-center gap-1 justify-self-end">
+              {session && !isAdult && (
+                <Link href="/favorites" aria-label="お気に入り" className="relative p-2 hover:bg-muted rounded transition-colors">
+                  <Heart className={`w-5 h-5 ${favCount > 0 ? 'fill-primary text-primary' : ''}`} />
+                  {favCount > 0 && (
+                    <span className="absolute -top-0.5 -right-0.5 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none">
+                      {favCount}
+                    </span>
+                  )}
+                </Link>
+              )}
               <Link href="/materials" aria-label="検索" className="p-2 hover:bg-muted rounded transition-colors">
                 <Search className="w-5 h-5" />
               </Link>

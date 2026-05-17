@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { Clock, Users, Star } from 'lucide-react'
 import type { Material } from '@/lib/types'
 import { DIFFICULTY_LABELS } from '@/lib/types'
+import { FavoriteButton } from '@/components/favorites/FavoriteButton'
 
 interface MaterialCardProps {
   material: Material
@@ -42,11 +43,12 @@ export function MaterialCard({ material }: MaterialCardProps) {
             </span>
           </div>
         )}
-        <div className="absolute top-2 right-2">
+        <div className="absolute bottom-2 left-2">
           <span className="inline-flex items-center gap-1 text-[12px] bg-white px-2.5 py-1 rounded-full font-bold border-2 border-[#E8B838] text-[#A87716] shadow-sm">
             {'★'.repeat(material.difficulty)}
           </span>
         </div>
+        <FavoriteButton materialId={material.id} size="sm" variant="overlay" />
       </div>
 
       {/* Card content */}
