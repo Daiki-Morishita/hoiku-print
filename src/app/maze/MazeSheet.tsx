@@ -9,8 +9,17 @@ type Props = {
   isAnswer?: boolean
 }
 
+type Edge = 'left' | 'right' | 'top' | 'bottom'
+
+function charStyle(edge: Edge, xPct: number, yPct: number): React.CSSProperties {
+  if (edge === 'left') return { right: 'calc(100% + 14px)', top: `${yPct}%`, transform: 'translateY(-50%)' }
+  if (edge === 'right') return { left: 'calc(100% + 14px)', top: `${yPct}%`, transform: 'translateY(-50%)' }
+  if (edge === 'top') return { bottom: 'calc(100% + 14px)', left: `${xPct}%`, transform: 'translateX(-50%)' }
+  return { top: 'calc(100% + 14px)', left: `${xPct}%`, transform: 'translateX(-50%)' }
+}
+
 export function MazeSheet({ maze, isAnswer = false }: Props) {
-  const { svg: mazeSvg, startYPct, goalYPct } = buildMazeSvg(maze, isAnswer)
+  const { svg: mazeSvg, startXPct, startYPct, startEdge, goalXPct, goalYPct, goalEdge } = buildMazeSvg(maze, isAnswer)
   return (
     <div className={styles['sheet-frame']}>
       <div className={styles.sheet}>
@@ -41,7 +50,7 @@ export function MazeSheet({ maze, isAnswer = false }: Props) {
         <div className={styles['title-block']}>
           <div className={styles['title-row']}>
             <div className={styles['title-main']}>
-              しかくのめいろ
+              {maze.shape_label}
               <span className={styles['title-difficulty']}>{maze.difficulty_label}</span>
             </div>
             <div className={styles['title-id']}>No.{String(maze.no).padStart(3, '0')}</div>
@@ -55,20 +64,14 @@ export function MazeSheet({ maze, isAnswer = false }: Props) {
 
         <div className={styles['maze-stage']}>
           <div className={styles['maze-frame']}>
-            <div
-              className={`${styles['char-at-opening']} ${styles['start-char']}`}
-              style={{ top: `${startYPct}%` }}
-            >
+            <div className={styles['char-at-opening']} style={charStyle(startEdge, startXPct, startYPct)}>
               <div className={styles['char-svg']} dangerouslySetInnerHTML={{ __html: RABBIT_SVG }} />
-              <span className={styles['point-label']}>スタート</span>
+              <span className={`${styles['point-label']} ${styles['start-label']}`}>スタート</span>
             </div>
             <div dangerouslySetInnerHTML={{ __html: mazeSvg }} />
-            <div
-              className={`${styles['char-at-opening']} ${styles['goal-char']}`}
-              style={{ top: `${goalYPct}%` }}
-            >
+            <div className={styles['char-at-opening']} style={charStyle(goalEdge, goalXPct, goalYPct)}>
               <div className={styles['char-svg']} dangerouslySetInnerHTML={{ __html: CARROT_SVG }} />
-              <span className={styles['point-label']}>ゴール</span>
+              <span className={`${styles['point-label']} ${styles['goal-label']}`}>ゴール</span>
             </div>
           </div>
         </div>
@@ -104,4 +107,3 @@ export function MazeSheet({ maze, isAnswer = false }: Props) {
     </div>
   )
 }
-

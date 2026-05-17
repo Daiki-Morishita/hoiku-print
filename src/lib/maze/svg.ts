@@ -1,12 +1,23 @@
-import type { MazeRecord } from './types'
+import type { MazeRecord, WallSide } from './types'
 
 const CELL = 42
 const WALL = 6
 
 export type MazeSvgResult = {
   svg: string
+  /** スタートキャラの top%（maze-frame基準） */
   startYPct: number
+  /** スタートキャラの left%（maze-frame基準）。左辺開口なら 0、上辺なら start_cell.x の中央% */
+  startXPct: number
+  /** スタートキャラを「どの方向に隣接させるか」: 'left'|'right'|'top'|'bottom' */
+  startEdge: 'left' | 'right' | 'top' | 'bottom'
   goalYPct: number
+  goalXPct: number
+  goalEdge: 'left' | 'right' | 'top' | 'bottom'
+}
+
+function sideToEdge(side: WallSide): 'left' | 'right' | 'top' | 'bottom' {
+  return ({ W: 'left', E: 'right', N: 'top', S: 'bottom' } as const)[side]
 }
 
 /**
@@ -14,43 +25,78 @@ export type MazeSvgResult = {
  * solution=true で赤い解答パスをオーバーレイ。
  */
 export function buildMazeSvg(maze: MazeRecord, showSolution = false): MazeSvgResult {
-  const { walls, cols, rows, solution } = maze
+  const { walls, valid, cols, rows, solution, start_cell, goal_cell, start_side, goal_side } = maze
   const W = cols * CELL
   const H = rows * CELL
 
+  // 内壁: 有効セル間の壁のみ
   const inner: string[] = []
+  // 外壁: 有効セルの「形の境界」（隣が無効 or 範囲外）
+  const outer: string[] = []
+  const [sx, sy] = start_cell
+  const [gx, gy] = goal_cell
+
   for (let x = 0; x < cols; x++) {
     for (let y = 0; y < rows; y++) {
+      if (!valid[x][y]) continue
       const px = x * CELL
       const py = y * CELL
       const cell = walls[x][y]
-      if (cell.includes('N') && y > 0) inner.push(`M${px} ${py} L${px + CELL} ${py}`)
-      if (cell.includes('W') && x > 0) inner.push(`M${px} ${py} L${px} ${py + CELL}`)
+      // 北
+      if (cell.includes('N')) {
+        const neighborValid = y > 0 && valid[x][y - 1]
+        const isStartOpening = x === sx && y === sy && start_side === 'N'
+        const isGoalOpening = x === gx && y === gy && goal_side === 'N'
+        if (isStartOpening || isGoalOpening) continue
+        if (neighborValid) inner.push(`M${px} ${py} L${px + CELL} ${py}`)
+        else outer.push(`M${px} ${py} L${px + CELL} ${py}`)
+      }
+      // 南
+      if (cell.includes('S')) {
+        const neighborValid = y < rows - 1 && valid[x][y + 1]
+        const isStartOpening = x === sx && y === sy && start_side === 'S'
+        const isGoalOpening = x === gx && y === gy && goal_side === 'S'
+        if (isStartOpening || isGoalOpening) continue
+        // 内壁は北側で書くので、南は外壁のみ書く（重複防止）
+        if (!neighborValid) outer.push(`M${px} ${py + CELL} L${px + CELL} ${py + CELL}`)
+      }
+      // 西
+      if (cell.includes('W')) {
+        const neighborValid = x > 0 && valid[x - 1][y]
+        const isStartOpening = x === sx && y === sy && start_side === 'W'
+        const isGoalOpening = x === gx && y === gy && goal_side === 'W'
+        if (isStartOpening || isGoalOpening) continue
+        if (neighborValid) inner.push(`M${px} ${py} L${px} ${py + CELL}`)
+        else outer.push(`M${px} ${py} L${px} ${py + CELL}`)
+      }
+      // 東
+      if (cell.includes('E')) {
+        const neighborValid = x < cols - 1 && valid[x + 1][y]
+        const isStartOpening = x === sx && y === sy && start_side === 'E'
+        const isGoalOpening = x === gx && y === gy && goal_side === 'E'
+        if (isStartOpening || isGoalOpening) continue
+        if (!neighborValid) outer.push(`M${px + CELL} ${py} L${px + CELL} ${py + CELL}`)
+      }
     }
   }
-  const outer: string[] = [
-    `M0 0 L${W} 0`,
-    `M0 ${H} L${W} ${H}`,
-    `M0 ${CELL} L0 ${H}`,
-    `M${W} 0 L${W} ${(rows - 1) * CELL}`,
-  ]
 
+  // 解答パス
   let solLayer = ''
   if (showSolution && solution.length > 0) {
     const pts: [number, number][] = []
-    const [, sy] = solution[0]
-    // 開口部からほんの少しだけ外に伸ばす
-    pts.push([-WALL, sy * CELL + CELL / 2])
+    // スタート外側
+    const [s0x, s0y] = solution[0]
+    pts.push(extendOutside(s0x, s0y, start_side))
     for (const [cx, cy] of solution) {
       pts.push([cx * CELL + CELL / 2, cy * CELL + CELL / 2])
     }
-    const [, gy] = solution[solution.length - 1]
-    pts.push([W + WALL, gy * CELL + CELL / 2])
+    // ゴール外側
+    const [g0x, g0y] = solution[solution.length - 1]
+    pts.push(extendOutside(g0x, g0y, goal_side))
     const d = 'M ' + pts.map(([px, py]) => `${px.toFixed(1)} ${py.toFixed(1)}`).join(' L ')
     solLayer = `<path d="${d}" stroke="#FF4757" stroke-width="${WALL * 0.9}" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.85"/>`
   }
 
-  // viewBox は壁線の太さぶんだけ余白。左右に余分なパディングを入れないことでキャラが開口部に隣接する
   const pad = WALL
   const vbW = W + pad * 2
   const vbH = H + pad * 2
@@ -60,9 +106,31 @@ export function buildMazeSvg(maze: MazeRecord, showSolution = false): MazeSvgRes
     <path d="${outer.join(' ')}" stroke="#2A1E22" stroke-width="${WALL}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
   </svg>`
 
-  const startYPct = ((pad + 0.5 * CELL) / vbH) * 100
-  const goalYPct = ((pad + (rows - 0.5) * CELL) / vbH) * 100
-  return { svg, startYPct, goalYPct }
+  // キャラ位置計算（viewBox上の座標を％に変換）
+  const startCenterX = sx * CELL + CELL / 2 + pad
+  const startCenterY = sy * CELL + CELL / 2 + pad
+  const goalCenterX = gx * CELL + CELL / 2 + pad
+  const goalCenterY = gy * CELL + CELL / 2 + pad
+
+  return {
+    svg,
+    startXPct: (startCenterX / vbW) * 100,
+    startYPct: (startCenterY / vbH) * 100,
+    startEdge: sideToEdge(start_side),
+    goalXPct: (goalCenterX / vbW) * 100,
+    goalYPct: (goalCenterY / vbH) * 100,
+    goalEdge: sideToEdge(goal_side),
+  }
+
+  function extendOutside(cx: number, cy: number, side: WallSide): [number, number] {
+    const px = cx * CELL + CELL / 2
+    const py = cy * CELL + CELL / 2
+    const off = CELL * 0.5
+    if (side === 'W') return [px - off, py]
+    if (side === 'E') return [px + off, py]
+    if (side === 'N') return [px, py - off]
+    return [px, py + off]
+  }
 }
 
 export const RABBIT_SVG = `<svg viewBox="0 0 100 115" xmlns="http://www.w3.org/2000/svg">
