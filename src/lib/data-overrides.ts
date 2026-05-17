@@ -14,7 +14,7 @@ export type MaterialOverride = {
 
 let _cache: Map<string, MaterialOverride> | null = null
 let _cacheAt = 0
-const TTL_MS = 30_000 // 30 sec cache within a serverless instance
+const TTL_MS = 10_000 // 10 sec cache within a serverless instance
 
 export async function loadOverrides(): Promise<Map<string, MaterialOverride>> {
   if (_cache && Date.now() - _cacheAt < TTL_MS) return _cache

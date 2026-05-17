@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import fs from 'fs'
 import path from 'path'
 import { prisma } from '@/lib/db'
@@ -52,6 +53,15 @@ export async function PATCH(request: Request) {
         })
       }
       invalidateOverridesCache()
+      // SSG/ISR ページを即座に再生成させる
+      try {
+        revalidatePath('/')
+        revalidatePath('/materials')
+        revalidatePath(`/materials/${id}`)
+        revalidatePath('/adult')
+        revalidatePath('/adult/materials')
+        revalidatePath('/favorites')
+      } catch {}
     }
 
     // ── data.ts への書き込みは dev のみ（Vercel は read-only） ──────────────

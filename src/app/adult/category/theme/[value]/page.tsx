@@ -16,6 +16,8 @@ const ADULT_THEME_DESCRIPTIONS: Record<string, string> = {
   cityscape:           'パリ・京都など、都市の街並みを線画で。',
 }
 
+export const revalidate = 30
+
 export function generateStaticParams() {
   return ADULT_THEMES.map(t => ({ value: t }))
 }

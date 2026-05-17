@@ -14,6 +14,9 @@ export async function generateStaticParams() {
   return materials.map(m => ({ id: m.id }))
 }
 
+// ISR: ステータス変更を 30 秒以内に反映
+export const revalidate = 30
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const material = getMaterialById(id)

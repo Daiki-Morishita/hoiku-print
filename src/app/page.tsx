@@ -10,6 +10,9 @@ export const metadata = {
   alternates: { canonical: 'https://nurie-print.com' },
 }
 
+// ISR: 管理画面のステータス変更を反映
+export const revalidate = 30
+
 const kidsMaterials = getMaterialsForAudience('kids')
 const totalMaterials = kidsMaterials.length
 

@@ -10,6 +10,8 @@ export const metadata = {
   alternates: { canonical: 'https://nurie-print.com/adult' },
 }
 
+export const revalidate = 30
+
 const adultMaterials = getMaterialsForAudience('adult')
 const totalAdult = adultMaterials.length
 

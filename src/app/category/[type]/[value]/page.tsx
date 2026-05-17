@@ -9,6 +9,9 @@ import type { Category, Season, Theme } from '@/lib/types'
 
 type CategoryType = 'age' | 'type' | 'season' | 'event' | 'theme'
 
+// ISR: ステータス変更反映
+export const revalidate = 30
+
 export function generateStaticParams() {
   const params = [
     ...[2, 3, 4, 5, 6].map(age => ({ type: 'age', value: String(age) })),
