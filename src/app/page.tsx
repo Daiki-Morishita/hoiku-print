@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight, ChevronRight, Clock } from 'lucide-react'
-import { MaterialCard } from '@/components/materials/MaterialCard'
+import { MaterialCard, DifficultyBadge } from '@/components/materials/MaterialCard'
+import type { Difficulty } from '@/lib/types'
 import { materials, getPopularMaterials, getMaterialById, filterMaterials, getMaterialsForAudience } from '@/lib/data'
 import { columns } from '@/lib/columns'
 
@@ -213,11 +214,50 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ===== POPULAR MATERIALS ===== */}
+      {/* ===== DIFFICULTY (moved up — quick filter) ===== */}
       <section className="py-12 border-t border-border bg-background">
         <div className="max-w-[1280px] mx-auto px-6">
           <SectionHead
             kicker="No. 01"
+            title="むずかしさで探す"
+            subtitle="お子さまの発達段階に合わせて選べる4段階"
+            emoji="⭐"
+          />
+          <div className="grid md:grid-cols-2 gap-3 md:gap-4">
+            {([
+              { diff: 1, label: 'かんたん', age: '2〜3歳', desc: 'シンプルで大きな線画。はじめてのぬりえに。' },
+              { diff: 2, label: 'やさしい', age: '3歳〜', desc: '親しみやすいシーンつき。背景もシンプル。' },
+              { diff: 3, label: 'ふつう', age: '3〜5歳', desc: '親子や複数体の構成。発展的に取り組める。' },
+              { diff: 4, label: 'たのしい', age: '4〜6歳', desc: 'にぎやかな背景・細かな描写。集中して塗れる。' },
+            ] as { diff: Difficulty; label: string; age: string; desc: string }[]).map(({ diff, label, age, desc }) => (
+              <Link
+                key={diff}
+                href={`/materials?difficulty=${diff}`}
+                className="bg-white border border-border rounded-lg p-5 hover:border-primary transition-all flex items-start gap-4 hover:-translate-y-0.5"
+              >
+                <div className="font-rounded text-primary text-[26px] font-black leading-none pt-1 shrink-0 w-8">
+                  0{diff}
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <span className="font-rounded text-[17px] font-black">{label}</span>
+                    <DifficultyBadge level={diff} />
+                    <span className="text-[12px] text-muted-foreground">{age}</span>
+                  </div>
+                  <p className="text-[12px] text-muted-foreground leading-relaxed">{desc}</p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 mt-1" />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== POPULAR MATERIALS ===== */}
+      <section className="py-12 border-t border-border">
+        <div className="max-w-[1280px] mx-auto px-6">
+          <SectionHead
+            kicker="No. 02"
             title="人気のぬりえ"
             count={`トップ ${popular.length}`}
             href="/materials"
@@ -233,10 +273,10 @@ export default function HomePage() {
       </section>
 
       {/* ===== THEMES ===== */}
-      <section className="py-12 border-t border-border">
+      <section className="py-12 border-t border-border bg-background">
         <div className="max-w-[1280px] mx-auto px-6">
           <SectionHead
-            kicker="No. 02"
+            kicker="No. 03"
             title="テーマで探す"
             count={`全${THEMES.length}カテゴリ`}
             subtitle="お子さま・園児が好きなテーマからお選びください"
@@ -275,10 +315,10 @@ export default function HomePage() {
       </section>
 
       {/* ===== AGE ===== */}
-      <section className="py-12 border-t border-border bg-background">
+      <section className="py-12 border-t border-border">
         <div className="max-w-[1280px] mx-auto px-6">
           <SectionHead
-            kicker="No. 03"
+            kicker="No. 04"
             title="年齢で探す"
             subtitle="2歳のはじめてから、6歳の力作まで"
             emoji="🎈"
@@ -323,44 +363,6 @@ export default function HomePage() {
           </p>
           <div className="text-[11px] text-muted-foreground mt-6 tracking-[0.15em]">
             — ぬりえプリント編集部 —
-          </div>
-        </div>
-      </section>
-
-      {/* ===== DIFFICULTY ===== */}
-      <section className="py-12 border-t border-border bg-background">
-        <div className="max-w-[1280px] mx-auto px-6">
-          <SectionHead
-            kicker="No. 04"
-            title="むずかしさで探す"
-            subtitle="お子さまの発達段階に合わせて選べる4段階"
-            emoji="⭐"
-          />
-          <div className="grid md:grid-cols-2 gap-3 md:gap-4">
-            {[
-              { diff: 1, label: 'かんたん', age: '2〜3歳', desc: 'シンプルで大きな線画。はじめてのぬりえに。' },
-              { diff: 2, label: 'やさしい', age: '3歳〜', desc: '親しみやすいシーンつき。背景もシンプル。' },
-              { diff: 3, label: 'ふつう', age: '3〜5歳', desc: '親子や複数体の構成。発展的に取り組める。' },
-              { diff: 4, label: 'たのしい', age: '4〜6歳', desc: 'にぎやかな背景・細かな描写。集中して塗れる。' },
-            ].map(({ diff, label, age, desc }) => (
-              <Link
-                key={diff}
-                href={`/materials?difficulty=${diff}`}
-                className="bg-white border border-border rounded-lg p-5 hover:border-primary transition-all flex items-start gap-4 hover:-translate-y-0.5"
-              >
-                <div className="font-rounded text-primary text-[26px] font-black leading-none pt-1 shrink-0">
-                  0{diff}
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-baseline gap-2 mb-1">
-                    <span className="font-rounded text-[17px] font-black">{label}</span>
-                    <span className="text-[12px] text-muted-foreground">{age}</span>
-                  </div>
-                  <p className="text-[12px] text-muted-foreground leading-relaxed">{desc}</p>
-                </div>
-                <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0 mt-1" />
-              </Link>
-            ))}
           </div>
         </div>
       </section>
