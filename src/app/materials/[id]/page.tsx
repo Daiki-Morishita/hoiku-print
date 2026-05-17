@@ -229,7 +229,7 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
               <PrintButton materialTitle={material.title} />
               <SaveButton materialTitle={material.title} imageUrl={material.imageUrl} />
               <p className="text-[11px] text-muted-foreground text-center pt-1">
-                A4横長・白黒印刷に最適化（モノクロ自動適用）
+                A4横長・白黒印刷に最適化されています
               </p>
             </div>
 
@@ -314,7 +314,7 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
                 <SaveButton materialTitle={material.title} imageUrl={material.imageUrl} />
               </div>
               <p className="text-xs text-muted-foreground mt-3 text-center">
-                A4横長・白黒印刷に最適化（モノクロ自動適用）
+                A4横長・白黒印刷に最適化されています
               </p>
             </div>
 
