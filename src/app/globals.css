@@ -49,40 +49,42 @@
 }
 
 :root {
-  /* Editorial palette: cream paper / ink / vermilion accent */
-  --background: oklch(0.967 0.012 82);          /* #FAF7F0 cream */
-  --foreground: oklch(0.32 0 0);                 /* #3A3A3A ink */
-  --card: oklch(1 0 0);                          /* pure white for cards */
-  --card-foreground: oklch(0.32 0 0);
+  /* Kids palette: cream paper / warm dark brown / playful orange + multi-color accents */
+  --background: oklch(0.975 0.018 87);          /* #FFF8EC softer cream */
+  --foreground: oklch(0.28 0.012 60);            /* #332C24 warm dark brown */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.28 0.012 60);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.32 0 0);
-  --primary: oklch(0.60 0.15 36);                /* #C75C3A vermilion */
+  --popover-foreground: oklch(0.28 0.012 60);
+  --primary: oklch(0.65 0.18 40);                /* #E66A2C playful warm orange */
   --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.94 0.012 82);             /* slightly darker cream */
-  --secondary-foreground: oklch(0.32 0 0);
-  --muted: oklch(0.94 0.012 82);
-  --muted-foreground: oklch(0.50 0.005 75);      /* #888 warm gray */
-  --accent: oklch(0.45 0.08 240);                /* #1F5C8F deep blue */
+  --secondary: oklch(0.94 0.018 85);
+  --secondary-foreground: oklch(0.28 0.012 60);
+  --muted: oklch(0.94 0.018 85);
+  --muted-foreground: oklch(0.52 0.008 65);      /* warm gray */
+  --accent: oklch(0.65 0.10 210);                /* #4FA7B8 sky teal — playful */
   --accent-foreground: oklch(0.99 0 0);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.89 0.020 80);                /* #E8E0D0 warm border */
-  --input: oklch(0.89 0.020 80);
-  --ring: oklch(0.60 0.15 36);
-  --chart-1: oklch(0.60 0.15 36);
-  --chart-2: oklch(0.45 0.08 240);
-  --chart-3: oklch(0.66 0.12 145);
-  --chart-4: oklch(0.75 0.12 75);
-  --chart-5: oklch(0.60 0.12 300);
-  --radius: 0.5rem;
-  --sidebar: oklch(0.97 0.012 82);
-  --sidebar-foreground: oklch(0.32 0 0);
-  --sidebar-primary: oklch(0.60 0.15 36);
+  --border: oklch(0.89 0.025 80);                /* warm beige border */
+  --input: oklch(0.89 0.025 80);
+  --ring: oklch(0.65 0.18 40);
+  /* Multi-color tag palette (used in chips, accents) */
+  --chart-1: oklch(0.65 0.18 40);                /* warm orange (primary) */
+  --chart-2: oklch(0.65 0.10 210);               /* sky teal */
+  --chart-3: oklch(0.74 0.13 90);                /* sunny yellow */
+  --chart-4: oklch(0.64 0.13 350);               /* soft rose */
+  --chart-5: oklch(0.62 0.10 150);               /* leaf green */
+  --radius: 0.75rem;
+  --sidebar: oklch(0.97 0.018 87);
+  --sidebar-foreground: oklch(0.28 0.012 60);
+  --sidebar-primary: oklch(0.65 0.18 40);
   --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.94 0.012 82);
-  --sidebar-accent-foreground: oklch(0.32 0 0);
-  --sidebar-border: oklch(0.89 0.020 80);
-  --sidebar-ring: oklch(0.60 0.15 36);
+  --sidebar-accent: oklch(0.94 0.018 85);
+  --sidebar-accent-foreground: oklch(0.28 0.012 60);
+  --sidebar-border: oklch(0.89 0.025 80);
+  --sidebar-ring: oklch(0.65 0.18 40);
   --font-mincho: var(--font-zen-mincho), 'YuMincho', 'Hiragino Mincho ProN', 'Noto Serif JP', serif;
+  --font-rounded: var(--font-mplus-rounded), 'Hiragino Maru Gothic ProN', 'YuGothic', 'Meiryo', sans-serif;
 }
 
 .dark {
@@ -133,6 +135,10 @@
   }
   .font-mincho {
     font-family: var(--font-mincho);
+    font-feature-settings: "palt" 1;
+  }
+  .font-rounded {
+    font-family: var(--font-rounded);
     font-feature-settings: "palt" 1;
   }
 }

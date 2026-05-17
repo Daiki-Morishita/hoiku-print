@@ -1,26 +1,50 @@
+'use client'
+
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export function Footer({ materialCount = 555 }: { materialCount?: number }) {
   const currentYear = new Date().getFullYear()
+  const pathname = usePathname() ?? ''
+  const isAdult = pathname.startsWith('/adult')
+  const brandFont = isAdult ? 'font-mincho' : 'font-rounded'
 
   return (
-    <footer className="border-t border-border bg-white mt-20">
+    <footer className={`border-t border-border mt-20 ${isAdult ? 'adult-section bg-[#F3EFE6]' : 'bg-white'}`}>
       {/* Editorial mark */}
       <div className="max-w-[1280px] mx-auto px-6 pt-16 pb-12">
         <div className="text-center mb-12">
-          <div className="font-mincho text-[12px] text-muted-foreground tracking-[0.2em] mb-2">— EDITORIAL —</div>
-          <p className="font-mincho text-[18px] text-foreground leading-loose max-w-xl mx-auto">
-            塗り絵は、ただの暇つぶしじゃない。<br />
-            子どもが、はじめて自分で「色」を選ぶ時間。
+          <div className="font-mincho text-[12px] text-muted-foreground tracking-[0.2em] mb-2">
+            {isAdult ? '— A QUIET HOUR —' : '— EDITORIAL —'}
+          </div>
+          <p className={`${isAdult ? 'font-mincho' : 'font-rounded'} text-[18px] text-foreground leading-loose max-w-xl mx-auto`}>
+            {isAdult ? (
+              <>一筆ずつ、色を選ぶ。<br />それは、自分の機嫌をとる時間。</>
+            ) : (
+              <>塗り絵は、ただの暇つぶしじゃない。<br />子どもが、はじめて自分で「色」を選ぶ時間。</>
+            )}
           </p>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 pt-8 border-t border-border">
           {/* Brand */}
           <div className="col-span-2 md:col-span-2">
-            <div className="font-mincho text-[22px] font-black tracking-[0.04em] mb-4">
-              ぬりえ<span className="text-primary">プリント</span>
-            </div>
+            {isAdult ? (
+              <div className="font-mincho text-[22px] font-black tracking-[0.04em] mb-4">
+                おとなの<span className="text-primary">ぬりえ</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 mb-4">
+                <span className="flex items-center gap-0.5" aria-hidden>
+                  <span className="w-2 h-2 rounded-full bg-[#E66A2C]" />
+                  <span className="w-2 h-2 rounded-full bg-[#4FA7B8]" />
+                  <span className="w-2 h-2 rounded-full bg-[#E8B838]" />
+                </span>
+                <span className={`${brandFont} text-[22px] font-black tracking-[0.03em]`}>
+                  ぬりえ<span className="text-primary">プリント</span>
+                </span>
+              </div>
+            )}
             <p className="text-[13px] text-muted-foreground leading-relaxed mb-4">
               保育士・幼稚園教諭の先生方、そして子どもたちの<br className="hidden md:inline" />
               ためのぬりえプリント配布サービス。{materialCount} 点の<br className="hidden md:inline" />
@@ -34,7 +58,7 @@ export function Footer({ materialCount = 555 }: { materialCount?: number }) {
 
           {/* Themes */}
           <div>
-            <h3 className="font-mincho text-[13px] font-bold mb-3 pb-2 border-b border-border">テーマ</h3>
+            <h3 className="font-rounded text-[13px] font-black mb-3 pb-2 border-b border-border">テーマ</h3>
             <ul className="space-y-2 text-[12px] text-muted-foreground">
               <li><Link href="/category/theme/animals" className="hover:text-primary transition-colors">動物のぬりえ</Link></li>
               <li><Link href="/category/theme/dinosaurs" className="hover:text-primary transition-colors">恐竜のぬりえ</Link></li>
@@ -47,7 +71,7 @@ export function Footer({ materialCount = 555 }: { materialCount?: number }) {
 
           {/* Age */}
           <div>
-            <h3 className="font-mincho text-[13px] font-bold mb-3 pb-2 border-b border-border">年齢</h3>
+            <h3 className="font-rounded text-[13px] font-black mb-3 pb-2 border-b border-border">年齢</h3>
             <ul className="space-y-2 text-[12px] text-muted-foreground">
               <li><Link href="/category/age/2" className="hover:text-primary transition-colors">2歳のぬりえ</Link></li>
               <li><Link href="/category/age/3" className="hover:text-primary transition-colors">3歳のぬりえ</Link></li>
@@ -59,7 +83,7 @@ export function Footer({ materialCount = 555 }: { materialCount?: number }) {
 
           {/* Editorial */}
           <div>
-            <h3 className="font-mincho text-[13px] font-bold mb-3 pb-2 border-b border-border">読みもの</h3>
+            <h3 className="font-rounded text-[13px] font-black mb-3 pb-2 border-b border-border">読みもの</h3>
             <ul className="space-y-2 text-[12px] text-muted-foreground">
               <li><Link href="/columns/benefits-of-coloring-for-kids" className="hover:text-primary transition-colors">ぬりえの発達効果</Link></li>
               <li><Link href="/columns/coloring-for-2-year-olds" className="hover:text-primary transition-colors">2歳からのぬりえ</Link></li>

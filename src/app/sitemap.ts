@@ -41,6 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const kidsCategoryPages = [
     ...AGES.map(age => ({ url: `${BASE_URL}/category/age/${age}`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.7 })),
     { url: `${BASE_URL}/category/type/coloring`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.8 },
+    { url: `${BASE_URL}/category/type/adult-coloring`, lastModified: new Date(), changeFrequency: 'weekly' as const, priority: 0.8 },
     ...kidsThemePages,
     ...seasonPages,
   ]

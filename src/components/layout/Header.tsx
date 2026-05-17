@@ -42,35 +42,56 @@ export function Header({ materialCount = 555 }: { materialCount?: number }) {
   const searchAction = isAdult ? '/adult/materials' : '/materials'
 
   return (
-    <>
-      {/* Audience switcher (top) */}
-      <div className="bg-[#1f1f1f] text-[#dcdcdc] text-[11px]">
-        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 flex justify-between items-center h-8 sm:h-9">
-          <div className="flex items-center gap-1">
-            <Link
-              href="/"
-              className={`px-3 py-1 rounded-full transition-colors ${!isAdult ? 'bg-white text-[#1f1f1f] font-bold' : 'hover:text-white'}`}
-            >
-              こども向け
-            </Link>
-            <Link
-              href="/adult"
-              className={`px-3 py-1 rounded-full transition-colors ${isAdult ? 'bg-white text-[#1f1f1f] font-bold' : 'hover:text-white'}`}
-            >
-              おとな向け
-            </Link>
-          </div>
-          <div className="hidden md:flex items-center gap-4">
-            <Link href="/about" className="hover:text-white transition-colors">運営について</Link>
-            <Link href="/editorial-policy" className="hover:text-white transition-colors">編集方針</Link>
-            <Link href="/contact" className="hover:text-white transition-colors">お問い合わせ</Link>
-            {session ? (
-              <button onClick={() => signOut({ callbackUrl: '/' })} className="hover:text-white transition-colors flex items-center gap-1">
-                <LogOut className="w-3 h-3" />ログアウト
-              </button>
-            ) : (
-              <Link href="/login" className="hover:text-white transition-colors">ログイン</Link>
-            )}
+    <div className={isAdult ? 'adult-section' : ''}>
+      {/* Audience switcher — prominent tab bar */}
+      <div className={`${isAdult ? 'bg-[#1E2A28]' : 'bg-[#2A2620]'} text-white`}>
+        <div className="max-w-[1280px] mx-auto px-3 sm:px-6">
+          <div className="flex items-stretch justify-between gap-2 h-12 sm:h-14">
+            {/* Audience tabs */}
+            <div className="flex items-stretch gap-1">
+              <Link
+                href="/"
+                className={`group flex items-center gap-2 px-4 sm:px-6 rounded-t-lg transition-all ${
+                  !isAdult
+                    ? 'bg-[#FFF8EC] text-[#332C24] -mb-px border-b-2 border-[#FFF8EC]'
+                    : 'text-white/60 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                <span className="text-[20px] leading-none">🖍️</span>
+                <div className="flex flex-col items-start leading-tight py-1">
+                  <span className={`text-[10px] tracking-wider ${!isAdult ? 'text-[#E66A2C]' : 'text-white/40'}`}>FOR KIDS</span>
+                  <span className={`text-[13px] sm:text-[14px] font-bold ${!isAdult ? 'font-rounded' : ''}`}>こども向け</span>
+                </div>
+              </Link>
+              <Link
+                href="/adult"
+                className={`group flex items-center gap-2 px-4 sm:px-6 rounded-t-lg transition-all ${
+                  isAdult
+                    ? 'bg-[#F3EFE6] text-[#1E2A28] -mb-px border-b-2 border-[#F3EFE6]'
+                    : 'text-white/60 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                <span className="text-[16px] leading-none">✶</span>
+                <div className="flex flex-col items-start leading-tight py-1">
+                  <span className={`text-[10px] tracking-wider ${isAdult ? 'text-[#2D5043]' : 'text-white/40'}`}>FOR ADULTS</span>
+                  <span className={`text-[13px] sm:text-[14px] font-bold ${isAdult ? 'font-mincho' : ''}`}>おとな向け</span>
+                </div>
+              </Link>
+            </div>
+
+            {/* Utility links (desktop) */}
+            <div className="hidden md:flex items-center gap-4 text-[11px]">
+              <Link href="/about" className="text-white/70 hover:text-white transition-colors">運営について</Link>
+              <Link href="/editorial-policy" className="text-white/70 hover:text-white transition-colors">編集方針</Link>
+              <Link href="/contact" className="text-white/70 hover:text-white transition-colors">お問い合わせ</Link>
+              {session ? (
+                <button onClick={() => signOut({ callbackUrl: '/' })} className="text-white/70 hover:text-white transition-colors flex items-center gap-1">
+                  <LogOut className="w-3 h-3" />ログアウト
+                </button>
+              ) : (
+                <Link href="/login" className="text-white/70 hover:text-white transition-colors">ログイン</Link>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -80,14 +101,27 @@ export function Header({ materialCount = 555 }: { materialCount?: number }) {
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-[auto_1fr_auto] md:grid-cols-[220px_1fr_220px] gap-3 md:gap-8 items-center h-16 md:h-20">
             {/* Logo */}
-            <Link href={isAdult ? '/adult' : '/'} className="flex items-baseline gap-0 group">
-              <span className="font-mincho text-[22px] md:text-[26px] font-black tracking-[0.04em] text-foreground group-hover:text-primary transition-colors">
-                {isAdult ? 'おとなの' : 'ぬりえ'}
-              </span>
-              <span className="font-mincho text-[22px] md:text-[26px] font-black tracking-[0.04em] text-primary">
-                {isAdult ? 'ぬりえ' : 'プリント'}
-              </span>
-            </Link>
+            {isAdult ? (
+              <Link href="/adult" className="flex items-baseline gap-0 group">
+                <span className="font-mincho text-[22px] md:text-[26px] font-black tracking-[0.04em] text-foreground group-hover:text-primary transition-colors">
+                  おとなの
+                </span>
+                <span className="font-mincho text-[22px] md:text-[26px] font-black tracking-[0.04em] text-primary">
+                  ぬりえ
+                </span>
+              </Link>
+            ) : (
+              <Link href="/" className="flex items-center gap-1.5 md:gap-2 group">
+                <span className="flex items-center gap-0.5" aria-hidden>
+                  <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-[#E66A2C]" />
+                  <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-[#4FA7B8]" />
+                  <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-[#E8B838]" />
+                </span>
+                <span className="font-rounded text-[20px] md:text-[24px] font-black tracking-[0.03em] text-foreground leading-none group-hover:text-primary transition-colors">
+                  ぬりえ<span className="text-primary">プリント</span>
+                </span>
+              </Link>
+            )}
 
             {/* Search bar (desktop) */}
             <form action={searchAction} method="get" className="hidden md:flex border-[1.5px] border-foreground rounded overflow-hidden bg-card shadow-sm">
@@ -107,8 +141,10 @@ export function Header({ materialCount = 555 }: { materialCount?: number }) {
 
             {/* Meta count (desktop) */}
             <div className="hidden md:block text-right">
-              <div className="font-mincho text-[24px] font-black text-primary leading-none">{isAdult ? '近日' : materialCount}</div>
-              <div className="text-[11px] text-muted-foreground mt-0.5">{isAdult ? '公開予定' : '点の無料教材'}</div>
+              <div className={`${isAdult ? 'font-mincho' : 'font-rounded'} text-[26px] font-black text-primary leading-none`}>
+                {isAdult ? '近日' : materialCount}
+              </div>
+              <div className="text-[11px] text-muted-foreground mt-1">{isAdult ? '公開予定' : '点の無料教材'}</div>
             </div>
 
             {/* Mobile actions */}
@@ -188,6 +224,6 @@ export function Header({ materialCount = 555 }: { materialCount?: number }) {
           </div>
         )}
       </header>
-    </>
+    </div>
   )
 }

@@ -105,13 +105,20 @@ export default function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
       {/* ===== HERO ===== */}
-      <section className="pt-12 md:pt-16 pb-8 text-center">
-        <div className="max-w-[1280px] mx-auto px-6">
-          <div className="font-mincho text-[12px] md:text-[13px] text-primary tracking-[0.25em] mb-4">
-            — 今日は何をぬる？ —
+      <section className="pt-12 md:pt-16 pb-8 text-center relative overflow-hidden">
+        {/* Playful background dots */}
+        <div className="absolute top-12 left-8 w-3 h-3 rounded-full bg-[#4FA7B8]/40 hidden md:block" />
+        <div className="absolute top-20 right-16 w-4 h-4 rounded-full bg-[#E8B838]/40 hidden md:block" />
+        <div className="absolute bottom-8 left-20 w-2.5 h-2.5 rounded-full bg-[#C25A6E]/40 hidden md:block" />
+        <div className="absolute bottom-16 right-10 w-3 h-3 rounded-full bg-[#E66A2C]/30 hidden md:block" />
+
+        <div className="max-w-[1280px] mx-auto px-6 relative">
+          <div className="font-rounded text-[12px] md:text-[13px] text-primary tracking-[0.25em] mb-4 font-bold">
+            ✿ 今日は何をぬる？ ✿
           </div>
-          <h1 className="font-mincho text-[32px] md:text-[48px] font-black leading-[1.4] tracking-[0.02em] mb-6">
-            先生たちと、<span className="text-primary">子どもたちへ</span>。
+          <h1 className="font-rounded text-[34px] md:text-[54px] font-black leading-[1.35] tracking-[0.02em] mb-6">
+            先生たちと、<br className="md:hidden" />
+            <span className="text-primary">子どもたちへ</span>。
           </h1>
           <p className="text-[14px] md:text-[15px] text-muted-foreground max-w-xl mx-auto mb-8 leading-relaxed">
             {totalMaterials} 点の塗り絵が、ぜんぶ無料。<br className="md:hidden" />
@@ -161,7 +168,7 @@ export default function HomePage() {
               <div className="font-mincho text-[11px] text-muted-foreground tracking-[0.2em] mb-3">
                 No. {String(materials.indexOf(todaysPick) + 1).padStart(3, '0')}　　今日のいちおし
               </div>
-              <h2 className="font-mincho text-[26px] md:text-[32px] font-bold leading-[1.3] mb-4">
+              <h2 className="font-rounded text-[26px] md:text-[34px] font-black leading-[1.3] mb-4">
                 {todaysPick.title}
               </h2>
               <p className="text-[14px] text-foreground/80 leading-relaxed mb-5 pl-4 border-l-[3px] border-primary">
@@ -244,8 +251,8 @@ export default function HomePage() {
                     ) : null}
                   </div>
                   <div className="p-3 text-center">
-                    <div className="font-mincho text-[15px] font-bold mb-0.5">{theme.label}</div>
-                    <div className="text-[10px] text-muted-foreground">{count}点</div>
+                    <div className="font-rounded text-[15px] font-black mb-0.5">{theme.label}</div>
+                    <div className="text-[10px] text-muted-foreground font-medium">{count}点</div>
                   </div>
                 </Link>
               )
@@ -263,18 +270,20 @@ export default function HomePage() {
             subtitle="2歳のはじめてから、6歳の力作まで"
           />
           <div className="grid grid-cols-5 gap-2 md:gap-3">
-            {[2, 3, 4, 5, 6].map(age => {
+            {[2, 3, 4, 5, 6].map((age, i) => {
               const count = filterMaterials({ age, audience: 'kids' }).length
+              const colors = ['#E66A2C', '#4FA7B8', '#E8B838', '#C25A6E', '#7AA875']
               return (
                 <Link
                   key={age}
                   href={`/category/age/${age}`}
-                  className="bg-white border border-border rounded-lg p-4 md:p-6 text-center hover:border-primary hover:-translate-y-0.5 transition-all"
+                  className="bg-white border-2 rounded-lg p-4 md:p-6 text-center hover:-translate-y-1 transition-all"
+                  style={{ borderColor: colors[i] }}
                 >
-                  <div className="font-mincho text-[24px] md:text-[36px] font-black leading-none">
+                  <div className="font-rounded text-[28px] md:text-[42px] font-black leading-none" style={{ color: colors[i] }}>
                     {age}
                   </div>
-                  <div className="text-[10px] md:text-[11px] text-muted-foreground mt-1">歳</div>
+                  <div className="text-[10px] md:text-[11px] text-muted-foreground mt-1 font-medium">歳</div>
                   <div className="text-[10px] md:text-[11px] text-muted-foreground mt-2 pt-2 border-t border-border/60">{count}点</div>
                 </Link>
               )
@@ -284,16 +293,21 @@ export default function HomePage() {
       </section>
 
       {/* ===== EDITORIAL QUOTE ===== */}
-      <section className="py-16 md:py-20 bg-white border-y border-border">
+      <section className="py-16 md:py-20 bg-gradient-to-b from-white to-[#FFF3E0]/40 border-y border-border">
         <div className="max-w-[860px] mx-auto px-6 text-center">
-          <div className="text-primary text-[14px] mb-6">✶</div>
-          <p className="font-mincho text-[18px] md:text-[22px] leading-[2] text-foreground">
+          <div className="flex justify-center gap-2 mb-6">
+            <span className="w-2 h-2 rounded-full bg-[#E66A2C]" />
+            <span className="w-2 h-2 rounded-full bg-[#4FA7B8]" />
+            <span className="w-2 h-2 rounded-full bg-[#E8B838]" />
+            <span className="w-2 h-2 rounded-full bg-[#C25A6E]" />
+            <span className="w-2 h-2 rounded-full bg-[#7AA875]" />
+          </div>
+          <p className="font-rounded text-[18px] md:text-[22px] leading-[2] text-foreground font-medium">
             塗り絵は、ただの暇つぶしじゃない。<br />
             子どもが、はじめて自分で「色」を選ぶ時間。<br />
             その時間に、ふさわしい紙を届けたい。
           </p>
-          <div className="text-primary text-[14px] mt-6">✶</div>
-          <div className="text-[11px] text-muted-foreground mt-4 tracking-[0.15em]">
+          <div className="text-[11px] text-muted-foreground mt-6 tracking-[0.15em]">
             — ぬりえプリント編集部 —
           </div>
         </div>
@@ -319,12 +333,12 @@ export default function HomePage() {
                 href={`/materials?difficulty=${diff}`}
                 className="bg-white border border-border rounded-lg p-5 hover:border-primary transition-all flex items-start gap-4 hover:-translate-y-0.5"
               >
-                <div className="font-mincho text-primary text-[22px] font-black leading-none pt-1 shrink-0">
+                <div className="font-rounded text-primary text-[26px] font-black leading-none pt-1 shrink-0">
                   0{diff}
                 </div>
                 <div className="flex-1">
                   <div className="flex items-baseline gap-2 mb-1">
-                    <span className="font-mincho text-[16px] font-bold">{label}</span>
+                    <span className="font-rounded text-[17px] font-black">{label}</span>
                     <span className="text-[10px] text-muted-foreground">{age}</span>
                   </div>
                   <p className="text-[12px] text-muted-foreground leading-relaxed">{desc}</p>
@@ -356,7 +370,7 @@ export default function HomePage() {
                 <span>{featuredColumn.category}</span>
                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" />約{featuredColumn.readingTime}分</span>
               </div>
-              <h3 className="font-mincho text-[20px] md:text-[24px] font-bold leading-[1.4] mb-3">
+              <h3 className="font-rounded text-[20px] md:text-[24px] font-black leading-[1.4] mb-3">
                 {featuredColumn.title}
               </h3>
               <p className="text-[13px] text-muted-foreground leading-relaxed mb-4">
@@ -398,7 +412,7 @@ export default function HomePage() {
           <div className="bg-white border border-border rounded-lg">
             {FAQS.map((faq, i) => (
               <div key={i} className={`p-5 md:p-6 ${i < FAQS.length - 1 ? 'border-b border-border' : ''}`}>
-                <div className="font-mincho text-[15px] md:text-[16px] font-bold mb-2 flex gap-2">
+                <div className="font-rounded text-[15px] md:text-[17px] font-black mb-2 flex gap-2">
                   <span className="text-primary shrink-0">Q.</span>
                   <span>{faq.q}</span>
                 </div>
@@ -423,7 +437,7 @@ export default function HomePage() {
           <div className="font-mincho text-[11px] text-primary tracking-[0.25em] mb-4">
             — INVITATION —
           </div>
-          <h2 className="font-mincho text-[26px] md:text-[34px] font-black leading-[1.5] mb-4">
+          <h2 className="font-rounded text-[28px] md:text-[38px] font-black leading-[1.4] mb-4">
             保育の現場を、<br />
             すこし、らくに。
           </h2>
@@ -448,7 +462,7 @@ export default function HomePage() {
             <div className="font-mincho text-[11px] text-white/60 tracking-[0.25em] mb-2">
               — For Adults —
             </div>
-            <h3 className="font-mincho text-[20px] md:text-[24px] font-bold mb-2">
+            <h3 className="font-mincho text-[20px] md:text-[26px] font-bold mb-2 tracking-[0.02em]">
               おとな・シニア向けの塗り絵もあります。
             </h3>
             <p className="text-[13px] text-white/70 leading-relaxed">
@@ -484,7 +498,7 @@ function SectionHead({
 }) {
   return (
     <div className="mb-6 md:mb-8">
-      <div className="flex items-end justify-between border-b border-foreground/15 pb-3">
+      <div className="flex items-end justify-between border-b-2 border-primary/15 pb-3">
         <div>
           {kicker && (
             <div className="font-mincho italic text-[11px] text-primary mb-1 tracking-[0.1em]">
@@ -492,12 +506,12 @@ function SectionHead({
             </div>
           )}
           <div className="flex items-baseline gap-3">
-            <h2 className="font-mincho text-[20px] md:text-[26px] font-bold">{title}</h2>
-            {count && <span className="text-[11px] text-primary">{count}</span>}
+            <h2 className="font-rounded text-[22px] md:text-[28px] font-black">{title}</h2>
+            {count && <span className="text-[11px] text-primary font-bold">{count}</span>}
           </div>
         </div>
         {href && (
-          <Link href={href} className="text-[12px] text-accent hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap">
+          <Link href={href} className="text-[12px] text-accent hover:text-primary transition-colors flex items-center gap-1 whitespace-nowrap font-medium">
             すべて見る<ArrowRight className="w-3 h-3" />
           </Link>
         )}
@@ -520,7 +534,7 @@ function CompactCard({ material }: { material: ReturnType<typeof getPopularMater
         ) : null}
       </div>
       <div className="p-2.5">
-        <h3 className="font-mincho text-[12px] font-bold mb-1 line-clamp-1">
+        <h3 className="font-rounded text-[13px] font-black mb-1 line-clamp-1">
           {material.title.split('（')[0]}
         </h3>
         <div className="text-[10px] text-muted-foreground flex gap-1.5 items-center">

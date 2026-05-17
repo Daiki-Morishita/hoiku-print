@@ -19,14 +19,15 @@ export type Duration = 5 | 10 | 15 | 20 | 30
 export type Season = 'spring' | 'summer' | 'autumn' | 'winter'
 
 export type Category =
-  | 'coloring'      // ぬりえ
-  | 'hiragana'      // ひらがな
-  | 'numbers'       // 数字
-  | 'drawing'       // 運筆
-  | 'maze'          // 迷路
-  | 'dotconnect'    // 点つなぎ
-  | 'craft'         // 工作
-  | 'scissors'      // ハサミ練習
+  | 'coloring'        // ぬりえ（こども向け）
+  | 'adult-coloring'  // 大人ぬりえ
+  | 'hiragana'        // ひらがな
+  | 'numbers'         // 数字
+  | 'drawing'         // 運筆
+  | 'maze'            // 迷路
+  | 'dotconnect'      // 点つなぎ
+  | 'craft'           // 工作
+  | 'scissors'        // ハサミ練習
 
 export type Theme =
   // ── こども向けテーマ ──
@@ -74,6 +75,7 @@ export const ADULT_THEMES: Theme[] = [
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   coloring: 'ぬりえ',
+  'adult-coloring': '大人ぬりえ',
   hiragana: 'ひらがな',
   numbers: '数字・数え方',
   drawing: '運筆',

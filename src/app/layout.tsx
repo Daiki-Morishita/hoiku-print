@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Noto_Sans_JP, Zen_Old_Mincho } from 'next/font/google'
+import { Noto_Sans_JP, Zen_Old_Mincho, M_PLUS_Rounded_1c } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
 import { Header } from '@/components/layout/Header'
@@ -21,6 +21,13 @@ const zenOldMincho = Zen_Old_Mincho({
   weight: ['500', '700', '900'],
   display: 'swap',
   variable: '--font-zen-mincho',
+})
+
+const mPlusRounded = M_PLUS_Rounded_1c({
+  subsets: ['latin'],
+  weight: ['500', '700', '800', '900'],
+  display: 'swap',
+  variable: '--font-mplus-rounded',
 })
 
 export const metadata: Metadata = {
@@ -51,7 +58,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ja" className={`${notoSansJP.variable} ${zenOldMincho.variable} h-full antialiased`}>
+    <html lang="ja" className={`${notoSansJP.variable} ${zenOldMincho.variable} ${mPlusRounded.variable} h-full antialiased`}>
       <head>
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4355731853778451" crossOrigin="anonymous" />

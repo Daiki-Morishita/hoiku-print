@@ -51,7 +51,7 @@ export function MaterialCard({ material }: MaterialCardProps) {
 
       {/* Card content */}
       <div className="p-3.5 flex flex-col gap-2 flex-1">
-        <h3 className="font-mincho font-bold text-[14px] leading-snug group-hover:text-primary transition-colors line-clamp-2">
+        <h3 className="font-rounded font-black text-[14px] leading-snug group-hover:text-primary transition-colors line-clamp-2">
           {material.title}
         </h3>
 
