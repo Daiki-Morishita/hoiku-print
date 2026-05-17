@@ -214,9 +214,17 @@ export default async function MaterialDetailPage({ params }: { params: Promise<{
             </div>
 
             {/* タイトル */}
-            <div className="font-rounded font-bold text-[11px] text-primary mb-1 tracking-[0.1em]">— Material —</div>
+            <div className="font-rounded font-bold text-[12px] text-primary mb-1 tracking-[0.1em]">— Material —</div>
             <h1 className="font-rounded text-[26px] sm:text-[32px] font-black leading-[1.3] mb-3">{material.title}</h1>
-            <p className="text-[14px] text-foreground/85 mb-5 leading-relaxed pl-4 border-l-[3px] border-primary">{material.description}</p>
+            <p className="text-[14px] text-foreground/85 mb-4 leading-relaxed pl-4 border-l-[3px] border-primary">{material.description}</p>
+
+            {/* モバイル専用: 画像直下に印刷ボタン */}
+            <div className="lg:hidden mb-6 bg-white border border-border rounded-lg p-4">
+              <PrintButton materialTitle={material.title} />
+              <p className="text-[11px] text-muted-foreground mt-2.5 text-center">
+                A4・白黒印刷に最適化済み
+              </p>
+            </div>
 
             {/* タグ */}
             <div className="flex flex-wrap gap-2 mb-6">
