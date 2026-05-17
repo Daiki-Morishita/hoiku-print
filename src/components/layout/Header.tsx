@@ -101,10 +101,10 @@ export function Header({ materialCount = 555 }: { materialCount?: number }) {
                   </Link>
                   <button
                     onClick={() => signOut({ callbackUrl: '/' })}
-                    aria-label="ログアウト"
-                    className="inline-flex items-center justify-center w-8 h-8 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-white/85 hover:text-white hover:bg-white/10 transition-colors"
                   >
                     <LogOut className="w-3.5 h-3.5" />
+                    <span className="font-medium">ログアウト</span>
                   </button>
                 </>
               ) : (
